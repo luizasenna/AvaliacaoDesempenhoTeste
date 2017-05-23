@@ -19,6 +19,11 @@ class Funcionario extends Model
  
 		return $this->hasOne('App\Equipe', 'CODINTERNO', 'CODEQUIPE');
 	   } 
+
+	    public function participante() {
+ 
+		return $this->hasMany('App\Participante', 'CHAPAAVALIADO', 'CHAPA');
+	   } 
 	   
 	  
 }

@@ -1,0 +1,116 @@
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Avaliação de Desempenho dos Funcionários
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /* page level styles */ ?>
+<?php $__env->startSection('header_styles'); ?>
+ <!--page level css starts-->
+	<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/tabbular.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendors/bootstrap-tagsinput/css/bootstrap-tagsinput.css')); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/panel.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/features.css')); ?>">
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/switchery/css/switchery.css')); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/bootstrap-switch/css/bootstrap-switch.css')); ?>">
+    <!--end of page level css-->
+<?php $__env->stopSection(); ?>
+<?php /* breadcrumb */ ?>
+<?php $__env->startSection('top'); ?>
+    <div class="breadcum">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="<?php echo e(route('home')); ?>"> <i class="livicon icon3 icon4" data-name="home" data-size="18" data-loop="true" data-c="#3d3d3d" data-hc="#3d3d3d"></i>Dashboard
+                    </a>
+                </li>
+                <li class="hidden-xs">
+                    <i class="livicon icon3" data-name="angle-double-right" data-size="18" data-loop="true" data-c="#01bc8c" data-hc="#01bc8c"></i>
+                    <a href="#">Avaliação de Desempenho</a>
+                </li>
+            </ol>
+            <div class="pull-right">
+                <i class="livicon icon3" data-name="barchart" data-size="20" data-loop="true" data-c="#3d3d3d" data-hc="#3d3d3d"></i> Avaliação de Desempenho
+            </div>
+        </div>
+    </div>
+    <?php $__env->stopSection(); ?>
+
+
+<?php /* Page content */ ?>
+<?php $__env->startSection('content'); ?>
+    <!-- Aba de Título -->
+    <div class="text-center">
+                <h3 class="border-primary"><span class="heading_border bg-primary"> 
+				<i class="livicon icon3" data-name="barchart" data-size="30" data-loop="true" data-c="#ffffff" data-hc="red"></i>
+				Avaliação de Desempenho</span></h3>
+        </div>	<center>
+        <div class="col-md-12 pull-center">
+		<div class="col-md-4 pull-center"></div>
+			<?php if(session('status')): ?>
+		<center><div id="alert_msg" class="col-md-4 alert alert-info alert-dismissable pull-center">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<strong><?php echo e(session('status')); ?></strong>
+		</div></center><div class="col-md-4 pull-center"></div>
+		<?php endif; ?>
+	</div></center>
+   
+    <div class="container" >
+        <!--Content Section Start -->
+		<div class="col-md-12" style="min-height:800px;">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+						<i class="livicon icon3" data-name="list-ul" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
+						Delegando Avaliação</h3>
+                    </div>
+  
+                    <div class="panel-body">
+						<div class="well col-md-6">
+								<h4>Delegando a Avaliacao de<span class="text-info"> <?php foreach($funcionario as $f): ?><?php echo e($f->NOME); ?><?php endforeach; ?></span></h4>
+								<h4>Mês: <span class="text-info"> <?php foreach($avaliacao as $b): ?><?php echo e($b->NOMEAVALIACAO); ?> </span> |  Chapa: <span class="text-info"><?php echo e($b->CHAPA); ?></span></h4> 
+								<h4>Avaliador: <span class="text-info"><?php echo e($b->NOMELIDER); ?></span><?php endforeach; ?> </h4>
+								<hr/>
+								<div>
+									<h4>Mudar para </h4>
+											
+									<form type="post" action="delegaUmaAvaliacao">
+												<?php foreach($avaliacao as $b): ?>
+													<input type="hidden" value="'<?php echo e($b->CHAPAAVALIADOR); ?>'" name="chapaantigoavaliador">
+													<input type="hidden" value="<?php echo e($b->CODAVALIACAO); ?>" name="avaliacao">
+												<?php endforeach; ?> 
+												<select name="avaliador" id="avaliador">
+													<?php foreach($lideres as $l): ?>
+														<option value="'<?php echo e($l->CHAPA); ?>'" name="avaliador"> <?php echo e($l->NOME); ?> - <?php echo e($l->CHAPA); ?></option>
+													<?php endforeach; ?>
+												</select>
+												<?php foreach($funcionario as $f): ?>
+												<input type="hidden" value="<?php echo e($f->CHAPA); ?>" name="c"> <?php endforeach; ?>
+												<div class="form-group" style="margin-top:15px;">
+													<textarea class="form-control" name="obs" placeholder="Deixe uma observação (opcional)" rows="3"></textarea>
+												</div>
+												<input class="btn btn-primary" type="submit" value="Enviar"/>
+												<input type="hidden" value="<?php echo e($p); ?>" name="p">
+												<input type="hidden" value="<?php echo e($a); ?>" name="a">
+												<input type="hidden" value="<?php echo e($c); ?>" name="xyz">
+											</form>
+										</div>
+						
+						</div>
+						
+						
+					</div>
+				</div>
+				</div>		
+        <!-- //Content Section End -->
+		
+	</div>	
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php /* page level scripts */ ?>
+<?php $__env->startSection('footer_scripts'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

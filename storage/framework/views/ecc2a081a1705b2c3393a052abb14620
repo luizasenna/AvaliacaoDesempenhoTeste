@@ -1,0 +1,256 @@
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Avaliação de Desempenho dos Funcionários
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /* page level styles */ ?>
+<?php $__env->startSection('header_styles'); ?>
+ <!--page level css starts-->
+	<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/tabbular.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendors/bootstrap-tagsinput/css/bootstrap-tagsinput.css')); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/panel.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/features.css')); ?>">
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/switchery/css/switchery.css')); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/bootstrap-switch/css/bootstrap-switch.css')); ?>">
+    <!--end of page level css-->
+<?php $__env->stopSection(); ?>
+<?php /* breadcrumb */ ?>
+<?php $__env->startSection('top'); ?>
+    <div class="breadcum">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="<?php echo e(route('home')); ?>"> <i class="livicon icon3 icon4" data-name="home" data-size="18" data-loop="true" data-c="#3d3d3d" data-hc="#3d3d3d"></i>Dashboard
+                    </a>
+                </li>
+                <li class="hidden-xs">
+                    <i class="livicon icon3" data-name="angle-double-right" data-size="18" data-loop="true" data-c="#f89a14" data-hc="#f89a14"></i>
+                    <a href="#">Avaliação de Desempenho</a>
+                </li>
+            </ol>
+            <div class="pull-right">
+                <i class="livicon icon3" data-name="barchart" data-size="20" data-loop="true" data-c="#3d3d3d" data-hc="#3d3d3d"></i> Avaliação de Desempenho
+            </div>
+        </div>
+    </div>
+    <?php $__env->stopSection(); ?>
+
+
+<?php /* Page content */ ?>
+<?php $__env->startSection('content'); ?>
+    <!-- Aba de Título -->
+    <div class="text-center">
+                <h3 class="border-primary"><span class="heading_border bg-primary"> 
+				<i class="livicon icon3" data-name="barchart" data-size="30" data-loop="true" data-c="#ffffff" data-hc="red"></i>
+				Avaliação de Desempenho</span></h3>
+        </div>	<center>
+        <div class="col-md-4 pull-center">
+			<?php if(session('status')): ?>
+		<div id="alert_msg" class="alert alert-info alert-dismissable">
+			<strong><?php echo e(session('status')); ?></strong>
+		</div>
+		<?php endif; ?>
+	</div></center>
+    
+    
+    <div class="container" style="min-height:800px;">
+        <!--Content Section Start -->
+		<div class="col-md-12">
+			
+				<?php if($erro): ?> <!--checando cadastro do lider -->
+					<div>
+						<h3>Opa! foi identificado um erro que te impede de proseguir. Abaixo detalhes: </h3> <br/>
+						<div class="bg-danger"><p style="padding:20px;"> <?php echo e($erro); ?> </p></div>
+					</div>
+				<?php else: ?>
+					
+                <div class="panel panel-primary" >
+                    <div class="panel-heading" role="tab">
+                    	<a data-toggle="collapse" data-parent="#accordion" data-target="#equipe" style="color: #fff;" aria-controls="equipe" >
+                        <h3 class="panel-title">
+						<i class="livicon icon3" data-name="users" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
+						Equipe</h3> <span> (clique para abrir ou fechar)</span></a>
+						 
+                    </div>
+                    <div id="equipe" class="panel-collapse collapse" role="tabpanel" >
+                    <div class="panel-body" >
+						 <!--  Consulta de Solicitações --> 
+						 <table class="table table-striped ...">
+						 	<?php foreach($lider as $l): ?>
+							    <!-- código escondido -->
+								<tr>
+								   <td><h5><b>LIDER:  <?php echo e($l->NOME); ?> </b></h5></td>
+								   <td><h5><b>FUNÇÃO:  <?php echo e($l->funcao ? $l->funcao->NOME : '--'); ?></b></h5></td>
+								</tr>
+							<?php endforeach; ?>
+						 </table>
+                         <?php if(!$todos): ?>
+							<?php echo e("Você ainda não é líder de nenhuma equipe"); ?>
+
+						 <?php else: ?>
+							<table class="table table-striped ...">
+								<tr  class="primary">
+									<td>NOME</td>
+									<td>CHAPA</td>
+									<td>FUNÇÃO</td>
+									<td>ADMISSAO</td>
+									<td>VISUALIZAR</td>
+								</tr>
+								<?php foreach($todos as $p): ?>
+							    <!-- código escondido -->
+									<tr>
+									   <td> <?php echo e($p->NOME); ?></td>
+									   <td> <?php echo e($p->CHAPA); ?></td>
+									   <td> <?php echo e($p->CARGO); ?></td>
+									   <td> <?php echo e(date("d/m/Y", strtotime($p->DATAADMISSAO))); ?></td>
+									   <td><a style="color:#ffffff;" href="/avaliacao/painel?id=<?php echo e($p->CHAPA); ?>" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-zoom-in"></span> Desempenho</a></td>
+									</tr>
+								<?php endforeach; ?>
+								<?php endif; ?>
+							</table>
+						<!--  Consulta de Solicitações--> 
+					</div>
+					</div>
+					</div>
+        <!-- //Content Section End -->
+		<div class="panel panel-primary">
+                    <div class="panel-heading" role="tab">
+                        <a data-toggle="collapse" data-parent="#accordion" data-target="#abertas" style="color: #fff;" aria-controls="abertas" >
+                        <h3 class="panel-title">
+						<i class="livicon icon3" data-name="signal" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
+						Avaliações Abertas</h3> <span> (clique para abrir ou fechar)</span>
+						</a>
+                    </div>
+                    <div id="abertas" class="panel-collapse collapse in" role="tabpanel">
+                    <div class="panel-body">
+						 <!--  Consulta de Avaliação --> 
+						  Aqui: <?php foreach($passagem as $pp): ?> <?php echo e($pp->CODAVALIACAO); ?> <?php endforeach; ?>
+						  <?php if(!$abertas): ?>
+							<?php echo e("No momento não há avaliações abertas para você."); ?>
+
+						 <?php else: ?>
+							<table class="table table-striped ...">
+								<tr  class="primary">
+									<td>MÊS</td>
+									<td>ABERTURA</td>
+									<td>PRAZO</td>
+									<td>AVALIAR EQUIPE</td>
+								</tr> 
+								<?php foreach($abertas as $a): ?>
+							    <!-- código escondido -->
+								<tr> 
+								   <td> <?php echo e($a->NOME); ?></td>
+								   <td> <?php echo e(date("d/m/Y", strtotime($a->DATAABERTURA))); ?></td>
+								   <td> prazo</td>
+								   <td><a style="color:#ffffff;" href="/avaliacao/mostra?id=<?php echo e($a->CODAVALIACAO); ?>" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-zoom-in"></span> Avaliar</a></td>
+								</tr> 
+								<?php endforeach; ?>
+								<?php endif; ?>
+							</table>
+						 	 <!--  Consulta de Avaliação --> 
+					</div>
+					</div>
+		</div>
+		</div>
+		<div class="col-md-12">
+		<div class="panel panel-primary">
+					<div class="panel-heading" role="tab">
+						<a data-toggle="collapse" data-parent="#accordion" data-target="#fechadas" style="color: #fff;" aria-controls="fechadas" >
+                        <h3 class="panel-title">
+						<i class="livicon icon3" data-name="signal" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
+						Avaliações Encerradas que você participou</h3><span> (clique para abrir ou fechar)</span>
+                    </div> </a>
+                    <div id="fechadas" class="collapse">
+                    <div class="panel-body">
+						 <!--  Consulta de Avaliação --> 
+						  <?php if(!$fechadas): ?>
+							<?php echo e("No momento não há avaliações fechadas para você."); ?>
+
+						 <?php else: ?>
+						    
+							<table class="table table-striped ...">
+								<tr  class="primary">
+									<td>NOME</td>
+									<td>ABERTURA</td>
+									<td>ENCERRAMENTO</td>
+
+								</tr>
+								<?php foreach($fechadas as $f): ?>
+							    <!-- código escondido -->
+								<tr>
+								   <td> <?php echo e($f->NOME); ?></td>
+								   <td> <?php echo e(date("d/m/Y", strtotime($f->DATAABERTURA))); ?></td>
+								   <td> <?php echo e(date("d/m/Y", strtotime($f->DATAFECHAMENTO))); ?></td>
+								  
+								</tr>
+								<?php endforeach; ?>
+								<?php endif; ?>
+								
+							</table>
+						 	 <!--  Consulta de Avaliação --> 
+						
+					</div>
+					</div>
+		</div>
+		</div>
+
+		<!-- Painel de delegações -->
+	
+		<div class="col-md-12">
+		<div class="panel panel-primary">
+                    <div class="panel-heading" role="tab">
+                    	<a data-toggle="collapse" data-target="#delegacoes" style="color: #fff;" aria-controls="delegacoes" >
+                        <h3 class="panel-title">
+						<i class="glyphicon glyphicon-retweet" data-name="signal" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
+						Situação / Delegação da sua Equipe</h3><span> (clique para abrir ou fechar)</span> </a>
+                    </div>
+		<div id="delegacoes" class="collapse">
+			  <div class="panel-body">
+						 <!--  Consulta de Avaliação --> 
+						  <?php if(!$todos): ?>
+							<?php echo e("Você ainda não é líder de nenhuma equipe"); ?>
+
+						 <?php else: ?>
+						    <h3>Pessoas da sua equipe</h3>
+							<table class="table table-striped ...">
+								<tr class="primary">
+									<td>Nome</td>
+									<td>Chapa</td>
+									<td>Loja Atual</td>
+									<td>Código TOTVS</td>
+									<td>Demissão</td>
+									<td>Ver / Editar</td>
+								</tr>
+								<?php foreach($delegacao as $e): ?>
+								<tr>
+								   <td> <?php echo e($e->NOME); ?></td>
+								   <td> <?php echo e($e->CHAPA); ?></td>
+								   <td> <?php echo e($e->CODFILIAL); ?></td>
+								   <td> <?php echo e($e->CODPESSOA); ?></td>
+								   <td> <?php if($e->DATADEMISSAO == null): ?>  Ativo <?php else: ?>  <?php echo e(date("d/m/Y", strtotime($e->DATADEMISSAO))); ?><?php endif; ?></td>
+								   <td> BOTAO</td>
+								</tr>
+								<?php endforeach; ?>
+								<?php endif; ?>
+							</table>
+						 	 <!--  Consulta de Avaliação --> 
+				</div>
+		</div>
+		</div>
+		</div>
+
+		<!-- Painel de delegações -->
+	<?php endif; ?> <!--checando cadastro do lider -->
+	</div>	
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php /* page level scripts */ ?>
+<?php $__env->startSection('footer_scripts'); ?>
+<script type="text/javascript" src="<?php echo e(asset('assets/js/pages/general.js')); ?>" ></script>
+<script type="text/javascript" src="<?php echo e(asset('assets/js/frontend/advfeatures.js')); ?>"></script>
+<script type="text/javascript" src="<?php echo e(asset('assets/js/jquery.min.js')); ?>"></script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -1,0 +1,106 @@
+
+
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Competências por Cargos
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /* Page content */ ?>
+<?php $__env->startSection('content'); ?>
+<section class="content-header">
+    <h1>Competências por Cargos</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="<?php echo e(route('dashboard')); ?>"> <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
+                Painel
+            </a>
+        </li>
+        <li>Competências por Cargos</li>
+        <li class="active">Disponiveis no TOTVS</li>
+    </ol>
+</section>
+
+<section class="content paddingleft_right15">
+    <div class="row">
+        <div class="panel panel-primary ">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left"> <i class="livicon" data-name="list-ul" data-size="16" data-loop="true" data-c="#fff" data-hc="white"></i>
+                    Competências por Cargos Disponiveis no Momento
+                </h4>
+            </div>
+            <br />
+            <div class="panel-body">
+                <table class="table table-bordered " id="table">
+                    <thead>
+                        <tr class="filters">
+							<th>Nome</th>
+							<th>C1</th>
+							<th>C2</th>
+							<th>C3</th>
+							<th>C4</th>
+							<th>C5</th>
+							<th>C6</th>
+							<th>C7</th>
+							<th>C8</th>
+							<th>C9</th>
+							<th>C10</th>
+							<th>C11</th>
+							<th>C12</th>
+							<th>C13</th>
+							<th>C14</th>
+							<th>C15</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach($vercargos as $vercargo): ?>
+                        <tr>
+							<td><?php echo $vercargo->nome; ?></td>
+							<td><?php echo $vercargo->c1; ?></td>
+							<td><?php echo $vercargo->c2; ?></td>
+							<td><?php echo $vercargo->c3; ?></td>
+							<td><?php echo $vercargo->c4; ?></td>
+							<td><?php echo $vercargo->c5; ?></td>
+							<td><?php echo $vercargo->c6; ?></td>
+							<td><?php echo $vercargo->c7; ?></td>
+							<td><?php echo $vercargo->c8; ?></td>
+							<td><?php echo $vercargo->c9; ?></td>
+							<td><?php echo $vercargo->c10; ?></td>
+							<td><?php echo $vercargo->c11; ?></td>
+							<td><?php echo $vercargo->c12; ?></td>
+							<td><?php echo $vercargo->c13; ?></td>
+							<td><?php echo $vercargo->c14; ?></td>
+							<td><?php echo $vercargo->c15; ?></td>
+                            <td>
+                                <a href="<?php echo e(route('admin.vercargos.show', $vercargo->id)); ?>">
+                                    <i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="view vercargo"></i>
+                                </a>
+                                <a href="<?php echo e(route('admin.vercargos.edit', $vercargo->id)); ?>">
+                                    <i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="edit vercargo"></i>
+                                </a>
+                        
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>    <!-- row-->
+</section>
+<?php $__env->stopSection(); ?>
+
+<?php /* Body Bottom confirm modal */ ?>
+<?php $__env->startSection('footer_scripts'); ?>
+<div class="modal fade" id="delete_confirm" tabindex="-1" role="dialog" aria-labelledby="user_delete_confirm_title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+<script>$(function () {$('body').on('hidden.bs.modal', '.modal', function () {$(this).removeData('bs.modal');});});</script>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin/layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

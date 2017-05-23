@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register | Welcome to Josh Frontend</title>
+    <!--global css starts-->
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/bootstrap.min.css')); ?>">
+    <link rel="shortcut icon" href="<?php echo e(asset('assets/images/favicon.png')); ?>" type="image/x-icon">
+    <link rel="icon" href="<?php echo e(asset('assets/images/favicon.png')); ?>" type="image/x-icon">
+    <!--end of global css-->
+    <!--page level css starts-->
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/iCheck/css/all.css')); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/register.css')); ?>">
+    <!--end of page level css-->
+</head>
+<body>
+<div class="container">
+    <!--Content Section Start -->
+    <div class="row">
+        <div class="box animation flipInX">
+            <img src="<?php echo e(asset('assets/images/josh-new.png')); ?>" alt="logo" class="img-responsive mar">
+            <h3 class="text-primary">Register</h3>
+            <!-- Notifications -->
+            <?php echo $__env->make('notifications', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+            <?php if($errors->has()): ?>
+                <?php foreach($errors->all() as $error): ?>
+                    <div class="text-danger"><?php echo e($error); ?></div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <form action="<?php echo e(route('register')); ?>" method="POST">
+                <!-- CSRF Token -->
+                <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
+
+                <div class="form-group <?php echo e($errors->first('first_name', 'has-error')); ?>">
+                    <label class="sr-only"> First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" placeholder="First Name"
+                           value="<?php echo old('first_name'); ?>" required>
+                    <?php echo $errors->first('first_name', '<span class="help-block">:message</span>'); ?>
+
+                </div>
+                <div class="form-group <?php echo e($errors->first('last_name', 'has-error')); ?>">
+                    <label class="sr-only"> Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Last Name"
+                           value="<?php echo old('last_name'); ?>" required>
+                    <?php echo $errors->first('last_name', '<span class="help-block">:message</span>'); ?>
+
+                </div>
+                <div class="form-group <?php echo e($errors->first('email', 'has-error')); ?>">
+                    <label class="sr-only"> Email</label>
+                    <input type="email" class="form-control" id="Email" name="email" placeholder="Email"
+                           value="<?php echo old('Email'); ?>" required>
+                    <?php echo $errors->first('email', '<span class="help-block">:message</span>'); ?>
+
+                </div>
+                <div class="form-group <?php echo e($errors->first('password', 'has-error')); ?>">
+                    <label class="sr-only"> Password</label>
+                    <input type="password" class="form-control" id="Password1" name="password" placeholder="Password">
+                    <?php echo $errors->first('password', '<span class="help-block">:message</span>'); ?>
+
+                </div>
+                <div class="form-group <?php echo e($errors->first('password_confirm', 'has-error')); ?>">
+                    <label class="sr-only"> Confirm Password</label>
+                    <input type="password" class="form-control" id="Password2" name="password_confirm"
+                           placeholder="Confirm Password">
+                    <?php echo $errors->first('password_confirm', '<span class="help-block">:message</span>'); ?>
+
+                </div>
+                <div class="form-group <?php echo e($errors->first('gender', 'has-error')); ?>">
+                    <label class="sr-only">Gender</label>
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" id="inlineRadio1" value="male"> Male
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="gender" id="inlineRadio2" value="female"> Female
+                    </label>
+                    <?php echo $errors->first('gender', '<span class="help-block">:message</span>'); ?>
+
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" checked name="subscribed" >  I accept <a href="#"> Terms and Conditions</a>
+                    </label>
+                </div>
+                <input type="submit" class="btn btn-block btn-primary" value="Sign up" name="submit">
+                Already have an account? Please <a href="<?php echo e(route('login')); ?>"> Sign In</a>
+            </form>
+        </div>
+    </div>
+    <!-- //Content Section End -->
+</div>
+<!--global js starts-->
+<script type="text/javascript" src="<?php echo e(asset('assets/js/jquery.min.js')); ?>"></script>
+<script type="text/javascript" src="<?php echo e(asset('assets/js/bootstrap.min.js')); ?>"></script>
+<script type="text/javascript" src="<?php echo e(asset('assets/vendors/iCheck/js/icheck.js')); ?>"></script>
+<!--global js end-->
+<script>
+    $(document).ready(function(){
+        $("input[type='checkbox'],input[type='radio']").iCheck({
+            checkboxClass: 'icheckbox_minimal-blue',
+            radioClass: 'iradio_minimal-blue'
+        });
+    });
+</script>
+</body>
+</html>

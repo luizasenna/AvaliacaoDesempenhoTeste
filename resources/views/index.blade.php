@@ -43,6 +43,21 @@ Home
                     </div>
                 </div>
             </div>
+             <!-- //Easy to Use Section End -->
+            <!-- Clean Design Section Start -->
+            <div class="col-sm-6 col-md-3">
+                <div class="box">
+                    <div class="box-icon box-icon2">
+                        <i class="livicon icon1" data-name="home" data-size="55" data-loop="true" data-c="#f89a14" data-hc="#f89a14"></i>
+                    </div>
+                    <div class="info">
+                        <h3 class="warning text-center">Agenda</h3>
+                        <p>Veja os contatos dos funcionários e fornecedores.</p>
+                        <div class="text-right primary"><a href="agenda/">Entrar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- //Responsive Section End -->
             <!-- Easy to Use Section Start -->
             <div class="col-sm-6 col-md-3">
@@ -61,21 +76,7 @@ Home
                     </div>
                 </div>
             </div>
-            <!-- //Easy to Use Section End -->
-            <!-- Clean Design Section Start -->
-            <div class="col-sm-6 col-md-3">
-                <div class="box">
-                    <div class="box-icon box-icon2">
-                        <i class="livicon icon1" data-name="home" data-size="55" data-loop="true" data-c="#f89a14" data-hc="#f89a14"></i>
-                    </div>
-                    <div class="info">
-                        <h3 class="warning text-center">Treinamentos</h3>
-                        <p>Solicite e atualize os treinamentos para seus funcionários</p>
-                        <div class="text-right primary"><a href="#">Entrar</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+           
             <!-- //Clean Design Section End -->
             <!-- 20+ Page Section Start -->
             <div class="col-sm-6 col-md-3">
@@ -230,7 +231,8 @@ Home
                         <div id="collapseThree" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <p>
-                                    Fale com a Luiza no luiza@pintos.com.br ou pelo telefone (86) 2107-4008. =)
+                                    Fale com a Luiza no luiza@pintos.com.br ou pelo telefone (86) 2107-4008. =) <br>
+                                    Versão 2.0
                                 </p>
                             </div>
                         </div>

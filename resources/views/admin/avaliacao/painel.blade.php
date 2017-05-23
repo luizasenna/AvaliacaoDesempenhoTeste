@@ -37,7 +37,41 @@ Avaliação de Desempenho
             
             <div class="row">
                 <div class="col-md-12">
-                           
+                    
+                    <div class="well">
+                        
+                        Filtrar por:
+                        <div class="row">
+                        <form class="form-inline">
+                          <div class="col-md-3"><label for="chapa">Chapa: </label>
+                              <div class="form-group">
+                                <input size="14" type="text" class="form-control" name="chapa" id="chapa" placeholder="Chapa">
+                              </div>
+                          </div>
+                          <div class="col-md-7"><label for="nome">Nome: </label> 
+                          <div class="form-group">
+                            <input size="30" type="text" class="form-control" name="nome" placeholder="Insira um nome para buscar">
+                          </div>
+                          </div>  
+                          <div class="col-md-2"></div>              
+                          <div class="col-md-6" style="margin-top: 8px;">          
+                          <div class="form-group">
+                            <label for="equipe">Equipe</label>
+                            <select class="form-control" id="codequipe" name="codequipe">
+                                <option value="">Todas</option>
+                                @foreach($equipes as $e)
+                                    <option value="{{$e->CODINTERNO}}">{{$e->DESCRICAO}}</option>
+                                @endforeach
+                            </select>
+                          </div>
+                          </div>
+                          <div class="col-md-1" style="margin-top: 8px;">
+                          <button type="submit" class="btn btn-primary">Buscar</button>
+                          </div>
+                          <div class="col-md-5"></div>
+                        </form>
+                        </div>
+                    </div>       
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">
@@ -50,25 +84,31 @@ Avaliação de Desempenho
                             <div class="row clearfix">
 								<div>
 									<table class="table table-striped" >
-										<th>Código Pessoa TOTVS</th>
+										<TH>Chapa</TH>
+                    <th>Cód Pessoa</th>
 										<th>Nome</th>
+                    <th>Demissão</th>
+                    <th>Equipe</th>
+                    <th>Ação</th>
 
-										@foreach ($a as $p)
+										@foreach ($people as $p)
 											<tr>
-												<td>{{ $p->CODPESSOA }}</td>
+												<td>{{ $p->CHAPA }}</td>
+                        <td>{{ $p->CODPESSOA }}</td>
 												<td>{{ $p->NOME }}</td>
+                        <td>@if( is_null($p->DATADEMISSAO)) Atual
+                                 @else {{ date('d/m/Y', strtotime($p->DATADEMISSAO)) }}
+                                 @endif 
+                        </td>
+                        <td>{{ $p->equipe->DESCRICAO }}</td>
+                        <td> <a href="{{ route('pessoa_show', $p->CHAPA) }}" title="Mostrar"><span class="glyphicon glyphicon-search"></span></a></td>
 											</tr>
 										@endforeach
 									</table>
-									<nav aria-label="...">
-									  <ul class="pagination">
-										<li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-										<li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-										{{$pessoas->render()}}
-									  </ul>
-									</nav>
-								</div>
-                              
+                                    <div class="col-md-12 text-center">
+                                       {!! $people->appends(Input::except('page'))->render() !!} 
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- / Building Form. --> </div>

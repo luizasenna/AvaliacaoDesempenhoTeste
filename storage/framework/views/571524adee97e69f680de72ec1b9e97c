@@ -1,0 +1,62 @@
+
+
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Competências por Cargos
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('content'); ?>
+<section class="content-header">
+    <h1>Competências por Cargos </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="<?php echo e(route('dashboard')); ?>"> <i class="livicon" data-name="home" data-size="16" data-color="#000"></i>
+                Painel
+            </a>
+        </li>
+        <li>Ver competências por cargos</li>
+        <li class="active">Cargos disponíveis no TOTVS</li>
+    </ol>
+</section>
+
+<section class="content paddingleft_right15">
+    <div class="row">
+        <div class="panel panel-primary ">
+            <div class="panel-heading clearfix">
+                <h4 class="panel-title"> <i class="livicon" data-name="list-ul" data-size="16" data-loop="true" data-c="#fff" data-hc="white"></i>
+                   Detalhes
+                </h4>
+            </div>
+            <br />
+            <div class="panel-body">
+                <table class="table">
+                    <tr><td>ID</td><td><?php echo e($vercargo->id); ?></td></tr>
+   					<tr><td>Codigo no TOTVS</td><td><?php echo e($vercargo['codcargo']); ?></td></tr>
+					<tr><td>Descrição do Cargo</td><td><?php echo e($vercargo['nome']); ?></td></tr>
+					<tr><td>01 - Aprendizagem e Adaptação </td><td><?php echo e($vercargo['c1']); ?></td></tr>
+					<tr><td>02 - Apresentação Pessoal </td><td><?php echo e($vercargo['c2']); ?></td></tr>
+					<tr><td>03 - Assiduidade </td><td><?php echo e($vercargo['c3']); ?></td></tr>
+					<tr><td>04 - Comunicação</td><td><?php echo e($vercargo['c4']); ?></td></tr>
+					<tr><td>05 - Disciplina e Respeito</td><td><?php echo e($vercargo['c5']); ?></td></tr>
+					<tr><td>06 - Estabilidade Emocional</td><td><?php echo e($vercargo['c6']); ?></td></tr>
+					<tr><td>07 - Hábitos de Segurança, Higiene e Zelo</td><td><?php echo e($vercargo['c7']); ?></td></tr>
+					<tr><td>08 - Iniciativa e Criatividade</td><td><?php echo e($vercargo['c8']); ?></td></tr>
+					<tr><td>09 - Interesse, Dedicação e Sigilo</td><td><?php echo e($vercargo['c9']); ?></td></tr>
+					<tr><td>10 - Organização</td><td><?php echo e($vercargo['c10']); ?></td></tr>
+					<tr><td>11 - Pontualidade</td><td><?php echo e($vercargo['c11']); ?></td></tr>
+					<tr><td>12 - Produtividade</td><td><?php echo e($vercargo['c12']); ?></td></tr>
+					<tr><td>13 - Qualidade</td><td><?php echo e($vercargo['c13']); ?></td></tr>
+					<tr><td>14 - Relacionamento Pessoal e Colaboração</td><td><?php echo e($vercargo['c14']); ?></td></tr>
+					<tr><td>15 - Administração</td><td><?php echo e($vercargo['c15']); ?></td></tr>
+					<tr><td>Criado em </td><td><?php echo e($vercargo['created_at']); ?></td></tr>
+					<tr><td>Atualizado em </td><td><?php echo e($vercargo['updated_at']); ?></td></tr>
+					
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin/layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

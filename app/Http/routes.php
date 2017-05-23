@@ -99,39 +99,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
         Route::get('{groupId}/confirm-delete', array('as' => 'confirm-delete/group', 'uses' => 'GroupsController@getModalDelete'));
         Route::get('{groupId}/restore', array('as' => 'restore/group', 'uses' => 'GroupsController@getRestore'));
     });
-    /*routes for blog*/
-	Route::group(array('prefix' => 'blog'), function () {
-        Route::get('/', array('as' => 'blogs', 'uses' => 'BlogController@index'));
-        Route::get('create', array('as' => 'create/blog', 'uses' => 'BlogController@create'));
-        Route::post('create', 'BlogController@store');
-        Route::get('{blog}/edit', array('as' => 'update/blog', 'uses' => 'BlogController@edit'));
-        Route::post('{blog}/edit', 'BlogController@update');
-        Route::get('{blog}/delete', array('as' => 'delete/blog', 'uses' => 'BlogController@destroy'));
-		Route::get('{blog}/confirm-delete', array('as' => 'confirm-delete/blog', 'uses' => 'BlogController@getModalDelete'));
-		Route::get('{blog}/restore', array('as' => 'restore/blog', 'uses' => 'BlogController@getRestore'));
-        Route::get('{blog}/show', array('as' => 'blog/show', 'uses' => 'BlogController@show'));
-        Route::post('{blog}/storecomment', array('as' => 'restore/blog', 'uses' => 'BlogController@storecomment'));
-	});
-
-    /*routes for blog category*/
-	Route::group(array('prefix' => 'blogcategory'), function () {
-        Route::get('/', array('as' => 'blogcategories', 'uses' => 'BlogCategoryController@index'));
-        Route::get('create', array('as' => 'create/blogcategory', 'uses' => 'BlogCategoryController@create'));
-        Route::post('create', 'BlogCategoryController@store');
-        Route::get('{blogcategory}/edit', array('as' => 'update/blogcategory', 'uses' => 'BlogCategoryController@edit'));
-        Route::post('{blogcategory}/edit', 'BlogCategoryController@update');
-        Route::get('{blogcategory}/delete', array('as' => 'delete/blogcategory', 'uses' => 'BlogCategoryController@destroy'));
-		Route::get('{blogcategory}/confirm-delete', array('as' => 'confirm-delete/blogcategory', 'uses' => 'BlogCategoryController@getModalDelete'));
-		Route::get('{blogcategory}/restore', array('as' => 'restore/blogcategory', 'uses' => 'BlogCategoryController@getRestore'));
-	});
-
-	/*routes for file*/
-	Route::group(array('prefix' => 'file'), function () {
-        Route::post('create', 'FileController@store');
-		Route::post('createmulti', 'FileController@postFilesCreate');
-		Route::delete('delete', 'FileController@delete');
-	});
-
+ 
 	Route::get('crop_demo', function () {
         return redirect('admin/imagecropping');
     });
@@ -142,21 +110,13 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 	Route::get('datatables', 'DataTablesController@index');
 	Route::get('datatables/data', array('as' => 'admin.datatables.data', 'uses' => 'DataTablesController@data'));
 
-    //tasks section
-    Route::post('task/create', 'TaskController@store');
-    Route::get('task/data', 'TaskController@data');
-    Route::post('task/{task}/edit', 'TaskController@update');
-    Route::post('task/{task}/delete', 'TaskController@delete');
-
-
-	# Remaining pages will be called from below controller method
-	# in real world scenario, you may be required to define all routes manually
-
 	Route::get('{name?}', 'JoshController@showView');
 	
+	# Rotas Avaliação no Admin
 	Route::group(array('prefix' => 'avaliacao'), function () {
 		Route::get('/', 'AvaliacaoController@paineladmin');
-		Route::get('/painel', 'AvaliacaoController@paineladmin');
+		Route::get('/painel', 'AvaliacaoAdminController@avaliacoes')->name('painel');
+		Route::get('/pessoa/{id}', 'AvaliacaoAdminController@pessoa')->name('pessoa_show');
 		Route::get('/progresso', 'AvaliacaoAdminController@progressoAvaliacao');
 		Route::get('/delegacao', 'AvaliacaoAdminController@painelDelegar');
 		Route::get('/equipe', 'AvaliacaoAdminController@equipe');
@@ -173,7 +133,8 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 		Route::get('/historicoEquipe', 'AvaliacaoAdminController@mostraHistoricoEquipe');
 	});
 	
-	
+
+		
 
 });
 
@@ -223,9 +184,9 @@ Route::get('/servico', 'ServicoController@index');
 Route::get('/atualizacao', 'AtualizacaoController@index');
 
 Route::get('/avaliacao/index', array('as' => 'avaliacao','uses' => 'AvaliacaoController@index'));
-Route::get('/avaliacao/', 'AvaliacaoController@index');
+Route::get('/avaliacao/', 'AvaliacaoController@index')->name('avaliacao');
 Route::get('/avaliacao/painel', 'AvaliacaoController@painel');
-Route::get('/avaliacao/mostra', 'AvaliacaoController@mostra');
+Route::get('/avaliacao/mostra', 'AvaliacaoController@mostra')->name('mostra');
 Route::get('/avaliacao/insere', 'AvaliacaoController@insere');
 Route::get('/avaliacao/notas', 'AvaliacaoController@visao');
 Route::get('/avaliacao/inserenota', 'AvaliacaoController@inserenota');
@@ -237,7 +198,20 @@ Route::get('/avaliacao/delegaUmaAvaliacao', 'AvaliacaoController@delegaUmaAvalia
 Route::get('/avaliacao/delegaVarias', 'AvaliacaoController@delegaVarias');
 Route::post('/avaliacao/historicoDelegacao/filtro', 'AvaliacaoController@delegaFiltro');
 Route::post('/avaliacao/historicoDelegacao/busca', 'AvaliacaoController@delegaBusca');
+Route::get('/avaliacao/avaliado', 'AvaliacaoController@avaliado');
 
+});
+
+Route::group(array('prefix' => 'agenda'), function () {
+		Route::get('/', 'AgendaController@index');
+		Route::post('/busca', 'AgendaController@busca');
+		Route::get('/insere', 'AgendaController@insere');
+		Route::get('/inserePessoa', 'AgendaController@inserePessoa');
+		Route::get('/insereEmpresa', 'AgendaController@insereEmpresa');
+		Route::post('/addPessoa', 'AgendaController@addPessoa');
+		Route::get('/pessoa/{id}', 'AgendaController@pessoa')->name('pessoa_mostra');
+
+	
 });
 
 Route::get('blog', array('as' => 'blog', 'uses' => 'BlogController@getIndexFrontend'));

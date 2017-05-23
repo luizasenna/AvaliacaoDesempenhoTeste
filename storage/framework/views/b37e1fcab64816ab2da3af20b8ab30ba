@@ -1,0 +1,133 @@
+
+
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Avaliação de Desempenho dos Funcionários
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /* page level styles */ ?>
+<?php $__env->startSection('header_styles'); ?>
+ <!--page level css starts-->
+	<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/tabbular.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendors/bootstrap-tagsinput/css/bootstrap-tagsinput.css')); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/panel.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/features.css')); ?>">
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/switchery/css/switchery.css')); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/bootstrap-switch/css/bootstrap-switch.css')); ?>">
+    <!--end of page level css-->
+<?php $__env->stopSection(); ?>
+<?php /* breadcrumb */ ?>
+<?php $__env->startSection('top'); ?>
+    <div class="breadcum">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li>
+                    <a href="<?php echo e(route('home')); ?>"> <i class="livicon icon3 icon4" data-name="home" data-size="18" data-loop="true" data-c="#3d3d3d" data-hc="#3d3d3d"></i>Dashboard
+                    </a>
+                </li>
+                <li class="hidden-xs">
+                    <i class="livicon icon3" data-name="angle-double-right" data-size="18" data-loop="true" data-c="#01bc8c" data-hc="#01bc8c"></i>
+                    <a href="#">Avaliação de Desempenho</a>
+                </li>
+            </ol>
+            <div class="pull-right">
+                <i class="livicon icon3" data-name="barchart" data-size="20" data-loop="true" data-c="#3d3d3d" data-hc="#3d3d3d"></i> Avaliação de Desempenho
+            </div>
+        </div>
+    </div>
+    <?php $__env->stopSection(); ?>
+
+
+<?php /* Page content */ ?>
+<?php $__env->startSection('content'); ?>
+    <!-- Aba de Título -->
+    <div class="text-center">
+                <h3 class="border-primary"><span class="heading_border bg-primary"> 
+				<i class="livicon icon3" data-name="barchart" data-size="30" data-loop="true" data-c="#ffffff" data-hc="red"></i>
+				Avaliação de Desempenho</span></h3>
+        </div>	<center>
+        <div class="col-md-4 pull-center">
+			<?php if(session('status')): ?>
+		<div id="alert_msg" class="alert alert-info alert-dismissable">
+			<strong><?php echo e(session('status')); ?></strong>
+		</div>
+		<?php endif; ?>
+	</div></center>
+    
+    
+    <div class="container" >
+        <!--Content Section Start -->
+		<div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+						<i class="livicon icon3" data-name="list-ul" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
+						Dados da Avaliação</h3>
+                    </div>
+                    <div class="panel-body">
+						 <!--  Consulta de Solicitações --> 
+						 <table class="table table-striped ..."> 
+					
+						 <?php foreach($avaliacao as $a): ?>
+								<tr>
+								   <td>
+								   <h5><b> Nome: <?php echo e($a->NOME); ?> </b></h5></td>
+								   <td><h5><b>Abertura:  <?php echo e($a->DATAABERTURA); ?></b></h5></td>
+
+								</tr>
+								<?php endforeach; ?>
+						 </table>
+                        
+						
+					</div>
+				</div>
+				</div>		
+
+				
+   
+   
+        
+        <!-- //Content Section End -->
+		
+		
+		
+		<div class="col-md-12">
+		<div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+						<i class="livicon icon3" data-name="signal" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
+						Avaliações Abertas</h3>
+                    </div>
+                    <div class="panel-body">
+						 <!--  Consulta de Avaliação --> 
+						 
+						    
+							<table class="table table-striped ...">
+								<tr  class="primary">
+									<td>NOME</td>
+									<td>ABERTURA</td>
+									<td>PRAZO</td>
+									<td>AVALIAR EQUIPE</td>
+								</tr>
+								
+								
+							</table>
+						 	 <!--  Consulta de Avaliação --> 
+						
+					</div>
+		</div>
+				
+		</div>
+	
+	
+	</div>	
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php /* page level scripts */ ?>
+<?php $__env->startSection('footer_scripts'); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

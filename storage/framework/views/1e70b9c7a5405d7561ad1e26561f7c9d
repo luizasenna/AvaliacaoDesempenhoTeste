@@ -1,0 +1,52 @@
+	
+
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Avaliação de Desempenho dos Funcionários
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /* page level styles */ ?>
+<?php $__env->startSection('header_styles'); ?>
+ <!--page level css starts-->
+	<link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/tabbular.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendors/bootstrap-tagsinput/css/bootstrap-tagsinput.css')); ?>" />
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/panel.css')); ?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/features.css')); ?>">
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/switchery/css/switchery.css')); ?>" />
+    <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/bootstrap-switch/css/bootstrap-switch.css')); ?>">
+    <!--end of page level css-->
+<?php $__env->stopSection(); ?>
+<?php /* breadcrumb */ ?>
+<?php $__env->startSection('top'); ?>
+    
+    <?php if($NOTAS): ?> 
+			<?php foreach($NOTAS AS $N): ?>
+					<?php echo e($contador++); ?> - <?php echo e($N); ?> <br /> <br />
+			<?php endforeach; ?>
+	<?php endif; ?>		
+    <?php if($COMENTARIOS): ?> 
+			<?php foreach($COMENTARIOS AS $C): ?>
+					<?php echo e($C); ?> <br /> <br />
+			<?php endforeach; ?>
+	<?php endif; ?>		
+
+
+<?php $__env->stopSection(); ?>
+
+
+
+<?php /* Page content */ ?>
+
+<?php $__env->startSection('content'); ?>					 
+<?php $__env->stopSection(); ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php /* page level scripts */ ?>
+<?php $__env->startSection('footer_scripts'); ?>
+<?php /* Scripts */ ?>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

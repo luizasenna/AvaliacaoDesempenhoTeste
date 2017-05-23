@@ -28,7 +28,11 @@ Avaliação de Desempenho dos Funcionários
                 </li>
                 <li class="hidden-xs">
                     <i class="livicon icon3" data-name="angle-double-right" data-size="18" data-loop="true" data-c="#01bc8c" data-hc="#01bc8c"></i>
-                    <a href="#">Avaliação de Desempenho</a>
+                    <a href="{{route('avaliacao')}}">Avaliação de Desempenho</a>
+                </li>
+                <li class="hidden-xs">
+                    <i class="livicon icon3" data-name="angle-double-right" data-size="18" data-loop="true" data-c="#01bc8c" data-hc="#01bc8c"></i>
+                    <a href="{{route('mostra')}}?id={{$avaliacao[0]->CODAVALIACAO}}">{{$avaliacao[0]->NOME}}</a>
                 </li>
             </ol>
             <div class="pull-right">
@@ -106,6 +110,7 @@ Avaliação de Desempenho dos Funcionários
 										
 											 @foreach ($comps as $c)	
 												<h3 class="text-info"><?=$contador++ ?> - {{$c->NOME }}</h3>
+                                                <h4> {{$c->CONCEITO}}</h4>
 											    <div id="notas{{$c->CODCOMPETENCIA}}">
 												<div class="radio" >
 													<label class="radio-inline">

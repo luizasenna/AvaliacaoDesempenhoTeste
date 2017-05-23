@@ -145,8 +145,11 @@ Delegação de Avaliado - AD
 													<td>@if ($a->TEMAVALIACAO=='S') SIM @else NÃO @endif</td>
 													<td>@if ($a->TEMAVALIACAO=='S') <span class="text-info">Aval. já Feita</span> 
 														@else 
+															@if($a->LICENCA=='S') Férias / Licença
+															@else
 															<a href="delega?xyz={{$funcionario[0]->CHAPA}}&a={{$a->CODAVALIACAO}}&p={{$a->CODPARTICIPANTE}}" class="btn btn-sm btn-warning">
 																<span class="glyphicon glyphicon-wrench"></span> Delegar </a>
+															@endif	
 														@endif</td>
 												</tr>
 												@endforeach

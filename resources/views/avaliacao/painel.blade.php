@@ -89,7 +89,7 @@ Avaliação de Desempenho dos Funcionários
 							<div class="col-md-2 panel-body">
 								@foreach ($funcionario as $f)
 								<!--<img src="/assets/images/avaliacao/avatar.png" width="180px" height="180px"/>-->
-								{{ $f->IMAGEM }}
+								
 								<img width="150px" height="180px" src="data:image/jpeg;base64,{{ base64_encode( $f->IMAGEM )}}"/> 
 								@endforeach
 							</div>
@@ -118,15 +118,52 @@ Avaliação de Desempenho dos Funcionários
 														<td colspan ="2">LIDER ATUAL: {{$lider[0]->NOME}} </td>
 													</tr>
 													<tr >
-														<td colspan ="2"> <a style="color:#ffffff;" href="/avaliacao/delegaTodas?c={{$p->CHAPA}}" class="btn btn-danger" title="Delegar as avaliações de funcáionrio para outro lider"><span class="glyphicon glyphicon-random"></span> Delegar as avaliações deste funcionário</a></td>
-														<!-- <td>  
-															<a style="color:#ffffff;" href="#myModalLicencas" class="btn btn-info" title="Ver férias e licenças deste funcionário"><span class="glyphicon glyphicon-time"></span> Ver Férias, Afastamentos e Licenças</a> </td>-->
+														<td> <a style="color:#ffffff;" href="/avaliacao/delegaTodas?c={{$p->CHAPA}}" class="btn btn-danger" title="Delegar as avaliações de funcáionrio para outro lider"><span class="glyphicon glyphicon-random"></span> Delegar as avaliações deste funcionário</a></td>
+														<td>  
+															<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+															 <span class="glyphicon glyphicon-time"></span> Ver Férias, Afastamentos e Licenças
+															</button>
+															</td>
+
 													
 													</tr>
 													
 												@endforeach
 											@endif
+
 										</table>
+
+
+										<!-- Modal -->
+										<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel">
+										   <div class="modal-dialog" role="document">
+											    <div class="modal-content">
+										  	        <div class="modal-header">
+													      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+													      <h4 class="modal-title" id="myModalLabel">Férias e Licenças</h4>
+												    </div>
+												    <div class="modal-body">
+ 											      	    <table class="table table-stripped">
+														 	<tr class="bg-primary">
+														 	 	<td>Tipo de Licença</td>
+																<td>Data Inicial</td>
+																<td>Data Final</td>
+													 	 	</tr>
+													 	 	@foreach ($licencas as $licenca)
+													 	 	<tr>
+													 	 		<td>{{$licenca->LICENCA}}</td>
+													 	 		<td>{{date("d/m/Y", strtotime($licenca->DTINICIAL))}}</td>
+													 	 		<td>{{date("d/m/Y", strtotime($licenca->DTFINAL))}}</td>
+													 	 	</tr>
+													 	 	@endforeach
+												      	</table>
+													 </div>
+												    <div class="modal-footer">
+												        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+												     </div>
+												</div>
+											</div>
+										</div>
 					
 							</div><!-- Dados do funcionario -->
 							
@@ -316,6 +353,8 @@ Avaliação de Desempenho dos Funcionários
 															</tr>
 														</table>
 														<table class="table table-stripped table-bordered">
+															
+																
 															<tr>
 																<td  class="info"><b>01 - Aprendizagem e Adaptação</b></td>
 																<td class="warning"><b>Nota: @if ($c->c1==0){{$n->NOTA1}}  @else - @endif </b></td>
@@ -424,6 +463,7 @@ Avaliação de Desempenho dos Funcionários
 															<tr>
 																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS15}} </td>
 															</tr>
+															
 														</table>
 													  </div>
 													  <div class="modal-footer">
@@ -435,29 +475,34 @@ Avaliação de Desempenho dos Funcionários
 											
 											</td>											
 											
-											<td>@if ($c->c1==0){{$n->NOTA1}}  @else - @endif</td>
-											<td>@if ($c->c2==0){{$n->NOTA2}}  @else - @endif</td>
-											<td>@if ($c->c3==0){{$n->NOTA3}} @else - @endif</td>
-											<td>@if ($c->c4==0){{$n->NOTA4}} @else - @endif</td>
-											<td>@if ($c->c5==0){{$n->NOTA5}} @else - @endif</td>
-											<td>@if ($c->c6==0){{$n->NOTA6}} @else - @endif</td>
-											<td>@if ($c->c7==0){{$n->NOTA7}} @else - @endif</td>
-											<td>@if ($c->c8==0){{$n->NOTA8}} @else - @endif</td>
-											<td>@if ($c->c9==0){{$n->NOTA9}} @else - @endif</td>
-											<td>@if ($c->c10==0){{$n->NOTA10}} @else - @endif</td>
-											<td>@if ($c->c11==0){{$n->NOTA11}} @else - @endif</td>
-											<td>@if ($c->c12==0){{$n->NOTA12}} @else - @endif</td>
-											<td>@if ($c->c13==0){{$n->NOTA13}} @else - @endif</td>
-											<td>@if ($c->c14==0){{$n->NOTA14}} @else - @endif</td>
-											<td>@if ($c->c15==0){{$n->NOTA15}} @else - @endif</td>
-											<td> - </span></td> 
-											
-												
+												<td>@if ($c->c1==0){{$n->NOTA1}}  @else - @endif</td>
+												<td>@if ($c->c2==0){{$n->NOTA2}}  @else - @endif</td>
+												<td>@if ($c->c3==0){{$n->NOTA3}} @else - @endif</td>
+												<td>@if ($c->c4==0){{$n->NOTA4}} @else - @endif</td>
+												<td>@if ($c->c5==0){{$n->NOTA5}} @else - @endif</td>
+												<td>@if ($c->c6==0){{$n->NOTA6}} @else - @endif</td>
+												<td>@if ($c->c7==0){{$n->NOTA7}} @else - @endif</td>
+												<td>@if ($c->c8==0){{$n->NOTA8}} @else - @endif</td>
+												<td>@if ($c->c9==0){{$n->NOTA9}} @else - @endif</td>
+												<td>@if ($c->c10==0){{$n->NOTA10}} @else - @endif</td>
+												<td>@if ($c->c11==0){{$n->NOTA11}} @else - @endif</td>
+												<td>@if ($c->c12==0){{$n->NOTA12}} @else - @endif</td>
+												<td>@if ($c->c13==0){{$n->NOTA13}} @else - @endif</td>
+												<td>@if ($c->c14==0){{$n->NOTA14}} @else - @endif</td>
+												<td>@if ($c->c15==0){{$n->NOTA15}} @else - @endif</td>
+												<td> - </span></td> 
+										
 										@endforeach
 										@endforeach
 									  </tr>			
 									</table>
 									
+									@if($licenciados)
+
+										<div class="alert-warning"> <b>Férias / Licenças: </b>
+										@foreach ($licenciados as $l) {{$l->NOME}} / @endforeach </div>
+
+									@endif
 							</div><!-- Dados da avaliação -->
 							
 							
@@ -495,11 +540,8 @@ Avaliação de Desempenho dos Funcionários
     <script type="text/javascript" src="{{ asset('assets/vendors/bootstrap-switch/js/bootstrap-switch.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/frontend/advfeatures.js') }}"></script>
 <script>
-		$('#myModalLicencas').on('shown.bs.modal', function () {
-		$('#myInput').focus()
-		})
 	
-	
+
 		$("#alert_msg").fadeTo(5800, 1600).slideUp(500, function(){
 		$("#alert_msg").slideUp(500);
 });

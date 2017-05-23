@@ -28,7 +28,7 @@ Avaliação de Desempenho dos Funcionários
                 </li>
                 <li class="hidden-xs">
                     <i class="livicon icon3" data-name="angle-double-right" data-size="18" data-loop="true" data-c="#01bc8c" data-hc="#01bc8c"></i>
-                    <a href="#">Avaliação de Desempenho</a>
+                    <a href="{{route('avaliacao')}}">Avaliação de Desempenho</a>
                 </li>
             </ol>
             <div class="pull-right">
@@ -129,6 +129,35 @@ Avaliação de Desempenho dos Funcionários
 								<td> {{$f->NOME }}</td>
 								<td> {{$f->CHAPA }} </td>
 								<td> {{$f->CHAPAAVALIADOR }} </td>
+								<td><a style="color:#ffffff;" href="/avaliacao/painel?id={{$f->CHAPA}}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-zoom-in"></span> Ver Funcionário</a></td>
+								
+							</tr>
+						
+						@endforeach
+						</table>
+						<table class="table table-striped ...">
+							<tr>
+								<td colspan="4" align="middle" class="primary"><h4 style="color:#fff;">Funcionários de Licença / Férias</h4></td>
+							</tr>
+							
+							 @if (!$licenciados)
+							<tr>
+								<td colspan="4" align="middle">Nenhum funcionário de férias ou licença.</td>
+							</tr>
+							@else
+							<tr class="primary" style="color:#ffffff;">
+								<td>Avaliado</td>
+								<td>Data Inicial</td>
+								<td>Data Final</td>
+								<td>Ações</td>
+							</tr>
+							@endif
+						@foreach ($licenciados as $f)	
+							<tr>
+								<td> {{$f->CHAPA }} -  {{$f->FUNCIONARIO }}</td>
+								<td> {{date("d/m/Y", strtotime($f->DTINICIAL))}} </td>
+								<td> {{date("d/m/Y", strtotime($f->DTFINAL))}}</td>
+								
 								<td><a style="color:#ffffff;" href="/avaliacao/painel?id={{$f->CHAPA}}" class="btn btn-sm btn-info"><span class="glyphicon glyphicon-zoom-in"></span> Ver Funcionário</a></td>
 								
 							</tr>

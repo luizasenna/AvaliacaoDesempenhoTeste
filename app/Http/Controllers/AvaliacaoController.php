@@ -14,6 +14,7 @@ use App\Participante;
 use App\Competencia;
 use App\Nota;
 use App\Equipe;
+//use App\Licenciado;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Database\QueryException;
@@ -47,6 +48,7 @@ class AvaliacaoController extends Controller
         $erro = 0;$teste = 0;  $todos = 0; $abertas=0; $fechadas=0; $ver= 0;
         $chefe = Sentinel::getUser()->chapa;
 		$lider = Funcionario::where('CHAPA', '=', $chefe)->get();
+		$chapa = Sentinel::getUser()->chapa;
        
         if (!Sentinel::getUser()->chapa or !Sentinel::getUser()->codequipe)
         {  
@@ -59,27 +61,89 @@ class AvaliacaoController extends Controller
 			$todos =  DB::select('select E.NOME AS NOME,
 								  E.CHAPA AS CHAPA, 
 								  E.DATAADMISSAO AS DATAADMISSAO,
-								  C.NOME AS CARGO
+								  C.NOME AS CARGO, 
+								  E.DATADEMISSAO AS DATADEMISSAO,
+								  E.CODFILIAL AS CODFILIAL,
+								  E.CODPESSOA AS CODPESSOA
 								  from funcionarios as E
 								  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
 								  where CODEQUIPE = '.$usuario.' and DATADEMISSAO is null order by E.NOME');
+
+			$delegacao =  DB::select('select E.NOME AS NOME,
+								  E.CHAPA AS CHAPA, 
+								  E.DATAADMISSAO AS DATAADMISSAO,
+								  C.NOME AS CARGO, 
+								  E.DATADEMISSAO AS DATADEMISSAO,
+								  E.CODFILIAL AS CODFILIAL,
+								  E.CODPESSOA AS CODPESSOA
+								  from funcionarios as E
+								  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+								  where CODEQUIPE = '.$usuario.' order by E.NOME');
 		   
-			$abertas = DB::select('select * 
+			$abertas = DB::select('select DATAABERTURA, NOME, A.CODAVALIACAO AS CODAVALIACAO
 								  from avaliacoes as A
 								  inner join veravaliacoes AS V on A.CODAVALIACAO = V.codigoavaliacao
-								  where statuslider = 0 and DATAFECHAMENTO is null');
+								  inner join participantes AS P ON P.CODAVALIACAO = A.CODAVALIACAO AND P.CODCOLIGADA = A.CODCOLIGADA
+								  where statuslider = 0 and CHAPAAVALIADOR = '.$chapa.' and DATAFECHAMENTO is null group by A.CODAVALIACAO');
 			
+
+			foreach($abertas as $aberta){
+				$testa = DB::select('select sum(if(LICENCA ="S" OR NOTA="S",0, 1)) AS Valor, CODAVALIACAO from testaavaliacao
+							where AVALIADOR = '.$chapa.' AND CODAVALIACAO = '.$aberta->CODAVALIACAO.'
+							group by CODAVALIACAO; ');
+				foreach ($testa as $t) {
+					$aberta->valor = $t->Valor;
+				}
+				
+
+			}
+
+
 			//$abertas = DB::table('avaliacoes')->whereNull('DATAFECHAMENTO')->get(); 
 			
 			//$fechadas = DB::table('avaliacoes')->having('DATAFECHAMENTO', '>', 0)->get();
 			
+			$feitos = DB::select('
+							select 
+							F.NOME AS NOME, A.CHAPAAVALIADO AS CHAPA, A.CHAPAAVALIADOR AS CHAPAAVALIADOR, 
+							IF(SUM(N.NOTAAVALIADOR)>0,"S","N")   AS TEMAVALIACAO, 
+						    LICENCA                              AS LICENCA, 
+						    A.CODAVALIACAO                       AS CODAVALIACAO, 
+						    AVA.DATAABERTURA                     AS DATAABERTURA
+							From participantes as A 
+ 							inner join funcionarios AS F
+ 							on F.CHAPA = A.CHAPAAVALIADO
+ 							left join notas AS N 
+ 							on N.CODPARTICIPANTE = A.CODPARTICIPANTE and N.CODAVALIACAO = A.CODAVALIACAO
+							left join licenciados AS L 
+							ON A.CODPARTICIPANTE = L.CODPARTICIPANTE AND A.CODAVALIACAO = L.CODAVALIACAO 
+							INNER JOIN avaliacoes as AVA ON AVA.CODAVALIACAO = A.CODAVALIACAO AND AVA.CODCOLIGADA = A.CODCOLIGADA
+ 							where N.CODPARTICIPANTE is not null
+ 							AND A.CHAPAAVALIADOR = '.$chefe.' and A.CODCOLIGADA = 1 and L.LICENCA is null
+  							GROUP BY (N.CODPARTICIPANTE)');	
+		
+				$mostra = array();
+				foreach ($abertas as $a) {
+				foreach ($feitos as $feito) {
+				
+						if($a->CODAVALIACAO == $feito->CODAVALIACAO){
+
+							if($feito->TEMAVALIACAO=='N' and $feito->LICENCA=='N'){
+								$passagem = new \stdClass();
+								$passagem->CODAVALIACAO = $feito->CODAVALIACAO; 
+								$passagem->COMPLETO = 'N';
+								array_push($mostra, $passagem);
+							}
+						}
+					}
+				}
+		
+
 			$fechadas = DB::select('select * 
 								  from avaliacoes as A
 								  inner join veravaliacoes AS V on A.CODAVALIACAO = V.codigoavaliacao
 								  where statuslider = 0 and DATAFECHAMENTO > 0 order by DATAABERTURA ASC');
-			
 			$ver = DB::table('veravaliacoes');
-	    
 	    } 
 	   
 	    return view('/avaliacao/index', [
@@ -89,6 +153,8 @@ class AvaliacaoController extends Controller
             'todos' => $todos,
 			'abertas' => $abertas,
 			'fechadas' => $fechadas, 
+			'delegacao' =>$delegacao,
+			'passagem' => $mostra,
 			'ver' => $ver
          ]);
          
@@ -123,7 +189,19 @@ class AvaliacaoController extends Controller
 							  from funcionarios as E
 		                      inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
 							  where CODEQUIPE = '.$usuario.' and DATADEMISSAO is null order by E.NOME');
+
+		$delegacao =  DB::select('select E.NOME AS NOME,
+								  E.CHAPA AS CHAPA, 
+								  E.DATAADMISSAO AS DATAADMISSAO,
+								  C.NOME AS CARGO, 
+								  E.DATADEMISSAO AS DATADEMISSAO,
+								  E.CODFILIAL AS CODFILIAL,
+								  E.CODPESSOA AS CODPESSOA
+								  from funcionarios as E
+								  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+								  where CODEQUIPE = '.$usuario.' order by E.NOME');
 							  
+
 		$funcionario =  DB::select('select E.NOME AS NOME,
 							  E.CHAPA AS CHAPA, 
 							  E.DATAADMISSAO AS DATAADMISSAO,
@@ -134,6 +212,9 @@ class AvaliacaoController extends Controller
 							  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 							  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 							  where E.CHAPA = '.$id);							  
+
+		$licenciados = DB::select('select * from licenciados where CHAPAVALIADO = '.$id);
+		$licencas = DB::select('select * from licencas where CHAPA = '.$id);
 
 	    $notas =   DB::statement('create temporary table notas_temp
 		            select 
@@ -224,8 +305,6 @@ class AvaliacaoController extends Controller
 				$t = 1; $qt = 0;
 				
 		}
-		
-	
 	    return view('/avaliacao/painel', [
             'lider' => $lider,
             'notas' => $notas,
@@ -235,13 +314,14 @@ class AvaliacaoController extends Controller
 			'perm' => $perm,
 			'qt' => $qt,
 			'aa' => $aa,
-			'm' => 0
+			'm' => 0, 
+			'licenciados' => $licenciados, 
+			'licencas' => $licencas,
+			'delegacao' => $delegacao
 			
          ]);
     }
-
- 
-   
+  
     public function mostra()
     {
 		$id = Request::input('id');
@@ -249,14 +329,27 @@ class AvaliacaoController extends Controller
 		$usuario = Sentinel::getUser()->codequipe;
 		$chefe = Sentinel::getUser()->chapa;
 		$lider = Funcionario::where('CHAPA', '=', $chefe)->get();
+		//$licenciados = Licenciado::where('CODAVALIACAO', '=', $id)->get();
 		
 		$avaliacao = Avaliacao::where('CODAVALIACAO', '=', $id)->get();
 		
-		$participantes = DB::select('select * 
+		$participantes = DB::select('
+									select * 
 									from participantes as A 
 									inner join funcionarios AS F
 									on F.CHAPA = A.CHAPAAVALIADO
-									where A.CODCOLIGADA = 1 and CODAVALIACAO = '.$id.' and CHAPAAVALIADOR = '.$chefe);
+									left join licenciados AS L 
+									ON A.CODPARTICIPANTE = L.CODPARTICIPANTE AND A.CODAVALIACAO = L.CODAVALIACAO
+									where A.CODCOLIGADA = 1 and A.CODAVALIACAO = '.$id.' and CHAPAAVALIADOR = '.$chefe);
+		
+		$licenciados = DB::select('
+									select DTINICIAL, DTFINAL, F.NOME AS FUNCIONARIO, F.CHAPA AS CHAPA 
+									from participantes as A 
+									inner join funcionarios AS F
+									on F.CHAPA = A.CHAPAAVALIADO
+									left join licenciados AS L 
+									ON A.CODPARTICIPANTE = L.CODPARTICIPANTE AND A.CODAVALIACAO = L.CODAVALIACAO
+									where L.LICENCA = "S" AND A.CODCOLIGADA = 1 and A.CODAVALIACAO = '.$id.' and CHAPAAVALIADOR = '.$chefe);
 		
 		
 		$equipe =  DB::select('select *
@@ -269,14 +362,21 @@ class AvaliacaoController extends Controller
 		                      left join participantes AS P on (P.CHAPAAVALIADO = F.CHAPA) AND CODAVALIACAO = '.$id.' 
 							  where F.CODCOLIGADA = 1 and F.CODEQUIPE = '.$usuario.' and CHAPAAVALIADO is null  order by F.NOME');			  
 		
-		$feitos = DB::select('select * From participantes as A 
-							  inner join funcionarios AS F
-								on F.CHAPA = A.CHAPAAVALIADO
-							  left join notas AS N 
-								on N.CODPARTICIPANTE = A.CODPARTICIPANTE and N.CODAVALIACAO = A.CODAVALIACAO
-								where  A.CODAVALIACAO = '.$id.' and N.CODPARTICIPANTE is not null
-								AND A.CHAPAAVALIADOR = '.$chefe.' and A.CODCOLIGADA = 1
-								GROUP BY (N.CODPARTICIPANTE)');	
+		$feitos = DB::select('
+							select 
+							F.NOME AS NOME, A.CHAPAAVALIADO AS CHAPA, A.CHAPAAVALIADOR AS CHAPAAVALIADOR, 
+							IF(SUM(N.NOTAAVALIADOR)>0,"S","N")   AS TEMAVALIACAO, 
+						    LICENCA                              AS LICENCA
+							From participantes as A 
+ 							inner join funcionarios AS F
+ 							on F.CHAPA = A.CHAPAAVALIADO
+ 							left join notas AS N 
+ 							on N.CODPARTICIPANTE = A.CODPARTICIPANTE and N.CODAVALIACAO = A.CODAVALIACAO
+							left join licenciados AS L 
+							ON A.CODPARTICIPANTE = L.CODPARTICIPANTE AND A.CODAVALIACAO = L.CODAVALIACAO
+ 							where  A.CODAVALIACAO = '.$id.' and N.CODPARTICIPANTE is not null
+ 							AND A.CHAPAAVALIADOR = '.$chefe.' and A.CODCOLIGADA = 1 and L.LICENCA is null
+  							GROUP BY (N.CODPARTICIPANTE)');	
 	
 	/*	$faltantes = DB::select('select * From participantes as A 
 							  inner join funcionarios AS F
@@ -289,7 +389,8 @@ class AvaliacaoController extends Controller
 		*/
 		
 		
-		$faltantes = DB::select('select 
+		$faltantes = DB::select('
+								select 
 								F.NOME as NOME, 
 								F.CHAPA  AS CHAPA,
 								A.CODAVALIACAO AS CODAVALIACAO, 
@@ -306,14 +407,43 @@ class AvaliacaoController extends Controller
                               inner join avaliacoes as AV 
                                 ON AV.CODCOLIGADA = A.CODCOLIGADA
                                 AND AV.CODAVALIACAO = A.CODAVALIACAO
+                                left join licenciados AS L 
+                                ON A.CODPARTICIPANTE = L.CODPARTICIPANTE AND A.CODAVALIACAO = L.CODAVALIACAO
 							  where A.CODAVALIACAO = '.$id.'
 							     and A.CHAPAAVALIADOR = '.$chefe.'
 							     AND N.NOTAAVALIADOR is null
 							     and A.CODCOLIGADA = 1
 							     and (DATADEMISSAO is null or DATADEMISSAO >= DATAABERTURA)
+                                 and L.LICENCA is null
 							  group by A.CODPARTICIPANTE
 						');
 		
+		$testaAvaliacao = DB::select('select F.CHAPA                              AS CHAPA, 
+						   F.NOME                               AS NOME,  
+						   MAX(P.CODPARTICIPANTE)               AS CODPARTICIPANTE,
+						   P.CODAVALIACAO                       AS CODAVALIACAO,
+						   A.NOME                               AS NOMEAVALIACAO,
+						   P.CHAPAAVALIADOR                     AS CHAPAAVALIADOR, 
+						   L.NOME                               AS NOMELIDER, 
+						   IF(SUM(N.NOTAAVALIADOR)>0,"S","N")   AS TEMAVALIACAO, 
+						   LICENCA                              AS LICENCA
+					 from funcionarios AS F
+					inner join participantes AS P
+						ON F.CHAPA = P.CHAPAAVALIADO
+					left join funcionarios AS L 
+						ON L.CHAPA = P.CHAPAAVALIADOR
+					left join avaliacoes AS A
+						ON A.CODAVALIACAO = P.CODAVALIACAO
+						   AND A.CODCOLIGADA = P.CODCOLIGADA
+					left join notas as N 
+						ON N.CODPARTICIPANTE = P.CODPARTICIPANTE AND
+						   N.CODAVALIACAO = P.CODAVALIACAO
+					left join pessoas AS PE on PE.CODIGO = F.CODPESSOA
+					left join licenciados as LF ON LF.CHAPAVALIADO = F.CHAPA AND LF.CODAVALIACAO = P.CODAVALIACAO
+					where A.DATAABERTURA > 20151231 and A.CODAVALIACAO > 24 and P.CHAPAAVALIADOR = '.$chefe.'
+					GROUP BY P.CODPARTICIPANTE
+					ORDER BY A.CODAVALIACAO DESC;');
+
 		return view('avaliacao.mostra', [
 			'avaliacao' => $avaliacao,
 			'lider' => $lider,
@@ -324,10 +454,9 @@ class AvaliacaoController extends Controller
 			'faltantes' => $faltantes,
 			'id' => $id,
 			'chefe' => $chefe,
-			'usuario' => $usuario
+			'usuario' => $usuario,
+			'licenciados' => $licenciados
 		]);
-		
-		
     }
 
    
@@ -471,8 +600,6 @@ class AvaliacaoController extends Controller
 			
 			$competencia = Request::input('$concat');
 			
-	
-			
 			try{
 			        DB::statement('insert into notas (CODPARTICIPANTE, CODAVALIACAO, CODITEMAVAL, CODCOLIGADA, created_at, 
 							PESOITEMAVAL, NOTAAVALIADOR, COMENTARIO, RECCREATEDBY) VALUES
@@ -485,7 +612,6 @@ class AvaliacaoController extends Controller
 			            //return 'houston, we have a duplicate entry problem';
 			        }
 			    }
-
 
 			$i++;
 			}
@@ -542,8 +668,6 @@ class AvaliacaoController extends Controller
 		                      left join participantes AS P on (P.CHAPAAVALIADO = F.CHAPA) AND CODAVALIACAO = '.$id.' 
 							  where DATADEMISSAO is null and F.CODEQUIPE = '.$usuario.' and CHAPAAVALIADO is null  order by F.NOME');			  
 		
-      
-		
 		return redirect()->intended('avaliacao/mostra?id='.$id)->withInput()->with('status' , 'Nota adicionada com sucesso');
 	
     }
@@ -553,14 +677,6 @@ class AvaliacaoController extends Controller
     {
         return view('avaliacao.valida');
     }
-
-
-
-  public function update(Request $request, $id)
-    {
-        //
-    }
-
 
 	public function paineladmin(){
 			
@@ -601,7 +717,6 @@ class AvaliacaoController extends Controller
 			
 			$funcionarios = Funcionario::whereNull('DATADEMISSAO')->paginate(15);
 
-			
 			return view('admin.avaliacao.painel', [
 			'avaliacoes' => $avaliacoes,
 			'usuario' => $usuario, 
@@ -609,7 +724,6 @@ class AvaliacaoController extends Controller
 			'funcionarios' => $funcionarios
 			
 			]);
-		
 		
 	}
 
@@ -640,8 +754,6 @@ class AvaliacaoController extends Controller
 				where statusadmin = 0
 				group by p.CODAVALIACAO;
 				');
-				
-				
 				
 				return view('admin.avaliacao.progresso', [
 				
@@ -690,12 +802,10 @@ class AvaliacaoController extends Controller
 							on C.CODAVALIACAO = N.CODAVALIACAO AND N.CODITEMAVAL= C.CODIGO
 							INNER JOIN competencias AS S ON C.CODCOMPETENCIA = S.CODCOMPETENCIA
 							where N.CODAVALIACAO = '.$id.' and N.CODPARTICIPANTE = '.$participante);
-		
 				
 		$avaliado = Participante::where('CODPARTICIPANTE', '=', $participante)->get();
 		$avaliacao = Avaliacao::where('CODAVALIACAO', '=', $id)->get();
 			
-		
            return view('/avaliacao/visao', [
             'id' => $id,
             'participante' => $participante,
@@ -710,7 +820,6 @@ class AvaliacaoController extends Controller
 		$a = Request::input('id');
 		$p = Request::input('pt');
 		$c = Request::input('c');
-	
 		
 		$lideres = DB::select('select CODPESSOA AS CODIGO, F.NOME AS NOME, F.CHAPA AS CHAPA from equipes as E
 					inner join funcionarios as F ON E.CODCLIENTE = F.CODPESSOA
@@ -756,7 +865,6 @@ class AvaliacaoController extends Controller
 									  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 									  where E.CHAPA = '.$c);		
 		
-		
 		  return view('/avaliacao/delegaUma', [
             'a' => $a,
             'p' => $p,
@@ -767,10 +875,8 @@ class AvaliacaoController extends Controller
             ]);
 		}
 		
-		
+	
 	 public function delegaUmaAvaliacao(){
-		 
-		 
 		$a = Request::input('a');
 		$p = Request::input('p');
 		$avaliador = Request::input('avaliador');
@@ -840,7 +946,6 @@ class AvaliacaoController extends Controller
 					where F.CHAPA = ".$xyz." and A.CODAVALIACAO > 24
 					GROUP BY P.CODAVALIACAO
 					ORDER BY A.CODAVALIACAO ASC;");
-				
 		
 		return view('/avaliacao/delegaTodas', [
 				'avaliado' => $avaliado,
@@ -849,8 +954,7 @@ class AvaliacaoController extends Controller
 				'xyz' => $xyz,
 				'contador' => 1
 				 ]);
-		
-		
+	
 		}
     
     public function delegaVarias(){
@@ -870,26 +974,142 @@ class AvaliacaoController extends Controller
 			$aa = Request::input('chapaantigoavaliador');
 			$av = Request::input('avaliacao');
 			if ($a > 0){
-
 				DB::statement('update participantes set CHAPAAVALIADOR = '.$avaliador.' Where CODPARTICIPANTE = '.$a.';');
 				DB::statement('insert into delegacoes (user, codigoavaliacao, obs, created_at, updated_at, chapaavaliado, chapaantigoavaliador, chapanovoavaliador) 
 					values ('.$user.','.$av.',"'.$obs.'","'.date("Y-m-d H:i:s").'","'.date("Y-m-d H:i:s").'","'.$c.'",'.$aa.','.$avaliador.')');
-								
-			}
-			
-			
+					
+				}
 			$i++;
-			
 			}
-		
-		
 		
 		return redirect()->intended('/avaliacao/painel?id='.$c)->withInput()->with('status' , 'Avaliador(a) alterado(a) com sucesso. Você continuará como líder desta pessoa, 
 		porém as avaliações serão feitas por outra pessoa. Para a mudança definitiva, contatar RH paras futuras avaliações.');
 		
-		
 		}
     
-    
+    public function avaliado(){
+
+    	$c = Request::input('id');
+		$avaliado = DB::select("
+					select F.CHAPA                              AS CHAPA, 
+						   F.NOME                               AS NOME,  
+						   MAX(P.CODPARTICIPANTE)               AS CODPARTICIPANTE,
+						   P.CODAVALIACAO                       AS CODAVALIACAO,
+						   A.NOME                               AS NOMEAVALIACAO,
+						   P.CHAPAAVALIADOR                     AS CHAPAAVALIADOR, 
+						   L.NOME                               AS NOMELIDER, 
+						   IF(SUM(N.NOTAAVALIADOR)>0,'S','N')   AS TEMAVALIACAO, 
+						   LICENCA                              AS LICENCA
+					 from funcionarios AS F
+					inner join participantes AS P
+						ON F.CHAPA = P.CHAPAAVALIADO
+					left join funcionarios AS L 
+						ON L.CHAPA = P.CHAPAAVALIADOR
+					left join avaliacoes AS A
+						ON A.CODAVALIACAO = P.CODAVALIACAO
+						   AND A.CODCOLIGADA = P.CODCOLIGADA
+					left join notas as N 
+						ON N.CODPARTICIPANTE = P.CODPARTICIPANTE AND
+						   N.CODAVALIACAO = P.CODAVALIACAO
+					left join pessoas AS PE on PE.CODIGO = F.CODPESSOA
+					left join licenciados as LF ON LF.CHAPAVALIADO = F.CHAPA AND LF.CODAVALIACAO = P.CODAVALIACAO
+					where F.CHAPA = ".$c." and A.DATAABERTURA > 20151231 and A.CODAVALIACAO > 24
+					GROUP BY P.CODAVALIACAO
+					ORDER BY A.CODAVALIACAO DESC;");
+					
+				$grupo = '';
+				
+						  
+				$funcionario =  DB::select('select E.NOME AS NOME,
+									  E.CHAPA AS CHAPA, 
+									  E.DATAADMISSAO AS DATAADMISSAO,
+									  E.DATADEMISSAO AS DATADEMISSAO,
+									  C.NOME AS CARGO, 
+									  I.IMAGEM AS IMAGEM,  
+									  E.CODFILIAL AS LOJA,
+									  E.CODEQUIPE AS CODEQUIPE, 
+									  G.DESCRICAO AS LIDER
+									  from funcionarios as E
+									  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+									  left join pessoas AS P on P.CODIGO = E.CODPESSOA
+									  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
+									  inner join equipes as G ON E.CODEQUIPE = G.CODINTERNO
+									  where E.CHAPA = '.$c);							  
+
+				$notas =   DB::statement('create temporary table notas_temp
+							select 
+							N.CODITEMAVAL   AS ITEM,
+							S.NOME           AS NOMECOMPETENCIA,  
+							NOTAAVALIADOR    AS NOTA,  
+							P.CHAPAAVALIADO  AS CHAPA,  
+							N.CODAVALIACAO   AS AVALIACAO, 
+							V.NOME           AS DESCRICAO, 
+							V.DATAABERTURA   AS DATA, P.CODPARTICIPANTE, P.CODAVALIACAO, 
+							N.COMENTARIO     AS OBS, 
+							date_format(N.created_at, "%d/%m/%Y")  AS FEITAEM, 
+							N.CODPARTICIPANTE  AS PARTICIPANTE, 
+							P.CHAPAAVALIADOR  AS AVALIADOR
+							from notas AS N
+							inner join participantes AS P on N.CODAVALIACAO = P.CODAVALIACAO and N.CODPARTICIPANTE = P.CODPARTICIPANTE
+							inner JOIN competencias AS S ON N.CODITEMAVAL = S.CODCOMPETENCIA
+							inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
+							inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
+							where statuslider = 0 and P.CHAPAAVALIADO = '.$c);	
+								  
+			
+				$resultado = DB::select('
+								select
+								AVALIACAO, 
+								CHAPA,
+								CODPARTICIPANTE,
+								DESCRICAO,
+								FEITAEM,
+								PARTICIPANTE,
+								AVALIADOR,
+								MAX(IF(ITEM = "01", NOTA, 0)) AS NOTA1, 
+								MAX(IF(ITEM = "01", OBS, " - "))  AS OBS1, 
+								MAX(IF(ITEM = "02", NOTA, 0)) AS NOTA2,
+								MAX(IF(ITEM = "03", NOTA, 0)) AS NOTA3,  
+								MAX(IF(ITEM = "04", NOTA, 0)) AS NOTA4,
+								MAX(IF(ITEM = "05", NOTA, 0)) AS NOTA5,  
+								MAX(IF(ITEM = "06", NOTA, 0)) AS NOTA6, 
+								MAX(IF(ITEM = "07", NOTA, 0)) AS NOTA7,  
+								MAX(IF(ITEM = "08", NOTA, 0)) AS NOTA8,
+								MAX(IF(ITEM = "09", NOTA, 0)) AS NOTA9,  
+								MAX(IF(ITEM = "10", NOTA, 0)) AS NOTA10,
+								MAX(IF(ITEM = "11", NOTA, 0)) AS NOTA11,  
+								MAX(IF(ITEM = "12", NOTA, 0)) AS NOTA12,
+								MAX(IF(ITEM = "13", NOTA, 0)) AS NOTA13,
+								MAX(IF(ITEM = "14", NOTA, 0)) AS NOTA14,  
+								MAX(IF(ITEM = "15", NOTA, 0)) AS NOTA15, 
+								MAX(IF(ITEM = "02", OBS, " - ")) AS OBS2,
+								MAX(IF(ITEM = "03", OBS, " - ")) AS OBS3,  
+								MAX(IF(ITEM = "04", OBS, " - ")) AS OBS4,
+								MAX(IF(ITEM = "05", OBS, " - ")) AS OBS5,  
+								MAX(IF(ITEM = "06", OBS, " - ")) AS OBS6, 
+								MAX(IF(ITEM = "07", OBS, " - ")) AS OBS7,  
+								MAX(IF(ITEM = "08", OBS, " - ")) AS OBS8,
+								MAX(IF(ITEM = "09", OBS, " - ")) AS OBS9,  
+								MAX(IF(ITEM = "10", OBS, " - ")) AS OBS10,
+								MAX(IF(ITEM = "11", OBS, " - ")) AS OBS11,  
+								MAX(IF(ITEM = "12", OBS, " - ")) AS OBS12,
+								MAX(IF(ITEM = "13", OBS, " - ")) AS OBS13,
+								MAX(IF(ITEM = "14", OBS, " - ")) AS OBS14,  
+								MAX(IF(ITEM = "15", OBS, " - ")) AS OBS15, 
+								0 AS MEDIA 
+								from notas_temp
+								GROUP BY AVALIACAO, CHAPA
+								ORDER BY AVALIACAO*1');					  
+							
+			
+			return view('/avaliacao/avaliado', [
+				'avaliado' => $avaliado,
+				'notas' => $notas,
+				'funcionario' => $funcionario,
+				'resultado' => $resultado,
+				'status' => 'status'
+			 ]);
+
+    }
     
 }

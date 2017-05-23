@@ -53,6 +53,7 @@
         <div class="bg-light animation flipInX">
             <a href="{{ route('forgot-password') }}">Esqueceu sua senha?</a>
         </div>
+        Versão 2.0
         </div>
     </div>
     <!-- //Content Section End -->

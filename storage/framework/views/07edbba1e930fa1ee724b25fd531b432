@@ -1,0 +1,188 @@
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Delegação de Avaliado - AD
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /* page level styles */ ?>
+<?php $__env->startSection('header_styles'); ?>
+    
+    <link href="<?php echo e(asset('assets/vendors/bootstrap-form-builder/css/custom.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('assets/css/pages/formbuilder.css')); ?>" rel="stylesheet" />
+    
+    <script type="stylesheet">
+		.center-block {  
+			display: block;  
+			margin-right: auto;  
+			margin-left: auto;  
+		} 
+	</script>
+
+    
+<?php $__env->stopSection(); ?>
+
+<?php /* Page content */ ?>
+<?php $__env->startSection('content'); ?>
+
+<section class="content-header">
+            <!--section starts-->
+            <h1>Delegação de Avaliação de Desempenho</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="<?php echo e(route('dashboard')); ?>">
+                        <i class="livicon" data-name="home" data-size="14" data-loop="true"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="active">Avaliado</li>
+            </ol>
+        </section>
+        <!--section ends-->
+        <section class="content">
+            <!--main content-->
+            
+            <div class="row"> 
+				 <?php if(session('status')): ?>
+							<div class="col-md-4"></div>
+							<div id="alert_msg" class="center-block col-md-4 alert alert-info row-centered alert-dismissable pull-center center-block" tabindex="-1" >
+							<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+							<strong><?php echo e(session('status')); ?></strong>
+						    </div>
+							<div class="col-md-4"></div>
+					<?php endif; ?>
+					</div> 
+                <div class="col-md-12">
+                           
+                   
+                           
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                                Avaliado
+                            </h3>
+                            <span class="pull-right clickable"></span>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row clearfix">
+								<div>
+									
+									<!-- Dados do funcionario -->
+									<div class="panel-body col-md-8">
+											<table class="table table-stripped">
+													<?php if(!$funcionario): ?>
+														<?php echo e("Pessoa não encontrada"); ?>
+
+													<?php else: ?>
+									
+														<?php foreach($funcionario as $p): ?>
+															<tr>
+																<td colspan ="2" > <h4><b> <?php echo e($p->NOME); ?></b></h4></td>
+															</tr>
+															<tr>											
+																<td><b>CHAPA:</b><?php echo e($p->CHAPA); ?> </td>
+																<td><b>CARGO:</b> <?php echo e($p->CARGO); ?> </td>
+															</tr>
+															<tr>											
+																<td><b>ADMISSÃO:</b> <?php echo e(date("d/m/Y", strtotime($p->DATAADMISSAO))); ?></td>
+																<td><b>DEMISSAO:</b> <?php if($p->DATADEMISSAO): ?><?php echo e(date("d/m/Y", strtotime($p->DATADEMISSAO))); ?> <?php else: ?> Nada Consta <?php endif; ?> </td>
+																
+															</tr>
+															<tr>
+																<td><b>LOJA:</b> <?php echo e($p->LOJA); ?></td>
+																<td><b>LIDER ATUAL:</b> <?php echo e($p->LIDER); ?> 
+																	
+																 </td>
+															</tr>
+														<?php endforeach; ?>
+													<?php endif; ?>
+												</table>
+							
+									</div><!-- Dados do funcionario -->
+									<div class="col-md-2 panel-body">
+										<?php foreach($funcionario as $f): ?>
+										<!--<img src="/assets/images/avaliacao/avatar.png" width="180px" height="180px"/>-->
+										<?php echo e($f->IMAGEM); ?>
+
+										<img width="150px" height="180px" src="data:image/jpeg;base64,<?php echo e(base64_encode( $f->IMAGEM )); ?>"/> 
+										<?php endforeach; ?>
+									</div>
+								</div>
+                              
+								<div class="row clearfix">
+									<div class="col-md-12">
+										
+										<div class="dropdown" style="margin-bottom:15px;">
+											  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+											    Alterar Liderança nas Avaliações de <?php echo e($funcionario[0]->NOME); ?>
+
+											    <span class="caret"></span>
+											  </button>
+											  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+												    <li><a href="delegaTodas?xyz=<?php echo e($funcionario[0]->CHAPA); ?>">Delegar Avaliações ainda não feitas</a></li>
+												    <li><a href="mudaequipe?xyz=<?php echo e($funcionario[0]->CHAPA); ?>">Mudar Equipe do funcionário</a></li>
+												    <li role="separator" class="divider"></li>
+												    <li class="text-center">Atenção, pois as duas ações<br/> 
+												    não significam o mesmo</li>
+											  </ul>
+										</div>
+										
+										
+											<table class="table table-stripped table-bordered">
+												<tr>
+													<th>Codigo</th>
+													<th>Nome da Avaliação</th>
+													<th>Avaliador</th>
+													<th>Nome do AValiador</th>
+													<th>Já foi feita?</th>
+													<th>Delegar</th>
+												</tr>
+												<?php foreach($avaliado as $a): ?>
+												<tr>
+													<td><?php echo e($a->CODAVALIACAO); ?></td>
+													<td><?php echo e($a->NOMEAVALIACAO); ?></td>
+													<td><?php echo e($a->CHAPAAVALIADOR); ?></td>
+													<td><?php echo e($a->NOMELIDER); ?></td>
+													<td><?php if($a->TEMAVALIACAO=='S'): ?> SIM <?php else: ?> NÃO <?php endif; ?></td>
+													<td><?php if($a->TEMAVALIACAO=='S'): ?> <span class="text-info">Aval. já Feita</span> 
+														<?php else: ?> 
+															<?php if($a->LICENCA=='S'): ?> Férias / Licença
+															<?php else: ?>
+															<a href="delega?xyz=<?php echo e($funcionario[0]->CHAPA); ?>&a=<?php echo e($a->CODAVALIACAO); ?>&p=<?php echo e($a->CODPARTICIPANTE); ?>" class="btn btn-sm btn-warning">
+																<span class="glyphicon glyphicon-wrench"></span> Delegar </a>
+															<?php endif; ?>	
+														<?php endif; ?></td>
+												</tr>
+												<?php endforeach; ?>
+											</table>
+										
+										
+										
+									</div>
+									
+								
+								</div>
+                              
+                            </div>
+                        </div>
+                        <!-- / Building Form. --> </div>
+                    <!-- / Components --> </div>
+                <!--form builder ends--> </div>
+        </section>
+        <!--main content ends--> 
+<?php $__env->stopSection(); ?>
+
+<?php /* page level scripts */ ?>
+<?php $__env->startSection('footer_scripts'); ?>
+  
+  <script type="text/javascript" src="<?php echo e(asset('assets/js/pages/general.js')); ?>" ></script>
+
+
+
+  
+
+	
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin/layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
