@@ -103,7 +103,7 @@
     <!-- //Footer Section End -->
     <div class="copyright">
         <div class="container">
-        <p>Copyright &copy; Centro de Informática da Pintos, 2016 - Versão 2.1.1</p>
+        <p>Feito com amor pelo Centro de Informática da Pintos, 2017 - Versão 2.1.1 - pintos.com.br</p>
         </div>
     </div>
     <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Subir para o topo" data-toggle="tooltip" data-placement="left">
