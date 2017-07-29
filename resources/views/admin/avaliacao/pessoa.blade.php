@@ -28,7 +28,7 @@ Avaliação de Desempenho
                     </a>
                 </li>
                 <li class="active"> <a href="{{route('painel')}}">
-                Avaliação de Desempenho</a></li>
+                Avaliação de Desempenho 2.0</a></li>
             </ol>
         </section>
         <!--section ends-->
