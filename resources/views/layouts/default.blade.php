@@ -101,6 +101,20 @@
         </div>
     </footer>
     <!-- //Footer Section End -->
+    
+    	<!-- Analytics Intranet RH-->
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+		  ga('create', 'UA-46066108-3', 'auto');
+		  ga('send', 'pageview');
+
+		</script>
+    	<!-- Analytics Intranet RH-->
+    
     <div class="copyright">
         <div class="container">
         <p>Feito com amor pelo Centro de Informática da Pintos, 2017 - Versão 2.1.1 - pintos.com.br</p>
