@@ -852,4 +852,14 @@ class AvaliacaoAdminController extends Controller
 							 ]);
 				}	
 
+		public function mediaAvaliacao(){
+			
+			return view('admin.avaliacao.media2016', [
+		
+			'0' => 0
+			
+			]);
+		}
+	
+	
 }
