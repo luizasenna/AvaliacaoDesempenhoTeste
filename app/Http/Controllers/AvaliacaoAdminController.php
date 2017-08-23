@@ -854,9 +854,12 @@ class AvaliacaoAdminController extends Controller
 
 		public function mediaAvaliacao(){
 			
+			$equipes = Equipe::all();
+			
+			
 			return view('admin.avaliacao.media2016', [
 		
-			'0' => 0
+			'equipes' => $equipes
 			
 			]);
 		}

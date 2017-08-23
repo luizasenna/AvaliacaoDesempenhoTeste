@@ -53,9 +53,13 @@ Média Geral 2016
 								<div class="col-md-12 panel-body">
 									<form class="form-inline">
 										  <div class="form-group">
-											<label for="setor">Setor</label>
+											<label for="setor">Equipe</label>
 											<select>
-												<option>Setores</option>
+												
+												<option>Selecione</option>
+												@foreach ($equipes as $e)
+													<option value="{{$e->CODINTERNO}}">{{$e->DESCRICAO}}</option>
+												@endforeach
 											</select>
 										  </div>
 										 

@@ -51,9 +51,13 @@ Média Geral 2016
 								<div class="col-md-12 panel-body">
 									<form class="form-inline">
 										  <div class="form-group">
-											<label for="setor">Setor</label>
+											<label for="setor">Equipe</label>
 											<select>
-												<option>Setores</option>
+												
+												<option>Selecione</option>
+												<?php foreach($equipes as $e): ?>
+													<option value="<?php echo e($e->CODINTERNO); ?>"><?php echo e($e->DESCRICAO); ?></option>
+												<?php endforeach; ?>
 											</select>
 										  </div>
 										 
