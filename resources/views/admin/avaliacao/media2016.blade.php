@@ -51,20 +51,43 @@ Média Geral 2016
                             <div class="row ">
                                 
 								<div class="col-md-12 panel-body">
-									<form class="form-inline">
+									<form class="form-inline" action="media2016" >
 										  <div class="form-group">
 											<label for="setor">Equipe</label>
-											<select>
+											<select name="equipe" id="equipe">
 												
 												<option>Selecione</option>
+												@if($equipe_filter)
+													<option value=""></option>
+												@endif
 												@foreach ($equipes as $e)
-													<option value="{{$e->CODINTERNO}}">{{$e->DESCRICAO}}</option>
+													<option value="{{$e->CODINTERNO}}" {{$e->CODINTERNO == $equipe_filter ? 'selected' : '' }}>{{$e->DESCRICAO}}</option>
 												@endforeach
 											</select>
 										  </div>
 										 
 										  <button type="submit" class="btn btn-primary">Buscar</button>
 									</form>
+									<div>
+										<table class="table table-stripped">
+											<tr>
+												<td>Chapa</td>
+												<td>Avaliação</td>
+												<td>Media</td>
+												
+											</tr>
+											@foreach($total as $t)
+											<tr>
+												<td>{{$t->CHAPA}}</td>
+												<td>{{$t->AVALIACAO}}</td>
+												<td>{{$t->DESCRICAO}}</td>
+												<td>{{$t->NOME}}</td>
+												<td>{{$t->mediames}}</td>
+											</tr>
+											@endforeach
+										</table>
+									</div>
+									
 								</div>
                             </div>
                         </div>
