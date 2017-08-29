@@ -855,10 +855,11 @@ class AvaliacaoAdminController extends Controller
 
 		public function mediaAvaliacao(){
 			
-			$equipes = Equipe::all();
+			$equipes = Equipe::orderBy('DESCRICAO','asc')->get();
 			$equipe_filter = Request::Input('equipe');
 			
-			if ($equipe_filter){
+			
+			if ($equipe_filter <> ''){
 				
 				DB::statement('drop table if exists notas_temp;');
 				DB::statement('
@@ -874,6 +875,7 @@ class AvaliacaoAdminController extends Controller
 					N.COMENTARIO     AS OBS, 
 					date_format(N.created_at, "%d/%m/%Y")  AS FEITAEM, 
 					F.NOME           AS NOME, 
+					FUN.NOME        AS FUNCAO,
 					N.CODPARTICIPANTE  AS PARTICIPANTE, 
 					P.CHAPAAVALIADOR  AS AVALIADOR
 					from notas AS N
@@ -882,6 +884,7 @@ class AvaliacaoAdminController extends Controller
 					inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
 					inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
 					inner JOIN funcionarios AS F on F.CHAPA = P.CHAPAAVALIADO
+					inner JOIN funcoes AS FUN ON FUN.CODIGO = F.CODFUNCAO
 					where statuslider = 0 and P.CODAVALIACAO BETWEEN 25 AND 36 and F.CODEQUIPE = '.$equipe_filter);
 				DB::statement('drop table if exists notasPessoa');
 				DB::statement('CREATE TEMPORARY TABLE notasPessoa    
@@ -893,6 +896,7 @@ class AvaliacaoAdminController extends Controller
 						PARTICIPANTE,
 						AVALIADOR,
 						NOME,
+						FUNCAO,
 						MAX(IF(ITEM = "01", NOTA, 0)) AS NOTA1, 
 						MAX(IF(ITEM = "02", NOTA, 0)) AS NOTA2,
 						MAX(IF(ITEM = "04", NOTA, 0)) AS NOTA4,
@@ -910,10 +914,11 @@ class AvaliacaoAdminController extends Controller
                         where NOTA != 0
 						GROUP BY AVALIACAO, CHAPA
 						ORDER BY AVALIACAO');
-				//$total = DB::table('select * from notasPessoa')->get();
+				
 				$total = DB::select(DB::raw('select * from notasPessoa order by CHAPA'));
 				$contador = 0;
 				$soma = 0;
+				DB::statement('delete from media2016');
 				foreach($total as $t){
 					if($t->NOTA1 > 0) { 
 						$soma = $soma + $t->NOTA1;
@@ -971,23 +976,42 @@ class AvaliacaoAdminController extends Controller
 					$contador = 0;
 					$soma = 0;
 					
+				
+				DB::table('media2016')->insert(
+				array('CHAPA'=>$t->CHAPA, 'AVALIACAO'=>$t->AVALIACAO, 'MEDIA'=>$t->mediames, 'NOME'=>$t->NOME, 'FUNCAO'=>$t->FUNCAO));
+			
 					
 				}
 				
-				
 			} else {
 				$total = '';
+				$medias = '';
 			}
 			
-			
+			$medias = DB::select('select CHAPA, ROUND(SUM(MEDIA)/COUNT(CHAPA),2) as SOMA, NOME, FUNCAO   FROM media2016 WHERE AVALIACAO between 25 and 36 group by CHAPA order by SOMA desc');
 			return view('admin.avaliacao.media2016', [
 		
 			'equipes' => $equipes,
 			'equipe_filter' => $equipe_filter,
-			'total' => $total
+			'total' => $total,
+			'medias' => $medias
 			
 			]);
 		}
 	
+		public function mediaImpressao(){
+			
+			
+			$medias = DB::select('select CHAPA, ROUND(SUM(MEDIA)/COUNT(CHAPA),2) as SOMA, NOME, FUNCAO   FROM media2016 WHERE AVALIACAO between 25 and 36 group by CHAPA order by SOMA desc');
+			$equipe = Request::Input('e');
+			$lider = Funcionario::Where('CODPESSOA', '=', $equipe)->get();
+			
+			return view('admin.avaliacao.mediaImpressao', [
+			'medias' => $medias,
+			'lider'=> $lider
+			
+			]);
+			
+		}
 	
 }

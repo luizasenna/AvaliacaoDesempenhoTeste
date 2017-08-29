@@ -55,11 +55,8 @@ Média Geral 2016
 										  <div class="form-group">
 											<label for="setor">Equipe</label>
 											<select name="equipe" id="equipe">
+												<option value="0">Selecione</option>
 												
-												<option>Selecione</option>
-												@if($equipe_filter)
-													<option value=""></option>
-												@endif
 												@foreach ($equipes as $e)
 													<option value="{{$e->CODINTERNO}}" {{$e->CODINTERNO == $equipe_filter ? 'selected' : '' }}>{{$e->DESCRICAO}}</option>
 												@endforeach
@@ -68,24 +65,31 @@ Média Geral 2016
 										 
 										  <button type="submit" class="btn btn-primary">Buscar</button>
 									</form>
-									<div>
+									<div class="col-md-9">
 										<table class="table table-stripped">
-											<tr>
-												<td>Chapa</td>
-												<td>Avaliação</td>
-												<td>Media</td>
-												
-											</tr>
-											@foreach($total as $t)
-											<tr>
-												<td>{{$t->CHAPA}}</td>
-												<td>{{$t->AVALIACAO}}</td>
-												<td>{{$t->DESCRICAO}}</td>
-												<td>{{$t->NOME}}</td>
-												<td>{{$t->mediames}}</td>
-											</tr>
-											@endforeach
+											@if(isset($medias))
+												<tr>
+													<td>Chapa</td>
+													<td>Nome</td>
+													<td>Função</td>
+													<td>Media</td>
+
+												</tr>
+											
+												@foreach($medias as $m)
+													<tr>
+														<td>{{$m->CHAPA}}</td>
+														<td>{{$m->NOME}}</td>
+														<td>{{$m->FUNCAO}}</td>
+														<td>{{$m->SOMA}}</td>
+														
+													</tr>
+												@endforeach
+											@endif
 										</table>
+										<div class="col-md-9 pull-right">
+											<a class="btn btn-default" href="mediaImpressao?e={{$equipe_filter}}" target="_blank" role="button">Versão para Impressão</a>
+										</div>
 									</div>
 									
 								</div>
