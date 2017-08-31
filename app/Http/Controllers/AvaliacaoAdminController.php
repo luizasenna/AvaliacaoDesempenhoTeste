@@ -48,7 +48,7 @@ class AvaliacaoAdminController extends Controller
 								  E.DATAADMISSAO AS DATAADMISSAO,
 								  C.NOME AS CARGO
 								  from funcionarios as E
-								  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+								  left join funcoes AS C on C.CODIGO = E.CODFUNCAO
 								  where CODEQUIPE = '.$usuario.' and DATADEMISSAO is null order by E.NOME');
 		 
 			$abertas = DB::select('select * 
@@ -161,7 +161,7 @@ class AvaliacaoAdminController extends Controller
 							  I.IMAGEM AS IMAGEM, 
 							  Q.DESCRICAO AS LIDER
 							  from funcionarios as E
-		                      inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+		                      left join funcoes AS C on C.CODIGO = E.CODFUNCAO
 							  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 							  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 							  inner join equipes as Q ON Q.CODCLIENTE = E.CODEQUIPE
@@ -411,7 +411,7 @@ class AvaliacaoAdminController extends Controller
 									  E.CODEQUIPE AS CODEQUIPE, 
 									  G.DESCRICAO AS LIDER
 									  from funcionarios as E
-									  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+									  left join funcoes AS C on C.CODIGO = E.CODFUNCAO
 									  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 									  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 									  inner join equipes as G ON E.CODEQUIPE = G.CODINTERNO
@@ -542,7 +542,7 @@ class AvaliacaoAdminController extends Controller
 									  E.CODFILIAL AS LOJA,
 									  E.CODEQUIPE AS CODEQUIPE
 									  from funcionarios as E
-									  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+									  left join funcoes AS C on C.CODIGO = E.CODFUNCAO
 									  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 									  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 									  where E.CHAPA = '.$xyz);		
@@ -609,7 +609,7 @@ class AvaliacaoAdminController extends Controller
 									  E.CODFILIAL AS LOJA,
 									  E.CODEQUIPE AS CODEQUIPE
 									  from funcionarios as E
-									  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+									  left join funcoes AS C on C.CODIGO = E.CODFUNCAO
 									  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 									  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 									  where E.CHAPA = '.$xyz);		
@@ -667,7 +667,7 @@ class AvaliacaoAdminController extends Controller
 									  E.CODFILIAL AS LOJA,
 									  E.CODEQUIPE AS CODEQUIPE
 									  from funcionarios as E
-									  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+									  left join funcoes AS C on C.CODIGO = E.CODFUNCAO
 									  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 									  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 									  where E.CHAPA = '.$xyz);		
@@ -797,7 +797,7 @@ class AvaliacaoAdminController extends Controller
 									  E.CODFILIAL AS LOJA,
 									  E.CODEQUIPE AS CODEQUIPE
 									  from funcionarios as E
-									  inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+									  left join funcoes AS C on C.CODIGO = E.CODFUNCAO
 									  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 									  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 									  where E.CHAPA = '.$xyz);	
@@ -859,7 +859,7 @@ class AvaliacaoAdminController extends Controller
 			$equipe_filter = Request::Input('equipe');
 			
 			
-			if ($equipe_filter <> ''){
+			if (isset($equipe_filter)){
 				
 				DB::statement('drop table if exists notas_temp;');
 				DB::statement('
@@ -884,7 +884,7 @@ class AvaliacaoAdminController extends Controller
 					inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
 					inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
 					inner JOIN funcionarios AS F on F.CHAPA = P.CHAPAAVALIADO
-					inner JOIN funcoes AS FUN ON FUN.CODIGO = F.CODFUNCAO
+					left JOIN funcoes AS FUN ON FUN.CODIGO = F.CODFUNCAO
 					where statuslider = 0 and P.CODAVALIACAO BETWEEN 25 AND 36 and F.CODEQUIPE = '.$equipe_filter);
 				DB::statement('drop table if exists notasPessoa');
 				DB::statement('CREATE TEMPORARY TABLE notasPessoa    
@@ -1013,5 +1013,19 @@ class AvaliacaoAdminController extends Controller
 			]);
 			
 		}
+	
+		public function pendente2016(){
+			
+			
+			
+			
+			
+			return view('admin.avaliacao.pendente2016', [
+			'0' => 0
+			
+			]);
+			
+		}
+	
 	
 }

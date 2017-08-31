@@ -118,6 +118,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 		Route::get('/painel', 'AvaliacaoAdminController@avaliacoes')->name('painel');
 		Route::get('/media2016', 'AvaliacaoAdminController@mediaAvaliacao')->name('media2016');
 		Route::get('/mediaImpressao', 'AvaliacaoAdminController@mediaImpressao')->name('mediaImpressao');
+		Route::get('/pendente2016', 'AvaliacaoAdminController@pendente2016')->name('pendente2016');
 		Route::get('/pessoa/{id}', 'AvaliacaoAdminController@pessoa')->name('pessoa_show');
 		Route::get('/progresso', 'AvaliacaoAdminController@progressoAvaliacao');
 		Route::get('/delegacao', 'AvaliacaoAdminController@painelDelegar');
