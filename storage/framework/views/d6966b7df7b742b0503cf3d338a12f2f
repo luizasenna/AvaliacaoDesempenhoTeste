@@ -158,11 +158,10 @@ Avaliação de Desempenho
 									<?php else: ?>
 									<td id="comp02" style="color:#bbb;">02 - Apresentação Pessoal <span class="text-danger">(inativo) </span></td>
 									<?php endif; ?>
-									<?php if($c->c3 == 0): ?>
+									
 									<td id="comp03" >03 - Assiduidade </td>
-									<?php else: ?>
-									<td id="comp03" style="color:#bbb;">03 - Assiduidade <span class="text-danger">(inativo) </span></td>
-									<?php endif; ?>
+									
+									
 								</tr>
 								<tr>
 									
@@ -325,7 +324,7 @@ Avaliação de Desempenho
 															</tr>
 															<tr>
 																<td class="info"><b>03 - Assiduidade </b></td>
-																<td class="warning"><b>Nota: <?php if($c->c3==0): ?><?php echo e($n->NOTA3); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																<td class="warning"><b>Nota: <?php echo e($n->NOTA3); ?>  </b></td>
 																
 															</tr>
 															<tr>
@@ -431,7 +430,7 @@ Avaliação de Desempenho
 											
 												<td><?php if($c->c1==0): ?><?php echo e($n->NOTA1); ?>  <?php else: ?> - <?php endif; ?></td>
 												<td><?php if($c->c2==0): ?><?php echo e($n->NOTA2); ?>  <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c3==0): ?><?php echo e($n->NOTA3); ?> <?php else: ?> - <?php endif; ?></td>
+												<td><?php echo e($n->NOTA3); ?></td>
 												<td><?php if($c->c4==0): ?><?php echo e($n->NOTA4); ?> <?php else: ?> - <?php endif; ?></td>
 												<td><?php if($c->c5==0): ?><?php echo e($n->NOTA5); ?> <?php else: ?> - <?php endif; ?></td>
 												<td><?php if($c->c6==0): ?><?php echo e($n->NOTA6); ?> <?php else: ?> - <?php endif; ?></td>

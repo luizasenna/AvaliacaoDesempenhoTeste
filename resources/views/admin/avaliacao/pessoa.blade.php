@@ -159,11 +159,10 @@ Avaliação de Desempenho
 									@else
 									<td id="comp02" style="color:#bbb;">02 - Apresentação Pessoal <span class="text-danger">(inativo) </span></td>
 									@endif
-									@if ($c->c3 == 0)
+									
 									<td id="comp03" >03 - Assiduidade </td>
-									@else
-									<td id="comp03" style="color:#bbb;">03 - Assiduidade <span class="text-danger">(inativo) </span></td>
-									@endif
+									
+									
 								</tr>
 								<tr>
 									
@@ -326,7 +325,7 @@ Avaliação de Desempenho
 															</tr>
 															<tr>
 																<td class="info"><b>03 - Assiduidade </b></td>
-																<td class="warning"><b>Nota: @if ($c->c3==0){{$n->NOTA3}}  @else - @endif </b></td>
+																<td class="warning"><b>Nota: {{$n->NOTA3}}  </b></td>
 																
 															</tr>
 															<tr>
@@ -432,7 +431,7 @@ Avaliação de Desempenho
 											
 												<td>@if ($c->c1==0){{$n->NOTA1}}  @else - @endif</td>
 												<td>@if ($c->c2==0){{$n->NOTA2}}  @else - @endif</td>
-												<td>@if ($c->c3==0){{$n->NOTA3}} @else - @endif</td>
+												<td>{{$n->NOTA3}}</td>
 												<td>@if ($c->c4==0){{$n->NOTA4}} @else - @endif</td>
 												<td>@if ($c->c5==0){{$n->NOTA5}} @else - @endif</td>
 												<td>@if ($c->c6==0){{$n->NOTA6}} @else - @endif</td>

@@ -26,30 +26,34 @@
 									
 									 @foreach($lider as $l)
                                			<div class="col-md-6"><h5>LÍDER: {{$l->NOME}}</h5></div>
-                                		<div class="col-md-6"><h5>SEÇÃO: {{$l->CODSECAO}}</h5></div>
+                                		
                                		 @endforeach
 									<div class="col-md-9">
 										<table class="table table-stripped">
-											@if(isset($medias))
 												<tr>
-													<td>Chapa</td>
-													<td>Nome</td>
-													<td>Função</td>
-													<td>Media</td>
+														<td>Chapa</td>
+														<td>Nome</td>
+														<td>Função</td>
+														<td>Admissão</td>
+														<td>Media</td>
+														<td>Loja</td>
+														<td>CodSecao</td>
+														<td>Seção</td>
 
-												</tr>
-											
-												@foreach($medias as $m)
-													<tr>
-														<td>{{$m->CHAPA}}</td>
-														<td>{{$m->NOME}}</td>
-														<td>{{$m->FUNCAO}}</td>
-														<td>{{$m->SOMA}}</td>
-														
 													</tr>
-												@endforeach
-											@endif
-										</table>
+													@foreach($medias as $m)
+														<tr>	
+															<td>{{$m->CHAPA}}</td>
+															<td>{{$m->NOME}}</td>
+															<td>{{$m->FUNCAO}}</td>
+															<td>{{date('d/m/Y', strtotime($m->DATAADMISSAO))}}</td>
+															<td>{{$m->MEDIA}}</td>
+															<td>{{$m->LOJA}}</td>
+															<td>{{$m->CODSECAO}}</td>
+															<td>{{$m->SECAO}}</td>
+														</tr>
+													@endforeach
+											</table>
 										
 									</div>
 									

@@ -526,8 +526,8 @@ class AvaliacaoController extends Controller
 				inner join funcionarios on funcionarios.CODPESSOA = fotos.CODPESSOA
 				where funcionarios.CHAPA ='.$chapa );
 		
-		$c1 = $compfuncao[0]->c1;
-		$c2 = $compfuncao[0]->c2;
+		if(isset($compfuncao[0]->c1)) { $c1 = $compfuncao[0]->c1; } 
+		if(isset($compfuncao[0]->c2)) { $c2 = $compfuncao[0]->c2; }
 		
 				
         return view('avaliacao.insere', [

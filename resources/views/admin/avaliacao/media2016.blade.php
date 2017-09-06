@@ -56,6 +56,7 @@ Média Geral 2016
 											<label for="setor">Equipe</label>
 											<select name="equipe" id="equipe">
 												<option value="0">Selecione</option>
+												<option value="all">Todas</option>
 												
 												@foreach ($equipes as $e)
 													<option value="{{$e->CODINTERNO}}" {{$e->CODINTERNO == $equipe_filter ? 'selected' : '' }}>{{$e->DESCRICAO}}</option>
@@ -65,23 +66,31 @@ Média Geral 2016
 										 
 										  <button type="submit" class="btn btn-primary">Buscar</button>
 									</form>
-									<div class="col-md-9">
+									<div class="col-md-12">
 										@if(isset($medias))
 										@if(isset($equipe_filter) and $equipe_filter <> 0)
-											<table class="table table-stripped">
+											<table class="table table-stripped table-responsive">
 												<tr>
 														<td>Chapa</td>
 														<td>Nome</td>
 														<td>Função</td>
+														<td>Admissão</td>
 														<td>Media</td>
+														<td>Loja</td>
+														<td>CodSecao</td>
+														<td>Seção</td>
 
 													</tr>
 													@foreach($medias as $m)
-														<tr>
+														<tr>	
 															<td>{{$m->CHAPA}}</td>
 															<td>{{$m->NOME}}</td>
 															<td>{{$m->FUNCAO}}</td>
-															<td>{{$m->SOMA}}</td>
+															<td>{{date('d/m/Y', strtotime($m->DATAADMISSAO))}}</td>
+															<td>{{$m->MEDIA}}</td>
+															<td>{{$m->LOJA}}</td>
+															<td>{{$m->CODSECAO}}</td>
+															<td>{{$m->SECAO}}</td>
 														</tr>
 													@endforeach
 											</table>
