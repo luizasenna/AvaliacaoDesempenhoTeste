@@ -22,14 +22,12 @@
                         <div class="panel-body">
                             <div class="row ">
                                
-								<div class="col-md-12 panel-body">
-									
+								<div class="col-md-12 panel-body">	
+									<div class="table-responsive">
 									 @foreach($lider as $l)
                                			<div class="col-md-6"><h5>LÍDER: {{$l->NOME}}</h5></div>
-                                		
                                		 @endforeach
-									<div class="col-md-9">
-										<table class="table table-stripped">
+										<table class="table table-striped" id="media2016Tabela" style="overflow-x: scroll;">
 												<tr>
 														<td>Chapa</td>
 														<td>Nome</td>
@@ -39,6 +37,7 @@
 														<td>Loja</td>
 														<td>CodSecao</td>
 														<td>Seção</td>
+														<td>Avaliador</td>
 
 													</tr>
 													@foreach($medias as $m)
@@ -51,6 +50,7 @@
 															<td>{{$m->LOJA}}</td>
 															<td>{{$m->CODSECAO}}</td>
 															<td>{{$m->SECAO}}</td>
+															<td>{{$m->AVALIADOR}}</td>
 														</tr>
 													@endforeach
 											</table>

@@ -22,14 +22,12 @@
                         <div class="panel-body">
                             <div class="row ">
                                
-								<div class="col-md-12 panel-body">
-									
+								<div class="col-md-12 panel-body">	
+									<div class="table-responsive">
 									 <?php foreach($lider as $l): ?>
                                			<div class="col-md-6"><h5>LÍDER: <?php echo e($l->NOME); ?></h5></div>
-                                		
                                		 <?php endforeach; ?>
-									<div class="col-md-9">
-										<table class="table table-stripped">
+										<table class="table table-striped" id="media2016Tabela" style="overflow-x: scroll;">
 												<tr>
 														<td>Chapa</td>
 														<td>Nome</td>
@@ -39,6 +37,7 @@
 														<td>Loja</td>
 														<td>CodSecao</td>
 														<td>Seção</td>
+														<td>Avaliador</td>
 
 													</tr>
 													<?php foreach($medias as $m): ?>
@@ -51,6 +50,7 @@
 															<td><?php echo e($m->LOJA); ?></td>
 															<td><?php echo e($m->CODSECAO); ?></td>
 															<td><?php echo e($m->SECAO); ?></td>
+															<td><?php echo e($m->AVALIADOR); ?></td>
 														</tr>
 													<?php endforeach; ?>
 											</table>

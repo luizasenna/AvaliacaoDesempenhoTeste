@@ -208,8 +208,8 @@ class AvaliacaoAdminController extends Controller
 						MAX(IF(ITEM = "01", OBS, " - "))  AS OBS1, 
 						MAX(IF(ITEM = "02", NOTA, 0)) AS NOTA2,
 						CASE 
-						WHEN (AE.atraso) BETWEEN "0" AND "3,99"    THEN 10
-						WHEN (AE.atraso) BETWEEN "0,01" AND "4"    THEN 3
+						WHEN (AE.atraso) = "0,0" AND "0,99"    THEN 10
+						WHEN (AE.atraso) BETWEEN "2,00" AND "4"    THEN 3
 						WHEN (AE.atraso) BETWEEN "4,01" AND "7,99" THEN 1
 						WHEN (AE.atraso) BETWEEN "8" AND "20"      THEN 0
 						ELSE 0 END
@@ -875,12 +875,9 @@ class AvaliacaoAdminController extends Controller
 			if (isset($equipe_filter)){
 				
 				DB::statement('drop table if exists notas_temp;');
-				/*if($equipe_filter == 'all'){
-					$consulta =  Equipe::all();
-					$equipe_filter = (string) $consulta->CODCLIENTE[];
-				}*/
-				DB::statement('
-					create temporary table notas_temp
+				
+			
+					$query = 'create temporary table notas_temp
 		            select 
 				    N.CODITEMAVAL   AS ITEM,
 					S.NOME           AS NOMECOMPETENCIA,  
@@ -894,7 +891,7 @@ class AvaliacaoAdminController extends Controller
 					F.NOME           AS NOME, 
 					FUN.NOME        AS FUNCAO,
 					N.CODPARTICIPANTE  AS PARTICIPANTE, 
-					P.CHAPAAVALIADOR   AS AVALIADOR,
+					LIDER.NOME   AS AVALIADOR,
 					F.CODPESSOA        AS CODPESSOA
 					from notas AS N
 					inner join participantes AS P on N.CODAVALIACAO = P.CODAVALIACAO and N.CODPARTICIPANTE = P.CODPARTICIPANTE
@@ -902,9 +899,12 @@ class AvaliacaoAdminController extends Controller
 					inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
 					inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
 					inner JOIN funcionarios AS F on F.CODPESSOA = P.CODPESSOA	
+					inner JOIN funcionarios AS LIDER ON LIDER.CODPESSOA = F.CODEQUIPE
 					left JOIN funcoes AS FUN ON FUN.CODIGO = F.CODFUNCAO
-					where statuslider = 0 and P.CODAVALIACAO BETWEEN 25 AND 36 and F.CODEQUIPE in ('.$equipe_filter.')
-					GROUP BY P.CODPESSOA, P.CODAVALIACAO, N.CODITEMAVAL');
+					where statuslider = 0 and P.CODAVALIACAO BETWEEN 25 AND 36 and F.CODEQUIPE = '.$equipe_filter.'
+					GROUP BY P.CODPESSOA, P.CODAVALIACAO, N.CODITEMAVAL';
+				
+				DB::statement($query);
 				
 				DB::statement('drop table if exists notasPessoa');
 				DB::statement('CREATE TEMPORARY TABLE notasPessoa    
@@ -945,6 +945,260 @@ class AvaliacaoAdminController extends Controller
 						ORDER BY AVALIACAO');
 				
 				$total = DB::select(DB::raw('select * from notasPessoa order by CODPESSOA'));
+				$contador = 0;
+				$soma = 0;
+				
+				DB::statement('Drop table if exists feitas');
+				DB::statement('create temporary table feitas
+							select p.CHAPAAVALIADO AS CHAPAAVALIADO,
+								   p.CODPESSOA as CODPESSOA, 
+								   f.NOME AS NOME, 
+								   p.CODAVALIACAO AS CODAVALIACAO,
+								  (if(n.CODITEMAVAL is not null, 1,0)) as EXISTE 
+							from participantes as p
+							inner join funcionarios as f on f.CODPESSOA = p.CODPESSOA
+							left join notas as n on n.CODPARTICIPANTE = p.CODPARTICIPANTE and n.CODCOLIGADA = p.CODCOLIGADA and n.CODAVALIACAO = p.CODAVALIACAO 
+							where f.CODEQUIPE = '.$equipe_filter.' and p.CODAVALIACAO between 25 and 36
+							group by p.CODPESSOA, p.CODAVALIACAO');
+				
+				DB::statement('Drop table if exists totais');
+				DB::statement('Create temporary table totais
+							select count(CODAVALIACAO) AS QTDE, SUM(EXISTE) AS FEITAS, CHAPAAVALIADO,
+				   CODPESSOA, NOME from feitas GROUP BY CODPESSOA');
+				
+				DB::statement('delete from media2016');
+				foreach($total as $t){
+					if($t->NOTA1 > 0) { 
+						$soma = $soma + $t->NOTA1;
+						$contador++;
+					}
+					if($t->NOTA2 > 0) { 
+						$soma = $soma + $t->NOTA2;
+						$contador++;
+					}
+					$soma = $soma + $t->NOTA3; //considerando a assiduidade
+					$contador++; //considerando a assiduidade
+					if($t->NOTA4 > 0) { 
+						$soma = $soma + $t->NOTA4;
+						$contador++;
+					}
+					if($t->NOTA5 > 0) { 
+						$soma = $soma + $t->NOTA5;
+						$contador++;
+					}
+					if($t->NOTA6 > 0) { 
+						$soma = $soma + $t->NOTA6;
+						$contador++;
+					}
+					if($t->NOTA7 > 0) { 
+						$soma = $soma + $t->NOTA7;
+						$contador++;
+					}
+					if($t->NOTA8 > 0) { 
+						$soma = $soma + $t->NOTA8;
+						$contador++;
+					}
+					if($t->NOTA9 > 0) { 
+						$soma = $soma + $t->NOTA9;
+						$contador++;
+					}
+					if($t->NOTA10 > 0) { 
+						$soma = $soma + $t->NOTA10;
+						$contador++;
+					}
+					if($t->NOTA12 > 0) { 
+						$soma = $soma + $t->NOTA12;
+						$contador++;
+					}
+					if($t->NOTA13 > 0) { 
+						$soma = $soma + $t->NOTA13;
+						$contador++;
+					}
+					if($t->NOTA14 > 0) { 
+						$soma = $soma + $t->NOTA14;
+						$contador++;
+					}
+					if($t->NOTA15 > 0) { 
+						$soma = $soma + $t->NOTA15;
+						$contador++;
+					}
+					$t->mediames = round($soma/$contador,2); 
+					$contador = 0;
+					$soma = 0;
+					
+				
+				DB::table('media2016')->insert(
+				array('CODPESSOA'=>$t->CODPESSOA, 'CHAPA'=>$t->CHAPA, 'AVALIACAO'=>$t->AVALIACAO, 'MEDIA'=>$t->mediames, 'NOME'=>$t->NOME, 'FUNCAO'=>$t->FUNCAO, 'AVALIADOR'=>$t->AVALIADOR));
+			
+					
+				}
+			}
+			 else {
+				$total = '';
+				$medias = '';
+			}
+			
+			if (isset($equipe_filter)){
+			$medias = DB::select('select f.CHAPA as CHAPA, 
+			f.NOME as NOME, 
+			FUNCAO, 
+			f.DATAADMISSAO AS DATAADMISSAO, 
+			ROUND(SUM(MEDIA)/COUNT(f.CHAPA),2) as MEDIA, 
+			CASE(f.CODFILIAL)  
+			WHEN 1 THEN "PINTOS MAGAZINE" 
+			WHEN 3 THEN "PINTOS RIVERSIDE" 
+			WHEN 5 THEN "PINTOS RIO BRANCO" 
+			WHEN 6 THEN "PINTOS CD1" 
+			WHEN 8 THEN "PINTOS CALÇADOS" 
+			WHEN 9 THEN "PINTOS FREI SERAFIM" 
+			WHEN 10 THEN "PINTOS CD2" 
+			WHEN 11 THEN "PINTOS SHOPPING" 
+			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
+			f.CODSECAO AS CODSECAO,  
+			s.DESCRICAO as SECAO,
+			AVALIADOR AS AVALIADOR,
+			(totais.QTDE) AS TOTAL, 
+			(totais.FEITAS) AS FEITAS
+			FROM media2016 
+			inner join funcionarios as f on f.CHAPA = media2016.chapa
+			LEFT JOIN secoes as s on s.CODIGO = CONCAT(f.CODFILIAL, ".", f.CODSECAO)
+			LEFT JOIN totais on totais.CODPESSOA = media2016.CODPESSOA 
+			WHERE AVALIACAO between 25 and 36 group by media2016.CODPESSOA order by MEDIA desc');
+			}
+			return view('admin.avaliacao.media2016', [
+		
+			'equipes' => $equipes,
+			'equipe_filter' => $equipe_filter,
+			'total' => $total,
+			'medias' => $medias
+			
+			]);
+		}
+	
+		public function mediaImpressao(){
+			
+			
+			$medias = DB::select('select f.CHAPA as CHAPA, 
+			f.NOME as NOME, 
+			FUNCAO, 
+			f.DATAADMISSAO AS DATAADMISSAO, 
+			ROUND(SUM(MEDIA)/COUNT(f.CHAPA),2) as MEDIA, 
+			CASE(f.CODFILIAL)  
+			WHEN 1 THEN "PINTOS MAGAZINE" 
+			WHEN 3 THEN "PINTOS RIVERSIDE" 
+			WHEN 5 THEN "PINTOS RIO BRANCO" 
+			WHEN 6 THEN "PINTOS CD1" 
+			WHEN 8 THEN "PINTOS CALÇADOS" 
+			WHEN 9 THEN "PINTOS FREI SERAFIM" 
+			WHEN 10 THEN "PINTOS CD2" 
+			WHEN 11 THEN "PINTOS SHOPPING" 
+			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
+			f.CODSECAO AS CODSECAO,  
+			s.DESCRICAO as SECAO,
+			AVALIADOR AS AVALIADOR
+			FROM media2016 
+			inner join funcionarios as f on f.CHAPA = media2016.chapa
+			LEFT JOIN secoes as s on s.CODIGO = CONCAT(f.CODFILIAL, ".", f.CODSECAO)
+			WHERE AVALIACAO between 25 and 36 group by f.CHAPA order by MEDIA desc');
+			$equipe = Request::Input('e');
+			if ($equipe == 'all') {$lider = "Todos os avaliadores";}
+			else{
+			$lider = Funcionario::Where('CODPESSOA', '=', $equipe)->groupBy('CODPESSOA')->get();}
+			
+			return view('admin.avaliacao.mediaImpressao', [
+			'medias' => $medias,
+			'lider'=> $lider
+			
+			]);
+			
+		}
+	
+		public function pendente2016(){
+			
+			
+			
+			
+			
+			return view('admin.avaliacao.pendente2016', [
+			'0' => 0
+			
+			]);
+			
+		}
+	
+	public function mediaAvaliacaoTodas(){
+					
+
+			DB::statement('drop table if exists notas_temp_todas;');
+				
+			$query = 'create temporary table notas_temp_todas
+		            select 
+				    N.CODITEMAVAL   AS ITEM,
+					S.NOME           AS NOMECOMPETENCIA,  
+					NOTAAVALIADOR    AS NOTA,  
+					P.CHAPAAVALIADO  AS CHAPA,  
+					N.CODAVALIACAO   AS AVALIACAO, 
+					V.NOME           AS DESCRICAO, 
+					V.DATAABERTURA   AS DATA, P.CODPARTICIPANTE, P.CODAVALIACAO, 
+					N.COMENTARIO     AS OBS, 
+					date_format(N.created_at, "%d/%m/%Y")  AS FEITAEM, 
+					F.NOME           AS NOME, 
+					FUN.NOME        AS FUNCAO,
+					N.CODPARTICIPANTE  AS PARTICIPANTE, 
+					LIDER.NOME   AS AVALIADOR,
+					F.CODPESSOA        AS CODPESSOA
+					from notas AS N
+					inner join participantes AS P on N.CODAVALIACAO = P.CODAVALIACAO and N.CODPARTICIPANTE = P.CODPARTICIPANTE
+					inner JOIN competencias AS S ON N.CODITEMAVAL = S.CODCOMPETENCIA
+					inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
+					inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
+					inner JOIN funcionarios AS F on F.CODPESSOA = P.CODPESSOA	
+					inner JOIN funcionarios AS LIDER ON LIDER.CODPESSOA = F.CODEQUIPE
+					left JOIN funcoes AS FUN ON FUN.CODIGO = F.CODFUNCAO
+					where statuslider = 0 and P.CODAVALIACAO BETWEEN 25 AND 36
+					GROUP BY P.CODPESSOA, P.CODAVALIACAO, N.CODITEMAVAL';
+				
+				DB::statement($query);
+				
+				DB::statement('drop table if exists notasPessoaTodas');
+				DB::statement('CREATE TEMPORARY TABLE notasPessoaTodas   
+                		select
+						AVALIACAO, 
+						notas_temp_todas.CHAPA AS CHAPA,
+						CODPARTICIPANTE,
+						DESCRICAO,
+						PARTICIPANTE,
+						AVALIADOR,
+						NOME,
+						FUNCAO,
+						notas_temp_todas.CODPESSOA AS CODPESSOA,
+						MAX(IF(ITEM = "01", NOTA, 0)) AS NOTA1, 
+						MAX(IF(ITEM = "02", NOTA, 0)) AS NOTA2,
+						MAX(IF(ITEM = "04", NOTA, 0)) AS NOTA4,
+						CASE 
+						WHEN (AE.atraso) BETWEEN "0" AND "3,99"    THEN 10
+						WHEN (AE.atraso) BETWEEN "0,01" AND "4"    THEN 3
+						WHEN (AE.atraso) BETWEEN "4,01" AND "7,99" THEN 1
+						WHEN (AE.atraso) BETWEEN "8" AND "20"      THEN 0
+						ELSE 0 END
+						AS	  	                        NOTA3,	
+						MAX(IF(ITEM = "05", NOTA, 0)) AS NOTA5,  
+						MAX(IF(ITEM = "06", NOTA, 0)) AS NOTA6, 
+						MAX(IF(ITEM = "07", NOTA, 0)) AS NOTA7,  
+						MAX(IF(ITEM = "08", NOTA, 0)) AS NOTA8,
+						MAX(IF(ITEM = "09", NOTA, 0)) AS NOTA9,  
+						MAX(IF(ITEM = "10", NOTA, 0)) AS NOTA10,
+						MAX(IF(ITEM = "12", NOTA, 0)) AS NOTA12,
+						MAX(IF(ITEM = "13", NOTA, 0)) AS NOTA13,
+						MAX(IF(ITEM = "14", NOTA, 0)) AS NOTA14,  
+						MAX(IF(ITEM = "15", NOTA, 0)) AS NOTA15
+ 						from notas_temp_todas
+						left join assiduidade AS AE on AE.codpessoa = notas_temp_todas.CODPESSOA AND AE.codavaliacao = notas_temp_todas.AVALIACAO
+                        where NOTA != 0
+						GROUP BY AVALIACAO, CODPESSOA
+						ORDER BY AVALIACAO');
+				
+				$total = DB::select(DB::raw('select * from notasPessoaTodas order by CODPESSOA'));
 				$contador = 0;
 				$soma = 0;
 				DB::statement('delete from media2016');
@@ -1009,15 +1263,11 @@ class AvaliacaoAdminController extends Controller
 					
 				
 				DB::table('media2016')->insert(
-				array('CODPESSOA'=>$t->CODPESSOA, 'CHAPA'=>$t->CHAPA, 'AVALIACAO'=>$t->AVALIACAO, 'MEDIA'=>$t->mediames, 'NOME'=>$t->NOME, 'FUNCAO'=>$t->FUNCAO));
+				array('CODPESSOA'=>$t->CODPESSOA, 'CHAPA'=>$t->CHAPA, 'AVALIACAO'=>$t->AVALIACAO, 'MEDIA'=>$t->mediames, 'NOME'=>$t->NOME, 'FUNCAO'=>$t->FUNCAO, 'AVALIADOR'=>$t->AVALIADOR));
 			
 					
 				}
-				
-			} else {
-				$total = '';
-				$medias = '';
-			}
+		
 			
 			$medias = DB::select('select f.CHAPA as CHAPA, 
 			f.NOME as NOME, 
@@ -1035,70 +1285,21 @@ class AvaliacaoAdminController extends Controller
 			WHEN 11 THEN "PINTOS SHOPPING" 
 			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
 			f.CODSECAO AS CODSECAO,  
-			s.DESCRICAO as SECAO
+			s.DESCRICAO as SECAO,
+			AVALIADOR AS AVALIADOR
 			FROM media2016 
 			inner join funcionarios as f on f.CHAPA = media2016.chapa
 			LEFT JOIN secoes as s on s.CODIGO = CONCAT(f.CODFILIAL, ".", f.CODSECAO)
 			WHERE AVALIACAO between 25 and 36 group by f.CHAPA order by MEDIA desc');
-			return view('admin.avaliacao.media2016', [
+			return view('admin.avaliacao.media2016Geral', [
 		
-			'equipes' => $equipes,
-			'equipe_filter' => $equipe_filter,
 			'total' => $total,
 			'medias' => $medias
 			
 			]);
-		}
-	
-		public function mediaImpressao(){
-			
-			
-			$medias = DB::select('select f.CHAPA as CHAPA, 
-			f.NOME as NOME, 
-			FUNCAO, 
-			f.DATAADMISSAO AS DATAADMISSAO, 
-			ROUND(SUM(MEDIA)/COUNT(f.CHAPA),2) as MEDIA, 
-			CASE(f.CODFILIAL)  
-			WHEN 1 THEN "PINTOS MAGAZINE" 
-			WHEN 3 THEN "PINTOS RIVERSIDE" 
-			WHEN 5 THEN "PINTOS RIO BRANCO" 
-			WHEN 6 THEN "PINTOS CD1" 
-			WHEN 8 THEN "PINTOS CALÇADOS" 
-			WHEN 9 THEN "PINTOS FREI SERAFIM" 
-			WHEN 10 THEN "PINTOS CD2" 
-			WHEN 11 THEN "PINTOS SHOPPING" 
-			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
-			f.CODSECAO AS CODSECAO,  
-			s.DESCRICAO as SECAO
-			FROM media2016 
-			inner join funcionarios as f on f.CHAPA = media2016.chapa
-			LEFT JOIN secoes as s on s.CODIGO = CONCAT(f.CODFILIAL, ".", f.CODSECAO)
-			WHERE AVALIACAO between 25 and 36 group by f.CHAPA order by MEDIA desc');
-			$equipe = Request::Input('e');
-			if ($equipe == 'all') {$lider = "Todos os avaliadores";}
-			else{
-			$lider = Funcionario::Where('CODPESSOA', '=', $equipe)->groupBy('CODPESSOA')->get();}
-			
-			return view('admin.avaliacao.mediaImpressao', [
-			'medias' => $medias,
-			'lider'=> $lider
-			
-			]);
-			
-		}
-	
-		public function pendente2016(){
-			
-			
-			
-			
-			
-			return view('admin.avaliacao.pendente2016', [
-			'0' => 0
-			
-			]);
-			
-		}
+		
+		
+	}
 	
 	
 }

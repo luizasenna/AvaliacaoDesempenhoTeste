@@ -11,6 +11,7 @@ Média Geral 2016
     
     <link href="{{ asset('assets/vendors/bootstrap-form-builder/css/custom.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/pages/formbuilder.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/datatables/css/scroller.bootstrap.css') }}">
     <script type="stylesheet">
 		.center-block {  
 			display: block;  
@@ -37,7 +38,7 @@ Média Geral 2016
 	 
 	       
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-lg-12">
                            
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -50,7 +51,7 @@ Média Geral 2016
                         <div class="panel-body">
                             <div class="row ">
                                 
-								<div class="col-md-12 panel-body">
+								<div class="col-lg-12 panel-body">
 									<form class="form-inline" action="media2016" >
 										  <div class="form-group">
 											<label for="setor">Equipe</label>
@@ -66,19 +67,22 @@ Média Geral 2016
 										 
 										  <button type="submit" class="btn btn-primary">Buscar</button>
 									</form>
-									<div class="col-md-12">
+									<div class="col-lg-12">
+									<div class="table-responsive">
 										@if(isset($medias))
 										@if(isset($equipe_filter) and $equipe_filter <> 0)
-											<table class="table table-stripped table-responsive">
+											<table class="table table-striped" id="media2016Tabela" style="overflow-x: scroll;">
 												<tr>
 														<td>Chapa</td>
 														<td>Nome</td>
 														<td>Função</td>
 														<td>Admissão</td>
+														<td>Feitas/Total</td>
 														<td>Media</td>
 														<td>Loja</td>
 														<td>CodSecao</td>
 														<td>Seção</td>
+														<td>Avaliador</td>
 
 													</tr>
 													@foreach($medias as $m)
@@ -87,10 +91,12 @@ Média Geral 2016
 															<td>{{$m->NOME}}</td>
 															<td>{{$m->FUNCAO}}</td>
 															<td>{{date('d/m/Y', strtotime($m->DATAADMISSAO))}}</td>
+															<td>{{$m->FEITAS}}/{{$m->TOTAL}}</td>
 															<td>{{$m->MEDIA}}</td>
 															<td>{{$m->LOJA}}</td>
 															<td>{{$m->CODSECAO}}</td>
 															<td>{{$m->SECAO}}</td>
+															<td>{{$m->AVALIADOR}}</td>
 														</tr>
 													@endforeach
 											</table>
@@ -103,12 +109,16 @@ Média Geral 2016
 									</div>
 									
 								</div>
+                           		
                             </div>
                         </div>
                         <!-- / Building Form. --> </div>
                     <!-- / Components --> </div>
                 <!--form builder ends--> </div>
 	</section>
+	
+	
+
 
 
 @stop
@@ -118,7 +128,18 @@ Média Geral 2016
   <script type='text/javascript' src="{{ asset('assets/vendors/bootstrap-progressbar/js/bootstrap-progressbar.js') }}" ></script>
   <script type="text/javascript" src="{{ asset('assets/js/pages/general.js') }}" ></script>
   <script data-main="{{ asset('assets/vendors/bootstrap-form-builder/js/main-built.js') }}" src="{{ asset('assets/vendors/bootstrap-form-builder/js/require.js') }}" ></script>
+  <script type="text/javascript" src="{{ asset('assets/vendors/datatables/js/dataTables.scroller.js') }}" ></script>
+  <script type="text/javascript" src="{{ asset('assets/vendors/datatables/js/jquery.dataTables.js') }}" ></script>
+
+<script>
+	$(document).ready(function() {
+    $('#media2016Tabela').DataTable( {
+        "scrollX": true
+    } );
+} );
+	
 
 	
+</script>
 
 @stop
