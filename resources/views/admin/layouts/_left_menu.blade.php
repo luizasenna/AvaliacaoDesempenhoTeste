@@ -25,7 +25,13 @@
 			<li {!! (Request::is('admin/avaliacao/media2016') ? 'class="active" id="active"' : '') !!}>
             <a href="{{ URL::to('admin/avaliacao/media2016') }}">
                 <i class="fa fa-angle-double-right"></i>
-                Média Anual 2016
+                Média 2016 - Equipe
+            </a>
+			</li>
+			<li {!! (Request::is('admin/avaliacao/media2016') ? 'class="active" id="active"' : '') !!}>
+            <a href="{{ URL::to('admin/avaliacao/media2016') }}">
+                <i class="fa fa-angle-double-right"></i>
+                Média 2016 - Todos
             </a>
 			</li>
 			<li {!! (Request::is('admin/avaliacao/painel') ? 'class="active" id="active"' : '') !!}>
