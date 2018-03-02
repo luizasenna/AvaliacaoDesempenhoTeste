@@ -29,7 +29,7 @@
             </a>
 			</li>
 			<li {!! (Request::is('admin/avaliacao/media2016') ? 'class="active" id="active"' : '') !!}>
-            <a href="{{ URL::to('admin/avaliacao/media2016') }}">
+            <a href="{{ URL::to('admin/avaliacao/media2016Geral') }}">
                 <i class="fa fa-angle-double-right"></i>
                 Média 2016 - Todos
             </a>

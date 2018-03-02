@@ -83,6 +83,9 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
         Route::get('{userId}/restore', array('as' => 'restore/user', 'uses' => 'UsersController@getRestore'));
         Route::get('{userId}', array('as' => 'users.show', 'uses' => 'UsersController@show'));
         Route::post('passwordreset', 'UsersController@passwordreset');
+		 Route::get('{userId}/passwordchange', array('as' => 'users.passwordchange', 'uses' => 'UsersController@passwdch'));
+		 Route::get('{userId}/passchange', array('as' => 'passchange', 'uses' => 'UsersController@passwordchange'));
+		//Route::post('passwordchange', 'UsersController@passwordchange')->name('users.passwordchange');
     });
     Route::resource('users', 'UsersController');
 

@@ -70,13 +70,14 @@ Lista de Usuários
             				<td>{{ $user->codequipe}}</td>
             				<td>{{ $user->chapa}}</td>
             				<td>
-                                <a href="{{ route('users.show', $user->id) }}"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="ver cadastro"></i></a>
+								 <a href="{{ route('users.show', $user->id) }}"><i class="livicon" data-name="info" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="ver cadastro"></i></a>
 
-                                <a href="{{ route('admin.users.edit', $user->id) }}"><i class="livicon" data-name="edit"
-                                                                                        data-size="18" data-loop="true"
-                                                                                        data-c="#428BCA"
-                                                                                        data-hc="#428BCA"
-                                                                                        title="atualizar usuário"></i></a>
+                                <a href="{{ route('admin.users.edit', $user->id) }}"><i class="livicon" data-name="edit" data-size="18" data-loop="true"
+ 								data-c="#428BCA" data-hc="#428BCA"
+                                title="atualizar usuário"></i></a>
+                               <a href="{{ route('users.passwordchange', $user->id) }}"><i class="livicon" data-name="gear" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="Modificar Senha"></i></a>
+
+                              
                                 
                                 @if ((Sentinel::getUser()->id != $user->id) && ($user->id != 1))
                 					<a href="{{ route('confirm-delete/user', $user->id) }}" data-toggle="modal" data-target="#delete_confirm"><i class="livicon" data-name="user-remove" data-size="18" data-loop="true" data-c="#f56954" data-hc="#f56954" title="delete"></i></a>

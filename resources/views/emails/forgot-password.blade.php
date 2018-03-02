@@ -1,13 +1,13 @@
 @extends('emails/layouts/default')
 
 @section('content')
-<p>Hello {!! $user->first_name !!} {!! $user->last_name !!},</p>
+<p>Ol&aacute; {!! $user->first_name !!} {!! $user->last_name !!},</p>
 
-<p>Please click on the following link to updated your password:</p>
+<p>Clique no link abaixo para atualizar sua senha:</p>
 
 <p><a href="{!! $forgotPasswordUrl !!}">{!! $forgotPasswordUrl !!}</a></p>
 
-<p>Best regards,</p>
+<p>Atenciosamente,</p>
 
-<p>@lang('general.site_name') Team</p>
+<p>Intranet Recursos Humanos</p>
 @stop

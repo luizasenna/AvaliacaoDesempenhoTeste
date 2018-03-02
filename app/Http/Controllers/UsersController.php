@@ -408,15 +408,42 @@ class UsersController extends JoshController
 
     }
 
+	
+	
     public function passwordreset()
     {
         if (Request::ajax()) {
             $data = Request::all();
-            $user = Sentinel::getUser();
+            //$user = Sentinel::getUser();
+			$user = User::findOrFail($data);
+			
             $password = Request::get('password');
             $user->password = Hash::make($password);
-            $user->save();
+           // $user->password = Hash::make($password);
+			$user->save();
 
         }
     }
+	
+	public function passwdch($id){
+		$user = Sentinel::findUserById($id);
+		return View('admin.users.passwordchange', compact('user'));
+	}
+	
+	 public function passwordchange($id)
+    {
+        if (Request::ajax()) {
+            $user = Sentinel::findUserById($id);
+			if(Request::get('password')) {
+				$password = Request::get('password');
+				$user->password = Hash::make($password);
+			   // $user->password = Hash::make($password);
+				$user->save();
+				}
+			
+			
+
+        }
+    }
+	
 }

@@ -59,6 +59,7 @@ Média Geral 2016 - Todas as Equipes
 											<a id="dlink"  style="display:none;"></a>
 
 											<input class="btn btn-primary btn-lg" type="button" onclick="tableToExcel('media2016Tabela', 'media2016Tabela', 'AD2016Geral.xls')" value="Exportar para Excel"> 
+											<a class="btn btn-primary btn-lg" href="mediaImpressao" target="_blank" role="button">Versão para Impressão</a>
 											<hr/>
 											<table class="table table-striped" id="media2016Tabela" style="overflow-x: scroll;">
 												<tr>
@@ -91,7 +92,7 @@ Média Geral 2016 - Todas as Equipes
 											</table>
 											
 											<div class="col-md-9 pull-right">
-												<a class="btn btn-default" href="mediaImpressaoGeral" target="_blank" role="button">Versão para Impressão</a>
+												
 											</div>
 										@endif
 										

@@ -1001,7 +1001,7 @@ class AvaliacaoAdminController extends Controller
 						$soma = $soma + $t->NOTA15;
 						$contador++;
 					}
-					$t->mediames = round($soma/$contador,2); 
+					$t->mediames = ($soma/$contador); 
 					$contador = 0;
 					$soma = 0;
 					
@@ -1040,7 +1040,7 @@ class AvaliacaoAdminController extends Controller
 			(totais.FEITAS) AS FEITAS
 			FROM media2016 
 			inner join funcionarios as f on f.CHAPA = media2016.chapa
-			LEFT JOIN secoes as s on s.CODIGO = CONCAT(f.CODFILIAL, ".", f.CODSECAO)
+			LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
 			LEFT JOIN totais on totais.CODPESSOA = media2016.CODPESSOA 
 			WHERE AVALIACAO between 25 and 36 group by media2016.CODPESSOA order by MEDIA desc');
 			}
@@ -1061,7 +1061,7 @@ class AvaliacaoAdminController extends Controller
 			f.NOME as NOME, 
 			FUNCAO, 
 			f.DATAADMISSAO AS DATAADMISSAO, 
-			ROUND(SUM(MEDIA)/COUNT(f.CHAPA),2) as MEDIA, 
+			replace(round(SUM(MEDIA)/COUNT(f.CHAPA),4),".",",") as MEDIA,
 			CASE(f.CODFILIAL)  
 			WHEN 1 THEN "PINTOS MAGAZINE" 
 			WHEN 3 THEN "PINTOS RIVERSIDE" 
@@ -1077,7 +1077,7 @@ class AvaliacaoAdminController extends Controller
 			AVALIADOR AS AVALIADOR
 			FROM media2016 
 			inner join funcionarios as f on f.CHAPA = media2016.chapa
-			LEFT JOIN secoes as s on s.CODIGO = CONCAT(f.CODFILIAL, ".", f.CODSECAO)
+			LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
 			WHERE AVALIACAO between 25 and 36 group by f.CHAPA order by MEDIA desc');
 			$equipe = Request::Input('e');
 			if ($equipe == 'all') {$lider = "Todos os avaliadores";}
@@ -1260,7 +1260,7 @@ class AvaliacaoAdminController extends Controller
 						$soma = $soma + $t->NOTA15;
 						$contador++;
 					}
-					$t->mediames = round($soma/$contador,2); 
+					$t->mediames = ($soma/$contador); 
 					$contador = 0;
 					$soma = 0;
 					
@@ -1276,7 +1276,7 @@ class AvaliacaoAdminController extends Controller
 				f.NOME as NOME, 
 				FUNCAO, 
 				f.DATAADMISSAO AS DATAADMISSAO, 
-				ROUND(SUM(MEDIA)/COUNT(f.CHAPA),2) as MEDIA, 
+				replace(round(SUM(MEDIA)/COUNT(f.CHAPA),4),".",",") as MEDIA, 
 				CASE(f.CODFILIAL)  
 				WHEN 1 THEN "PINTOS MAGAZINE" 
 				WHEN 3 THEN "PINTOS RIVERSIDE" 
@@ -1294,7 +1294,7 @@ class AvaliacaoAdminController extends Controller
 				(totais.FEITAS) AS FEITAS
 				FROM media2016 
 				inner join funcionarios as f on f.CHAPA = media2016.chapa
-				LEFT JOIN secoes as s on s.CODIGO = CONCAT(f.CODFILIAL, ".", f.CODSECAO)
+				LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
 				LEFT JOIN totais on totais.CODPESSOA = media2016.CODPESSOA 
 				WHERE AVALIACAO between 25 and 36 group by media2016.CODPESSOA order by MEDIA desc');
 		

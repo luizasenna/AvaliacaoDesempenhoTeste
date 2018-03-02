@@ -4,7 +4,7 @@
     {{--<meta charset="utf-8">--}}
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Forgot_password | Welcome to Josh Frontend</title>
+    <title>Recuperar Senha | Recursos Humanos na Intranet</title>
     <!--global css starts-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}" type="image/x-icon">
@@ -18,9 +18,9 @@
 <div class="container">
     <div class="row">
         <div class="box animation flipInX">
-            <img src="{{ asset('assets/images/josh-new.png') }}" alt="logo" class="img-responsive mar">
-            <h3 class="text-primary">Forgot Password</h3>
-            <p>Enter your email to send the password</p>
+            <img src="{{ asset('assets/images/logo.png') }}" alt="logo" class="img-responsive mar">
+            <h3 class="text-primary">Esqueceu sua Senha</h3>
+            <p>Insira seu email para resetar sua senha:</p>
             @include('notifications')
             <form action="{{ route('forgot-password') }}" class="omb_loginForm" autocomplete="off" method="POST">
                 {!! Form::token() !!}
@@ -31,7 +31,7 @@
                     <span class="help-block">{{ $errors->first('email', ':message') }}</span>
                 </div>
                 <div class="form-group">
-                    <input class="form-control btn btn-primary btn-block" type="submit" value="Reset Your Password">
+                    <input class="form-control btn btn-primary btn-block" type="submit" value="Resetar sua senha">
                 </div>
             </form>
         </div>

@@ -43,7 +43,7 @@ Avaliação de Desempenho dos Funcionários
 @section('content')
     <!-- Aba de Título -->
     <div class="text-center">
-                <h3 class="border-primary"><span class="heading_border bg-primary"> 
+                <h3 class="border-primary"><span class="heading_border bg-primary">
 				<i class="livicon icon3" data-name="barchart" data-size="30" data-loop="true" data-c="#ffffff" data-hc="red"></i>
 				Avaliação de Desempenho</span></h3>
         </div>	<center>
@@ -54,30 +54,30 @@ Avaliação de Desempenho dos Funcionários
 		</div>
 		@endif
 	</div></center>
-    
-    
+
+
     <div class="container" style="min-height:800px;">
         <!--Content Section Start -->
 		<div class="col-md-12">
-			
+
 				@if ($erro) <!--checando cadastro do lider -->
 					<div>
 						<h3>Opa! foi identificado um erro que te impede de proseguir. Abaixo detalhes: </h3> <br/>
 						<div class="bg-danger"><p style="padding:20px;"> {{ $erro }} </p></div>
 					</div>
 				@else
-					
+
                 <div class="panel panel-primary" >
                     <div class="panel-heading" role="tab">
                     	<a data-toggle="collapse" data-parent="#accordion" data-target="#equipe" style="color: #fff;" aria-controls="equipe" >
                         <h3 class="panel-title">
 						<i class="livicon icon3" data-name="users" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
 						Equipe</h3> <span> (clique para abrir ou fechar)</span></a>
-						 
+
                     </div>
                     <div id="equipe" class="panel-collapse collapse" role="tabpanel" >
                     <div class="panel-body" >
-						 <!--  Consulta de Solicitações --> 
+						 <!--  Consulta de Solicitações -->
 						 <table class="table table-striped ...">
 						 	@foreach ($lider as $l)
 							    <!-- código escondido -->
@@ -97,6 +97,7 @@ Avaliação de Desempenho dos Funcionários
 									<td>FUNÇÃO</td>
 									<td>ADMISSAO</td>
 									<td>VISUALIZAR</td>
+									<td>SITUAÇÃO</td>
 								</tr>
 								@foreach ($todos as $p)
 							    <!-- código escondido -->
@@ -106,11 +107,12 @@ Avaliação de Desempenho dos Funcionários
 									   <td> {{$p->CARGO}}</td>
 									   <td> {{date("d/m/Y", strtotime($p->DATAADMISSAO))}}</td>
 									   <td><a style="color:#ffffff;" href="/avaliacao/painel?id={{$p->CHAPA}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-zoom-in"></span> Desempenho</a></td>
+										 <td> <a style="color:#ffffff;" href="/avaliacao/avaliado?id={{$p->CHAPA}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-zoom-in"></span> Ver situação</a></td>
 									</tr>
 								@endforeach
 								@endif
 							</table>
-						<!--  Consulta de Solicitações--> 
+						<!--  Consulta de Solicitações-->
 					</div>
 					</div>
 					</div>
@@ -125,8 +127,8 @@ Avaliação de Desempenho dos Funcionários
                     </div>
                     <div id="abertas" class="panel-collapse collapse in" role="tabpanel">
                     <div class="panel-body">
-						 <!--  Consulta de Avaliação --> 
-						  Aqui: @foreach ($passagem as $pp) {{$pp->CODAVALIACAO}} @endforeach
+						 <!--  Consulta de Avaliação -->
+
 						  @if (!$abertas)
 							{{"No momento não há avaliações abertas para você."}}
 						 @else
@@ -136,20 +138,20 @@ Avaliação de Desempenho dos Funcionários
 									<td>ABERTURA</td>
 									<td>PRAZO</td>
 									<td>AVALIAR EQUIPE</td>
-								</tr> 
+								</tr>
 								@foreach ($abertas as $a)
 							    @if($a->valor > 0)
-								<tr> 
+								<tr>
 								   <td> {{$a->NOME}}</td>
 								   <td> {{date("d/m/Y", strtotime($a->DATAABERTURA))}}</td>
 								   <td> prazo</td>
 								   <td><a style="color:#ffffff;" href="/avaliacao/mostra?id={{$a->CODAVALIACAO}}" class="btn btn-sm btn-warning"><span class="glyphicon glyphicon-zoom-in"></span> Avaliar</a></td>
-								</tr> 
+								</tr>
 								@endif
 								@endforeach
 								@endif
 							</table>
-						 	 <!--  Consulta de Avaliação --> 
+						 	 <!--  Consulta de Avaliação -->
 					</div>
 					</div>
 		</div>
@@ -164,8 +166,8 @@ Avaliação de Desempenho dos Funcionários
                     </div> </a>
                     <div id="fechadas" class="collapse">
                     <div class="panel-body">
-						 <!--  Consulta de Avaliação --> 
-						  
+						 <!--  Consulta de Avaliação -->
+
 							<table class="table table-striped ...">
 								<tr  class="primary">
 									<td>NOME</td>
@@ -174,35 +176,36 @@ Avaliação de Desempenho dos Funcionários
 								</tr>
 								@foreach ($abertas as $a)
 							    @if($a->valor == 0)
-								<tr> 
+								<tr>
 								   <td> {{$a->NOME}}</td>
 								   <td> {{date("d/m/Y", strtotime($a->DATAABERTURA))}}</td>
-								   
+
 								   <td><a style="color:#ffffff;" href="/avaliacao/mostra?id={{$a->CODAVALIACAO}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-zoom-in"></span> Ver todos os funcionários desta avaliação</a></td>
-								</tr> 
+								</tr>
 								@endif
 								@endforeach
 							</table>
-						 	 <!--  Consulta de Avaliação --> 
+						 	 <!--  Consulta de Avaliação -->
 					</div>
 					</div>
 		</div>
 		</div>
+
 		<!-- Painel de delegações -->
-		<div class="col-md-12">
+		<!--<div class="col-md-12">
 		<div class="panel panel-primary">
                     <div class="panel-heading" role="tab">
                     	<a data-toggle="collapse" data-target="#delegacoes" style="color: #fff;" aria-controls="delegacoes" >
                         <h3 class="panel-title">
 						<i class="glyphicon glyphicon-retweet" data-name="signal" data-size="20" data-loop="true" data-c="#ffffff" data-hc="#ffffff"></i>
 						Situação / Delegação da sua Equipe</h3><span> (clique para abrir ou fechar)</span> </a>
-                    </div>
-		<div id="delegacoes" class="collapse">
+					</div>-->
+		<!--<div id="delegacoes" class="collapse">
 			  <div class="panel-body">
-						 <!--  Consulta de Avaliação --> 
-						  @if (!$todos)
+
+						/*  @if (!$todos)
 							{{"Você ainda não é líder de nenhuma equipe"}}
-						 @else
+						 @else */
 						    <h3>Pessoas da sua equipe</h3>
 							<table class="table table-striped ...">
 								<tr class="primary">
@@ -225,15 +228,15 @@ Avaliação de Desempenho dos Funcionários
 								@endforeach
 								@endif
 							</table>
-						 	 <!--  Consulta de Avaliação --> 
-				</div>
+
+				</div> -->
+		<!--</div>
 		</div>
-		</div>
-		</div>
+	</div>-->
 
 		<!-- Painel de delegações -->
 	@endif <!--checando cadastro do lider -->
-	</div>	
+	</div>
     </div>
 @stop
 
