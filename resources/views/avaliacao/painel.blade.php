@@ -15,13 +15,13 @@ Avaliação de Desempenho dos Funcionários
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/frontend/features.css') }}">
     <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendors/switchery/css/switchery.css') }}" />
     <link type="text/css" rel="stylesheet" href="{{ asset('assets/vendors/bootstrap-switch/css/bootstrap-switch.css') }}">
-    
+
     <script type="stylesheet">
-		.center-block {  
-			display: block;  
-			margin-right: auto;  
-			margin-left: auto;  
-		} 
+		.center-block {
+			display: block;
+			margin-right: auto;
+			margin-left: auto;
+		}
 	</script>
     <!--end of page level css-->
 @stop
@@ -55,12 +55,12 @@ Avaliação de Desempenho dos Funcionários
 @section('content')
     <!-- Aba de Título -->
     <div class="text-center">
-                <h3 class="border-primary"><span class="heading_border bg-primary"> 
+                <h3 class="border-primary"><span class="heading_border bg-primary">
 				<i class="livicon icon3" data-name="barchart" data-size="30" data-loop="true" data-c="#ffffff" data-hc="red"></i>
 				Avaliação de Desempenho</span></h3>
         </div>	<center>
         <div class="col-md-12 ">
-			@if (session('status')) 
+			@if (session('status'))
 				<div class="col-md-2 pull-center text-center"></div>
 					<div id="alert_msg" class="col-md-8 alert alert-info row-centered alert-dismissable" tabindex="-1" >
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -69,11 +69,11 @@ Avaliação de Desempenho dos Funcionários
 				<div class="col-md-2"></div>
 			@endif
 	</div></center>
-    
-    
+
+
     <div class="container" style="min-height:800px;" >
         <!--Content Section Start -->
-        
+
     @if ($perm == '0' )
 		<div class="col-md-12">
                 <div class="panel panel-info">
@@ -84,33 +84,33 @@ Avaliação de Desempenho dos Funcionários
                     </div>
 						<div class="panel-body">
 							<!-- Foto -->
-							
-							
+
+
 							<div class="col-md-2 panel-body">
 								@foreach ($funcionario as $f)
 								<!--<img src="/assets/images/avaliacao/avatar.png" width="180px" height="180px"/>-->
-								
-								<img width="150px" height="180px" src="data:image/jpeg;base64,{{ base64_encode( $f->IMAGEM )}}"/> 
+
+								<img width="150px" height="180px" src="data:image/jpeg;base64,{{ base64_encode( $f->IMAGEM )}}"/>
 								@endforeach
 							</div>
 							<!-- Foto -->
-							
+
 							<!-- Dados do funcionario -->
 							<div class="panel-body col-md-6">
 									<table class="table table-stripped ">
 										    @if (!$funcionario)
 												{{"Pessoa não encontrada"}}
 											@else
-						    
+
 												@foreach ($funcionario as $p)
 													<tr>
 														<td colspan ="2" >NOME: {{$p->NOME}}</td>
 													</tr>
-													<tr>											
+													<tr>
 														<td>CHAPA: {{$p->CHAPA}} </td>
 														<td>CARGO: {{$p->CARGO}} </td>
 													</tr>
-													<tr>											
+													<tr>
 														<td>ADMISSÃO: {{date("d/m/Y", strtotime($p->DATAADMISSAO))}}</td>
 														<td></td>
 													</tr>
@@ -119,15 +119,15 @@ Avaliação de Desempenho dos Funcionários
 													</tr>
 													<tr >
 														<td> <a style="color:#ffffff;" href="/avaliacao/delegaTodas?c={{$p->CHAPA}}" class="btn btn-danger" title="Delegar as avaliações de funcáionrio para outro lider"><span class="glyphicon glyphicon-random"></span> Delegar as avaliações deste funcionário</a></td>
-														<td>  
+														<td>
 															<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
 															 <span class="glyphicon glyphicon-time"></span> Ver Férias, Afastamentos e Licenças
 															</button>
 															</td>
 
-													
+
 													</tr>
-													
+
 												@endforeach
 											@endif
 
@@ -164,17 +164,17 @@ Avaliação de Desempenho dos Funcionários
 												</div>
 											</div>
 										</div>
-					
+
 							</div><!-- Dados do funcionario -->
-							
+
 							<!-- Gráfico -->
 							<div class="panel-body col-md-4">
 									<!--<img src="/assets/images/avaliacao/grafico.png" width="350px" height="180px"/>-->
 							</div> <!-- Gráfico -->
-							
+
 						</div>
 				</div>
-				</div>		
+				</div>
 
 		 <!-- Competências -->
 		<div class="col-md-12">
@@ -188,7 +188,7 @@ Avaliação de Desempenho dos Funcionários
 					<div class="panel-body panel-collapse collapse in" id="collapse1" >
 					<!--<div class="panel-body"  >-->
 							<table class="table table-stripped">
-								
+
 								<tr>
 								@foreach ($compfuncao as $c)
 									@if ($c->c1 == 0)
@@ -208,7 +208,7 @@ Avaliação de Desempenho dos Funcionários
 									@endif
 								</tr>
 								<tr>
-									
+
 									@if ($c->c4 == 0)
 									<td id="comp04" >04 - Comunicação </td>
 									@else
@@ -226,7 +226,7 @@ Avaliação de Desempenho dos Funcionários
 									@endif
 								</tr>
 								<tr>
-									
+
 									@if ($c->c7 == 0)
 									<td id="comp07" >07 - Hábitos de Segurança, Higiene e Zelo</td>
 									@else
@@ -276,17 +276,17 @@ Avaliação de Desempenho dos Funcionários
 									@else
 									<td id="comp15" style="color:#bbb;">15 - Administração <span class="text-danger">(inativo) </span></td>
 									@endif
-								</tr>	@endforeach																													
-							</table>	
-							
-							
-					
-							
+								</tr>	@endforeach
+							</table>
+
+
+
+
 					</div>
 				</div>
-		</div>		
+		</div>
 		<!-- Competências -->
-					
+
 		 <!-- Avaliações -->
 		<div class="col-md-12">
                 <div class="panel panel-info">
@@ -298,205 +298,231 @@ Avaliação de Desempenho dos Funcionários
 					<div class="panel-body">
 							<!-- Dados da avaliação -->
 							<div class="panel-body col-md-12">
-								
-									<table class="table table-stripped table-bordered ">
-									@if ($resultado)	
-										<tr class="primary" style="color:#fff;">
-											<td>NOME DA AVALIAÇÃO </td>											
-											<td><abbr title="Aprendizagem e Adaptação" class="initialism">01</abbr> </td>
-											<td><abbr title="Apresentação Pessoal" class="initialism">02</abbr> </td>
-											<td><abbr title="Assiduidade" class="initialism">03</abbr> </td>
-											<td><abbr title="Comunicação" class="initialism">04</abbr> </td>
-											<td><abbr title="Disciplina e Respeito" class="initialism">05</abbr> </td>
-											<td><abbr title="Estabilidade Emocional" class="initialism">06</abbr> </td>
-											<td><abbr title="Hábitos de Segurança, Higiene e Zelo" class="initialism">07</abbr> </td>
-											<td><abbr title="Iniciativa e Criatividade" class="initialism">08</abbr> </td>
-											<td><abbr title="Interesse, Dedicação e Sigilo" class="initialism">09</abbr> </td>
-											<td><abbr title="Organização" class="initialism">10</abbr> </td>
-											<td><abbr title="Pontualidade" class="initialism">11</abbr> </td>
-											<td><abbr title="Produtividade" class="initialism">12</abbr> </td>
-											<td><abbr title="Qualidade" class="initialism">13</abbr> </td>
-											<td><abbr title="Relacionamento Pessoal e Colaboração" class="initialism">14</abbr> </td>
-											<td><abbr title="Administração" class="initialism">15</abbr> </td>
-											<td>MÉDIA TOTAL </td>
-										</tr>
-									@else Nenhuma Nota ainda cadastrada para este funcionário. Começe a fazer avaliações <a class="info" href="http://rh.pintos.com.br/avaliacao">na Área de Avaliações Abertas</a>. 
-									@endif
-									
-										
-										@foreach ($compfuncao as $c)
-										@foreach ($resultado as $n)
-									
-										<tr> 
-											<td><a data-toggle="modal" data-target="#myModal{{$n->AVALIACAO}}">{{$n->DESCRICAO}} </a>
-											
-												<div class="modal fade" id="myModal{{$n->AVALIACAO}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-												  <div class="modal-dialog" role="document">
-													<div class="modal-content">
-													  <div class="modal-header">
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-														<h4 class="modal-title" id="myModalLabel">{{$n->DESCRICAO}}</h4>
-													  </div>
-													  <div class="modal-body">
-														<table class="table table-stripped table-bordered info">
-															<tr  class="info">
-																<th>Avaliação feita por </th>
-																<th>Data </th>
-																<th>Avaliação TOTVS</th>
-																<th>Participante TOTVS</th>
-															</tr>
-															<tr>
-																<td>{{$n->AVALIADOR}}</td>
-																<td>{{$n->FEITAEM}}</td>
-																<td>{{$n->AVALIACAO}}</td>
-																<td>{{$n->PARTICIPANTE}}</td>
-															</tr>
-														</table>
-														<table class="table table-stripped table-bordered">
-															
-																
-															<tr>
-																<td  class="info"><b>01 - Aprendizagem e Adaptação</b></td>
-																<td class="warning"><b>Nota: @if ($c->c1==0){{$n->NOTA1}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS1}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>02 - Apresentação Pessoal</b></td>
-																<td class="warning"><b>Nota: @if ($c->c2==0){{$n->NOTA2}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS2}} </td>
-															</tr>
-															<tr>
-																<td class="info"><b>03 - Assiduidade </b></td>
-																<td class="warning"><b>Nota: @if ($c->c3==0){{$n->NOTA3}}  @else - @endif </b></td>
-																
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS3}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>04 - Comunicação</b></td>
-																<td class="warning"><b>Nota: @if ($c->c4==0){{$n->NOTA4}}  @else - @endif </b></td>
-																
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS4}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>05 - Disciplina e Respeito</b></td>
-																<td class="warning"><b>Nota: @if ($c->c5==0){{$n->NOTA5}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS5}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>06 - Estabilidade Emocional</b></td>
-																<td class="warning"><b>Nota: @if ($c->c6==0){{$n->NOTA6}}  @else - @endif </b></td>
-																
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS6}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>07 - Hábitos de Segurança, Higiene e Zelo</b></td>
-																<td class="warning"><b>Nota: @if ($c->c7==0){{$n->NOTA7}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS7}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>08 - Iniciativa e Criatividade</b></td>
-																<td class="warning"><b>Nota: @if ($c->c8==0){{$n->NOTA8}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS8}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>09 - Interesse, Dedicação e Sigilo</b></td>
-																<td class="warning"><b>Nota: @if ($c->c9==0){{$n->NOTA9}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS9}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>10 - Organização</b></td>
-																<td class="warning"><b>Nota: @if ($c->c10==0){{$n->NOTA10}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS10}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>11 - Pontualidade</b></td>
-																<td class="warning"><b>Nota: @if ($c->c11==0){{$n->NOTA11}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS11}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>12 - Produtividade</b></td>
-																<td class="warning"><b>Nota: @if ($c->c12==0){{$n->NOTA12}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS12}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>13 - Qualidade</b></td>
-																<td class="warning"><b>Nota: @if ($c->c13==0){{$n->NOTA13}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS13}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>14 - Relacionamento Pessoal e Colaboração</b></td>
-																<td class="warning"><b>Nota: @if ($c->c14==0){{$n->NOTA14}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS14}} </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>15 - Administração</b></td>
-																<td class="warning"><b>Nota: @if ($c->c15==0){{$n->NOTA15}}  @else - @endif </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> {{$n->OBS15}} </td>
-															</tr>
-															
-														</table>
-													  </div>
-													  <div class="modal-footer">
-														<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-													  </div>
-													</div>
-												  </div>
-												</div>
-											
-											</td>											
-											
-												<td>@if ($c->c1==0){{$n->NOTA1}}  @else - @endif</td>
-												<td>@if ($c->c2==0){{$n->NOTA2}}  @else - @endif</td>
-												<td>@if ($c->c3==0){{$n->NOTA3}} @else - @endif</td>
-												<td>@if ($c->c4==0){{$n->NOTA4}} @else - @endif</td>
-												<td>@if ($c->c5==0){{$n->NOTA5}} @else - @endif</td>
-												<td>@if ($c->c6==0){{$n->NOTA6}} @else - @endif</td>
-												<td>@if ($c->c7==0){{$n->NOTA7}} @else - @endif</td>
-												<td>@if ($c->c8==0){{$n->NOTA8}} @else - @endif</td>
-												<td>@if ($c->c9==0){{$n->NOTA9}} @else - @endif</td>
-												<td>@if ($c->c10==0){{$n->NOTA10}} @else - @endif</td>
-												<td>@if ($c->c11==0){{$n->NOTA11}} @else - @endif</td>
-												<td>@if ($c->c12==0){{$n->NOTA12}} @else - @endif</td>
-												<td>@if ($c->c13==0){{$n->NOTA13}} @else - @endif</td>
-												<td>@if ($c->c14==0){{$n->NOTA14}} @else - @endif</td>
-												<td>@if ($c->c15==0){{$n->NOTA15}} @else - @endif</td>
-												<td> - </span></td> 
-										
-										@endforeach
-										@endforeach
-									  </tr>			
-									</table>
-									
+
+													<div class="tab-content">
+														  @foreach( $anos as $ano )
+	                            <div class="tab-pane active" id="#tab_{{$ano->ANO}}">
+	                                <div class="panel-group" id="accordion">
+	                                    <div class="panel panel-default">
+	                                        <div class="panel-heading">
+	                                            <h4 class="panel-title">
+	                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{$ano->ANO}}"  class="text-primary" >
+	                                                    <span class=" glyphicon glyphicon-minus"></span>
+	                                                    <span>{{$ano->ANO}}</span></a>
+	                                                </h4>
+	                                        </div>
+	                                        <div id="collapse{{$ano->ANO}}" class="panel-collapse collapse in">
+	                                            <div class="panel-body">
+																									<table class="table table-stripped table-bordered ">
+																										@if ($resultado)
+																											<tr class="primary" style="color:#fff;">
+																												<td>NOME DA AVALIAÇÃO </td>
+																												<td><abbr title="Aprendizagem e Adaptação" class="initialism">01</abbr> </td>
+																												<td><abbr title="Apresentação Pessoal" class="initialism">02</abbr> </td>
+																												<td><abbr title="Assiduidade" class="initialism">03</abbr> </td>
+																												<td><abbr title="Comunicação" class="initialism">04</abbr> </td>
+																												<td><abbr title="Disciplina e Respeito" class="initialism">05</abbr> </td>
+																												<td><abbr title="Estabilidade Emocional" class="initialism">06</abbr> </td>
+																												<td><abbr title="Hábitos de Segurança, Higiene e Zelo" class="initialism">07</abbr> </td>
+																												<td><abbr title="Iniciativa e Criatividade" class="initialism">08</abbr> </td>
+																												<td><abbr title="Interesse, Dedicação e Sigilo" class="initialism">09</abbr> </td>
+																												<td><abbr title="Organização" class="initialism">10</abbr> </td>
+																												<td><abbr title="Pontualidade" class="initialism">11</abbr> </td>
+																												<td><abbr title="Produtividade" class="initialism">12</abbr> </td>
+																												<td><abbr title="Qualidade" class="initialism">13</abbr> </td>
+																												<td><abbr title="Relacionamento Pessoal e Colaboração" class="initialism">14</abbr> </td>
+																												<td><abbr title="Administração" class="initialism">15</abbr> </td>
+																												<td>MÉDIA TOTAL </td>
+																											</tr>
+																										@else Nenhuma Nota ainda cadastrada para este funcionário. Começe a fazer avaliações <a class="info" href="http://rh.pintos.com.br/avaliacao">na Área de Avaliações Abertas</a>.
+																										@endif
+	                                                <!-- conteúdo dos collapses -->
+																									@foreach ($compfuncao as $c)
+
+																											@foreach ($resultado as $n)
+																													@if ($n->ANO == $ano->ANO)
+
+
+
+																													<tr>
+																														<td><a data-toggle="modal" data-target="#myModal{{$n->AVALIACAO}}">{{$n->DESCRICAO}} </a>
+
+																															<div class="modal fade" id="myModal{{$n->AVALIACAO}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+																																<div class="modal-dialog" role="document">
+																																<div class="modal-content">
+																																	<div class="modal-header">
+																																	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																																	<h4 class="modal-title" id="myModalLabel">{{$n->DESCRICAO}}</h4>
+																																	</div>
+																																	<div class="modal-body">
+																																	<table class="table table-stripped table-bordered info">
+																																		<tr  class="info">
+																																			<th>Avaliação feita por </th>
+																																			<th>Data </th>
+																																			<th>Avaliação TOTVS</th>
+																																			<th>Participante TOTVS</th>
+																																		</tr>
+																																		<tr>
+																																			<td>{{$n->AVALIADOR}}</td>
+																																			<td>{{$n->FEITAEM}}</td>
+																																			<td>{{$n->AVALIACAO}}</td>
+																																			<td>{{$n->PARTICIPANTE}}</td>
+																																		</tr>
+																																	</table>
+																																	<table class="table table-stripped table-bordered">
+
+
+																																		<tr>
+																																			<td  class="info"><b>01 - Aprendizagem e Adaptação</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c1==0){{$n->NOTA1}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS1}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>02 - Apresentação Pessoal</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c2==0){{$n->NOTA2}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS2}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td class="info"><b>03 - Assiduidade </b></td>
+																																			<td class="warning"><b>{{$n->NOTA3}} </b></td>
+
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS3}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>04 - Comunicação</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c4==0){{$n->NOTA4}}  @else - @endif </b></td>
+
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS4}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>05 - Disciplina e Respeito</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c5==0){{$n->NOTA5}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS5}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>06 - Estabilidade Emocional</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c6==0){{$n->NOTA6}}  @else - @endif </b></td>
+
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS6}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>07 - Hábitos de Segurança, Higiene e Zelo</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c7==0){{$n->NOTA7}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS7}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>08 - Iniciativa e Criatividade</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c8==0){{$n->NOTA8}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS8}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>09 - Interesse, Dedicação e Sigilo</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c9==0){{$n->NOTA9}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS9}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>10 - Organização</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c10==0){{$n->NOTA10}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS10}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>11 - Pontualidade</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c11==0){{$n->NOTA11}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS11}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>12 - Produtividade</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c12==0){{$n->NOTA12}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS12}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>13 - Qualidade</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c13==0){{$n->NOTA13}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS13}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>14 - Relacionamento Pessoal e Colaboração</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c14==0){{$n->NOTA14}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS14}} </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>15 - Administração</b></td>
+																																			<td class="warning"><b>Nota: @if ($c->c15==0){{$n->NOTA15}}  @else - @endif </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> {{$n->OBS15}} </td>
+																																		</tr>
+
+																																	</table>
+																																	</div>
+																																	<div class="modal-footer">
+																																	<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+																																	</div>
+																																</div>
+																																</div>
+																															</div>
+
+																														</td>
+
+																															<td>@if ($c->c1==0){{$n->NOTA1}}  @else - @endif</td>
+																															<td>@if ($c->c2==0){{$n->NOTA2}}  @else - @endif</td>
+																															<td>{{$n->NOTA3}} </td>
+																															<td>@if ($c->c4==0){{$n->NOTA4}} @else - @endif</td>
+																															<td>@if ($c->c5==0){{$n->NOTA5}} @else - @endif</td>
+																															<td>@if ($c->c6==0){{$n->NOTA6}} @else - @endif</td>
+																															<td>@if ($c->c7==0){{$n->NOTA7}} @else - @endif</td>
+																															<td>@if ($c->c8==0){{$n->NOTA8}} @else - @endif</td>
+																															<td>@if ($c->c9==0){{$n->NOTA9}} @else - @endif</td>
+																															<td>@if ($c->c10==0){{$n->NOTA10}} @else - @endif</td>
+																															<td>@if ($c->c11==0){{$n->NOTA11}} @else - @endif</td>
+																															<td>@if ($c->c12==0){{$n->NOTA12}} @else - @endif</td>
+																															<td>@if ($c->c13==0){{$n->NOTA13}} @else - @endif</td>
+																															<td>@if ($c->c14==0){{$n->NOTA14}} @else - @endif</td>
+																															<td>@if ($c->c15==0){{$n->NOTA15}} @else - @endif</td>
+																															<td> @if($n->ANO < date('Y')) {{round($n->MEDIA,2)}} @else - @endif</span></td>
+
+																													@endif
+																													@endforeach
+																													</tr>
+																													</table>
+																												
+																													@endforeach
+																									 <!-- conteúdo dos collapses -->
+																									 	</div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+															@endforeach
+
 									@if($licenciados)
 
 										<div class="alert-warning"> <b>Férias / Licenças: </b>
@@ -504,19 +530,19 @@ Avaliação de Desempenho dos Funcionários
 
 									@endif
 							</div><!-- Dados da avaliação -->
-							
-							
-					
-							
+
+
+
+
 					</div>
 				</div>
-		</div>		
+		</div>
 		<!-- Avaliações -->
-			
+
 
         <!-- //Content Section End -->
 	</div>
-	@else 
+	@else
 	<div class="container">
 		<div class="row">
 			<div class="alert alert-danger">
@@ -540,11 +566,11 @@ Avaliação de Desempenho dos Funcionários
     <script type="text/javascript" src="{{ asset('assets/vendors/bootstrap-switch/js/bootstrap-switch.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/frontend/advfeatures.js') }}"></script>
 <script>
-	
+
 
 		$("#alert_msg").fadeTo(5800, 1600).slideUp(500, function(){
 		$("#alert_msg").slideUp(500);
 });
-	
+
 	</script>
 @stop

@@ -176,7 +176,7 @@ class AvaliacaoController extends Controller
 
 	public function painel()
     {
-        $usuario = Sentinel::getUser()->codequipe;
+    $usuario = Sentinel::getUser()->codequipe;
 		$chefe = Sentinel::getUser()->chapa;
 		$lider = Funcionario::where('CHAPA', '=', $chefe)->get();
 		$id = Request::input('id');
@@ -228,52 +228,61 @@ class AvaliacaoController extends Controller
 		$licenciados = DB::select('select * from licenciados where CHAPAVALIADO = '.$id);
 		$licencas = DB::select('select * from licencas where CHAPA = '.$id);
 
-	    $notas =   DB::statement('create temporary table notas_temp
+	  $notas =   DB::statement('create temporary table notas_temp
 		            select
-				    N.CODITEMAVAL   AS ITEM,
-					S.NOME           AS NOMECOMPETENCIA,
-					NOTAAVALIADOR    AS NOTA,
-					P.CHAPAAVALIADO  AS CHAPA,
-					N.CODAVALIACAO   AS AVALIACAO,
-					V.NOME           AS DESCRICAO,
-					V.DATAABERTURA   AS DATA, P.CODPARTICIPANTE, P.CODAVALIACAO,
-					N.COMENTARIO     AS OBS,
-					date_format(N.created_at, "%d/%m/%Y")  AS FEITAEM,
-					N.CODPARTICIPANTE  AS PARTICIPANTE,
-					P.CHAPAAVALIADOR  AS AVALIADOR
-					from notas AS N
-					inner join participantes AS P on N.CODAVALIACAO = P.CODAVALIACAO and N.CODPARTICIPANTE = P.CODPARTICIPANTE
-					inner JOIN competencias AS S ON N.CODITEMAVAL = S.CODCOMPETENCIA
-					inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
-					inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
-					where statuslider = 0 and P.CHAPAAVALIADO = '.$id);
+				    		N.CODITEMAVAL   AS ITEM,
+								S.NOME           AS NOMECOMPETENCIA,
+								NOTAAVALIADOR    AS NOTA,
+								P.CHAPAAVALIADO  AS CHAPA,
+								N.CODAVALIACAO   AS AVALIACAO,
+								V.NOME           AS DESCRICAO,
+								V.DATAABERTURA   AS DATA, P.CODPARTICIPANTE, P.CODAVALIACAO,
+								N.COMENTARIO     AS OBS,
+								date_format(N.created_at, "%d/%m/%Y")  AS FEITAEM,
+								N.CODPARTICIPANTE  AS PARTICIPANTE,
+								P.CHAPAAVALIADOR  AS AVALIADOR,
+								P.CODPESSOA       AS CODPESSOA,
+								YEAR(V.DATAABERTURA) AS ANO
+								from notas AS N
+								inner join participantes AS P on N.CODAVALIACAO = P.CODAVALIACAO and N.CODPARTICIPANTE = P.CODPARTICIPANTE
+								inner JOIN competencias AS S ON N.CODITEMAVAL = S.CODCOMPETENCIA
+								inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
+								inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
+								where statuslider = 0 and P.CHAPAAVALIADO = '.$id);
 
 
 		$resultado = DB::select('
 						select
 						AVALIACAO,
-						CHAPA,
+						notas_temp.CHAPA,
 						CODPARTICIPANTE,
 						DESCRICAO,
 						FEITAEM,
 						PARTICIPANTE,
 						AVALIADOR,
-						MAX(IF(ITEM = "01", NOTA, 0)) AS NOTA1,
+						notas_temp.ANO AS ANO,
+						MAX(IF(ITEM = "01", notas_temp.NOTA, 0)) AS NOTA1,
 						MAX(IF(ITEM = "01", OBS, " - "))  AS OBS1,
-						MAX(IF(ITEM = "02", NOTA, 0)) AS NOTA2,
-						MAX(IF(ITEM = "03", NOTA, 0)) AS NOTA3,
-						MAX(IF(ITEM = "04", NOTA, 0)) AS NOTA4,
-						MAX(IF(ITEM = "05", NOTA, 0)) AS NOTA5,
-						MAX(IF(ITEM = "06", NOTA, 0)) AS NOTA6,
-						MAX(IF(ITEM = "07", NOTA, 0)) AS NOTA7,
-						MAX(IF(ITEM = "08", NOTA, 0)) AS NOTA8,
-						MAX(IF(ITEM = "09", NOTA, 0)) AS NOTA9,
-						MAX(IF(ITEM = "10", NOTA, 0)) AS NOTA10,
-						MAX(IF(ITEM = "11", NOTA, 0)) AS NOTA11,
-						MAX(IF(ITEM = "12", NOTA, 0)) AS NOTA12,
-						MAX(IF(ITEM = "13", NOTA, 0)) AS NOTA13,
-						MAX(IF(ITEM = "14", NOTA, 0)) AS NOTA14,
-						MAX(IF(ITEM = "15", NOTA, 0)) AS NOTA15,
+						MAX(IF(ITEM = "02", notas_temp.NOTA, 0)) AS NOTA2,
+						CASE
+						WHEN (AE.atraso) BETWEEN "0" AND "1,99"    THEN 10
+						WHEN (AE.atraso) BETWEEN "2,0" AND "4"     THEN 3
+						WHEN (AE.atraso) BETWEEN "4,01" AND "8" 	 THEN 1
+						WHEN (AE.atraso) BETWEEN "8,1" AND "100"   THEN 0
+						ELSE 0 END
+						AS	  	                        NOTA3,
+						MAX(IF(ITEM = "04", notas_temp.NOTA, 0)) AS NOTA4,
+						MAX(IF(ITEM = "05", notas_temp.NOTA, 0)) AS NOTA5,
+						MAX(IF(ITEM = "06", notas_temp.NOTA, 0)) AS NOTA6,
+						MAX(IF(ITEM = "07", notas_temp.NOTA, 0)) AS NOTA7,
+						MAX(IF(ITEM = "08", notas_temp.NOTA, 0)) AS NOTA8,
+						MAX(IF(ITEM = "09", notas_temp.NOTA, 0)) AS NOTA9,
+						MAX(IF(ITEM = "10", notas_temp.NOTA, 0)) AS NOTA10,
+						MAX(IF(ITEM = "11", notas_temp.NOTA, 0)) AS NOTA11,
+						MAX(IF(ITEM = "12", notas_temp.NOTA, 0)) AS NOTA12,
+						MAX(IF(ITEM = "13", notas_temp.NOTA, 0)) AS NOTA13,
+						MAX(IF(ITEM = "14", notas_temp.NOTA, 0)) AS NOTA14,
+						MAX(IF(ITEM = "15", notas_temp.NOTA, 0)) AS NOTA15,
 						MAX(IF(ITEM = "02", OBS, " - ")) AS OBS2,
 						MAX(IF(ITEM = "03", OBS, " - ")) AS OBS3,
 						MAX(IF(ITEM = "04", OBS, " - ")) AS OBS4,
@@ -291,35 +300,42 @@ class AvaliacaoController extends Controller
 						0 AS MEDIA
 
 						from notas_temp
+						left join assiduidade AS AE on AE.codpessoa = notas_temp.CODPESSOA AND AE.codavaliacao = notas_temp.AVALIACAO
 						GROUP BY AVALIACAO, CHAPA
 						ORDER BY AVALIACAO*1');
 
-		$aa = 0;
-
-		$t = 1;
-		$qt = 0;
-		$total = 0;
+						$anos = DB::select('select ANO
+																from notas_temp group by ANO');
 
 
-		foreach ($resultado as $r) {
-				While($t < 16)
-				{
-					$q = 'c'.$t;
-					$nn = 'NOTA'.$t;
-					if (($compfuncao[0]->$q) == 0)
-					{
-						$total = $total + $r->$nn;
-						$qt++;
-						 } $t++;
-					}
-				$r->MEDIA = $total/$qt;
-				$total = 0;
-				$t = 1; $qt = 0;
+						$t = 1;
+						$qt = 0;
+						$total = 0;
 
-		}
+						foreach ($resultado as $r) {
+								While($t < 16)
+								{
+									$q = 'c'.$t;
+									$nn = 'NOTA'.$t;
+									if (($compfuncao[0]->$q) == 0)
+									{
+										$total = $total + $r->$nn;
+										$qt++;
+										 } $t++;
+									}
+								$qt = $qt + 1; //considerando a assiduidade calculada automaticamente
+								$total = $total + $r->NOTA3; //considerando a assiduidade calculada automaticamente
+								$r->MEDIA = $total/$qt;
+								$total = 0;
+								$t = 1; $qt = 0;
+
+								$aa = 0;
+								}
+
 	    return view('/avaliacao/painel', [
             'lider' => $lider,
             'notas' => $notas,
+						'anos' => $anos,
 						'funcionario' => $funcionario,
 						'resultado' => $resultado,
 						'compfuncao' => $compfuncao,
@@ -330,6 +346,7 @@ class AvaliacaoController extends Controller
 						'licenciados' => $licenciados,
 						'licencas' => $licencas,
 						'delegacao' => $delegacao
+
 
          ]);
     }

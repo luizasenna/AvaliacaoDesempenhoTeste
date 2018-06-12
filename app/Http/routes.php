@@ -24,6 +24,17 @@ Route::pattern('slug', '[a-z0-9- _]+');
 
 Route::post('atualizacao.formulario', 'AtualizacaoController@formulario');
 
+#Seleções e Currículos
+Route::group(array('prefix' => 'selecoes'), function () {
+		Route::get('/', 'SelecaoController@index');
+		Route::get('/entrar', 'SelecaoController@entrar');
+
+});
+//
+
+
+
+
 Route::group(array('prefix' => 'admin'), function () {
 
 	# Error pages should be shown without requiring login
@@ -41,7 +52,7 @@ Route::group(array('prefix' => 'admin'), function () {
 
 	#cron
 		Route::get('/cron', 'AvaliacaoController@cron');
-	
+
 	# All basic routes defined here
 	Route::get('signin', array('as' => 'signin', 'uses' => 'AuthController@getSignin'));
 	Route::post('signin', 'AuthController@postSignin');
@@ -73,6 +84,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 	Route::get('/', array('as' => 'dashboard','uses' => 'JoshController@showHome'));
 
 
+
     # User Management
     Route::group(array('prefix' => 'users'), function () {
         Route::get('/', array('as' => 'users', 'uses' => 'UsersController@index'));
@@ -102,7 +114,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
         Route::get('{groupId}/confirm-delete', array('as' => 'confirm-delete/group', 'uses' => 'GroupsController@getModalDelete'));
         Route::get('{groupId}/restore', array('as' => 'restore/group', 'uses' => 'GroupsController@getRestore'));
     });
- 
+
 	Route::get('crop_demo', function () {
         return redirect('admin/imagecropping');
     });
@@ -114,17 +126,22 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 	Route::get('datatables/data', array('as' => 'admin.datatables.data', 'uses' => 'DataTablesController@data'));
 
 	Route::get('{name?}', 'JoshController@showView');
-	
+
 	# Rotas Avaliação no Admin
 	Route::group(array('prefix' => 'avaliacao'), function () {
 		Route::get('/', 'AvaliacaoController@paineladmin');
 		Route::get('/painel', 'AvaliacaoAdminController@avaliacoes')->name('painel');
 		Route::get('/media2016', 'AvaliacaoAdminController@mediaAvaliacao')->name('media2016');
 		Route::get('/mediaImpressao', 'AvaliacaoAdminController@mediaImpressao')->name('mediaImpressao');
-		Route::get('/media2016Geral', 'AvaliacaoAdminController@mediaAvaliacaoTodas')->name('media2016');
+	/*	Route::get('/media2016Geral/', function () {
+			return View::make('admin.avaliacao.media2016Geral');
+		});*/
+		Route::get('/media2016Geral', 'AvaliacaoAdminController@mediaAvaliacaoTodas')->name('media2016Geral');
+		Route::post('/mediaGeralAno', 'AvaliacaoAdminController@mediaAvaliacaoAno')->name('mediaGeralAno');
 		Route::get('/pendente2016', 'AvaliacaoAdminController@pendente2016')->name('pendente2016');
 		Route::get('/pessoa/{id}', 'AvaliacaoAdminController@pessoa')->name('pessoa_show');
-		Route::get('/progresso', 'AvaliacaoAdminController@progressoAvaliacao');
+		Route::get('/pessoa/{id}', 'AvaliacaoAdminController@pessoa')->name('pessoa_show');
+		Route::get('/pessoa/notasImpressao/{ano}/{codigo}', 'AvaliacaoAdminController@notasImpressao');
 		Route::get('/delegacao', 'AvaliacaoAdminController@painelDelegar');
 		Route::get('/equipe', 'AvaliacaoAdminController@equipe');
 		Route::get('/avaliado', 'AvaliacaoAdminController@avaliado');
@@ -138,10 +155,14 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 		Route::get('/func', 'AvaliacaoAdminController@verTime');
 		Route::post('/outraEquipe', 'AvaliacaoAdminController@outraEquipe');
 		Route::get('/historicoEquipe', 'AvaliacaoAdminController@mostraHistoricoEquipe');
+		Route::get('/assiduidade', 'AvaliacaoAdminController@mostraAssiduidade')->name('mostraAssiduidade');
+		Route::get('/insereAssiduidade', 'AvaliacaoAdminController@insereAssiduidade')->name('insereAssiduidade');
+		Route::post('/insereNovaAssiduidade', 'AvaliacaoAdminController@insereNovaAssiduidade')->name('insereNovaAssiduidade');
+		Route::post('/atualizaAssiduidade', 'AvaliacaoAdminController@atualizaAssiduidade')->name('atualizaAssiduidade');
 	});
-	
 
-		
+
+
 
 });
 
@@ -218,7 +239,7 @@ Route::group(array('prefix' => 'agenda'), function () {
 		Route::post('/addPessoa', 'AgendaController@addPessoa');
 		Route::get('/pessoa/{id}', 'AgendaController@pessoa')->name('pessoa_mostra');
 
-	
+
 });
 
 Route::get('blog', array('as' => 'blog', 'uses' => 'BlogController@getIndexFrontend'));

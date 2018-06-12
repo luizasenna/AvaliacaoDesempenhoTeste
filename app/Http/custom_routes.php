@@ -13,3 +13,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 	Route::get('vercargos/{id}/delete', array('as' => 'admin.vercargos.delete', 'uses' => 'VercargosController@getDelete'));
 	Route::get('vercargos/{id}/confirm-delete', array('as' => 'admin.vercargos.confirm-delete', 'uses' => 'VercargosController@getModalDelete'));
 });
+Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), function () {Route::resource('abonos', 'AbonosController');
+	Route::get('abonos/{id}/delete', array('as' => 'admin.abonos.delete', 'uses' => 'AbonosController@getDelete'));
+	Route::get('abonos/{id}/confirm-delete', array('as' => 'admin.abonos.confirm-delete', 'uses' => 'AbonosController@getModalDelete'));
+});

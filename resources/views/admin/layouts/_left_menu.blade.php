@@ -16,6 +16,41 @@
             <span class="fa arrow"></span>
         </a>
         <ul class="sub-menu">
+          <li {!! (Request::is('admin/avaliacao/assiduidade') ? 'class="active" id="active"' : '') !!}>
+            <a href="{{ URL::to('admin/avaliacao/assiduidade') }}">
+                <i class="fa fa-angle-double-right"></i>
+                Assiduidade
+            </a>
+              <ul>
+                <li>
+                  <a href="{{ route('mostraAssiduidade') }}">
+                      <i class="livicon" data-name="list" data-c="#67C5DF" data-hc="#67C5DF"
+                         data-size="18" data-loop="true"></i>
+                      <span class="title">Ver Todas</span>
+
+                  </a>
+                </li>
+                <li>
+                  <a href="{{ route('insereAssiduidade') }}">
+                      <i class="livicon" data-name="plus-alt" data-c="#67C5DF" data-hc="#67C5DF"
+                         data-size="18" data-loop="true"></i>
+                      <span class="title">Calcular Nova</span>
+
+                  </a>
+                </li>
+                <li>
+                    <a href="{{ URL::to('admin/abonos') }}">
+                      <i class="livicon" data-name="pencil" data-c="#67C5DF" data-hc="#67C5DF"
+                         data-size="18" data-loop="true"></i>
+                      <span class="title">Abonos Considerados</span>
+
+
+                    </a>
+                </li>
+              </ul>
+
+
+    			</li>
 			<li {!! (Request::is('admin/avaliacao/progresso') ? 'class="active" id="active"' : '') !!}>
             <a href="{{ URL::to('admin/avaliacao/progresso') }}">
                 <i class="fa fa-angle-double-right"></i>
@@ -23,15 +58,9 @@
             </a>
 			</li>
 			<li {!! (Request::is('admin/avaliacao/media2016') ? 'class="active" id="active"' : '') !!}>
-            <a href="{{ URL::to('admin/avaliacao/media2016') }}">
-                <i class="fa fa-angle-double-right"></i>
-                Média 2016 - Equipe
-            </a>
-			</li>
-			<li {!! (Request::is('admin/avaliacao/media2016') ? 'class="active" id="active"' : '') !!}>
             <a href="{{ URL::to('admin/avaliacao/media2016Geral') }}">
                 <i class="fa fa-angle-double-right"></i>
-                Média 2016 - Todos
+                Média Anual - Todos
             </a>
 			</li>
 			<li {!! (Request::is('admin/avaliacao/painel') ? 'class="active" id="active"' : '') !!}>
@@ -84,7 +113,7 @@
         </li>
 
 
-        
+
         </ul>
     </li>
 
@@ -109,10 +138,10 @@
                 Criar Novo
             </a>
         </li>
-    
 
 
-        
+
+
         </ul>
     </li>
 

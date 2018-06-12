@@ -13,13 +13,13 @@ Avaliação de Desempenho dos Funcionários
     <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/css/frontend/features.css')); ?>">
     <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/switchery/css/switchery.css')); ?>" />
     <link type="text/css" rel="stylesheet" href="<?php echo e(asset('assets/vendors/bootstrap-switch/css/bootstrap-switch.css')); ?>">
-    
+
     <script type="stylesheet">
-		.center-block {  
-			display: block;  
-			margin-right: auto;  
-			margin-left: auto;  
-		} 
+		.center-block {
+			display: block;
+			margin-right: auto;
+			margin-left: auto;
+		}
 	</script>
     <!--end of page level css-->
 <?php $__env->stopSection(); ?>
@@ -53,12 +53,12 @@ Avaliação de Desempenho dos Funcionários
 <?php $__env->startSection('content'); ?>
     <!-- Aba de Título -->
     <div class="text-center">
-                <h3 class="border-primary"><span class="heading_border bg-primary"> 
+                <h3 class="border-primary"><span class="heading_border bg-primary">
 				<i class="livicon icon3" data-name="barchart" data-size="30" data-loop="true" data-c="#ffffff" data-hc="red"></i>
 				Avaliação de Desempenho</span></h3>
         </div>	<center>
         <div class="col-md-12 ">
-			<?php if(session('status')): ?> 
+			<?php if(session('status')): ?>
 				<div class="col-md-2 pull-center text-center"></div>
 					<div id="alert_msg" class="col-md-8 alert alert-info row-centered alert-dismissable" tabindex="-1" >
 						<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -67,11 +67,11 @@ Avaliação de Desempenho dos Funcionários
 				<div class="col-md-2"></div>
 			<?php endif; ?>
 	</div></center>
-    
-    
+
+
     <div class="container" style="min-height:800px;" >
         <!--Content Section Start -->
-        
+
     <?php if($perm == '0' ): ?>
 		<div class="col-md-12">
                 <div class="panel panel-info">
@@ -82,17 +82,17 @@ Avaliação de Desempenho dos Funcionários
                     </div>
 						<div class="panel-body">
 							<!-- Foto -->
-							
-							
+
+
 							<div class="col-md-2 panel-body">
 								<?php foreach($funcionario as $f): ?>
 								<!--<img src="/assets/images/avaliacao/avatar.png" width="180px" height="180px"/>-->
-								
-								<img width="150px" height="180px" src="data:image/jpeg;base64,<?php echo e(base64_encode( $f->IMAGEM )); ?>"/> 
+
+								<img width="150px" height="180px" src="data:image/jpeg;base64,<?php echo e(base64_encode( $f->IMAGEM )); ?>"/>
 								<?php endforeach; ?>
 							</div>
 							<!-- Foto -->
-							
+
 							<!-- Dados do funcionario -->
 							<div class="panel-body col-md-6">
 									<table class="table table-stripped ">
@@ -100,16 +100,16 @@ Avaliação de Desempenho dos Funcionários
 												<?php echo e("Pessoa não encontrada"); ?>
 
 											<?php else: ?>
-						    
+
 												<?php foreach($funcionario as $p): ?>
 													<tr>
 														<td colspan ="2" >NOME: <?php echo e($p->NOME); ?></td>
 													</tr>
-													<tr>											
+													<tr>
 														<td>CHAPA: <?php echo e($p->CHAPA); ?> </td>
 														<td>CARGO: <?php echo e($p->CARGO); ?> </td>
 													</tr>
-													<tr>											
+													<tr>
 														<td>ADMISSÃO: <?php echo e(date("d/m/Y", strtotime($p->DATAADMISSAO))); ?></td>
 														<td></td>
 													</tr>
@@ -118,15 +118,15 @@ Avaliação de Desempenho dos Funcionários
 													</tr>
 													<tr >
 														<td> <a style="color:#ffffff;" href="/avaliacao/delegaTodas?c=<?php echo e($p->CHAPA); ?>" class="btn btn-danger" title="Delegar as avaliações de funcáionrio para outro lider"><span class="glyphicon glyphicon-random"></span> Delegar as avaliações deste funcionário</a></td>
-														<td>  
+														<td>
 															<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
 															 <span class="glyphicon glyphicon-time"></span> Ver Férias, Afastamentos e Licenças
 															</button>
 															</td>
 
-													
+
 													</tr>
-													
+
 												<?php endforeach; ?>
 											<?php endif; ?>
 
@@ -163,17 +163,17 @@ Avaliação de Desempenho dos Funcionários
 												</div>
 											</div>
 										</div>
-					
+
 							</div><!-- Dados do funcionario -->
-							
+
 							<!-- Gráfico -->
 							<div class="panel-body col-md-4">
 									<!--<img src="/assets/images/avaliacao/grafico.png" width="350px" height="180px"/>-->
 							</div> <!-- Gráfico -->
-							
+
 						</div>
 				</div>
-				</div>		
+				</div>
 
 		 <!-- Competências -->
 		<div class="col-md-12">
@@ -187,7 +187,7 @@ Avaliação de Desempenho dos Funcionários
 					<div class="panel-body panel-collapse collapse in" id="collapse1" >
 					<!--<div class="panel-body"  >-->
 							<table class="table table-stripped">
-								
+
 								<tr>
 								<?php foreach($compfuncao as $c): ?>
 									<?php if($c->c1 == 0): ?>
@@ -207,7 +207,7 @@ Avaliação de Desempenho dos Funcionários
 									<?php endif; ?>
 								</tr>
 								<tr>
-									
+
 									<?php if($c->c4 == 0): ?>
 									<td id="comp04" >04 - Comunicação </td>
 									<?php else: ?>
@@ -225,7 +225,7 @@ Avaliação de Desempenho dos Funcionários
 									<?php endif; ?>
 								</tr>
 								<tr>
-									
+
 									<?php if($c->c7 == 0): ?>
 									<td id="comp07" >07 - Hábitos de Segurança, Higiene e Zelo</td>
 									<?php else: ?>
@@ -275,17 +275,17 @@ Avaliação de Desempenho dos Funcionários
 									<?php else: ?>
 									<td id="comp15" style="color:#bbb;">15 - Administração <span class="text-danger">(inativo) </span></td>
 									<?php endif; ?>
-								</tr>	<?php endforeach; ?>																													
-							</table>	
-							
-							
-					
-							
+								</tr>	<?php endforeach; ?>
+							</table>
+
+
+
+
 					</div>
 				</div>
-		</div>		
+		</div>
 		<!-- Competências -->
-					
+
 		 <!-- Avaliações -->
 		<div class="col-md-12">
                 <div class="panel panel-info">
@@ -297,205 +297,231 @@ Avaliação de Desempenho dos Funcionários
 					<div class="panel-body">
 							<!-- Dados da avaliação -->
 							<div class="panel-body col-md-12">
-								
-									<table class="table table-stripped table-bordered ">
-									<?php if($resultado): ?>	
-										<tr class="primary" style="color:#fff;">
-											<td>NOME DA AVALIAÇÃO </td>											
-											<td><abbr title="Aprendizagem e Adaptação" class="initialism">01</abbr> </td>
-											<td><abbr title="Apresentação Pessoal" class="initialism">02</abbr> </td>
-											<td><abbr title="Assiduidade" class="initialism">03</abbr> </td>
-											<td><abbr title="Comunicação" class="initialism">04</abbr> </td>
-											<td><abbr title="Disciplina e Respeito" class="initialism">05</abbr> </td>
-											<td><abbr title="Estabilidade Emocional" class="initialism">06</abbr> </td>
-											<td><abbr title="Hábitos de Segurança, Higiene e Zelo" class="initialism">07</abbr> </td>
-											<td><abbr title="Iniciativa e Criatividade" class="initialism">08</abbr> </td>
-											<td><abbr title="Interesse, Dedicação e Sigilo" class="initialism">09</abbr> </td>
-											<td><abbr title="Organização" class="initialism">10</abbr> </td>
-											<td><abbr title="Pontualidade" class="initialism">11</abbr> </td>
-											<td><abbr title="Produtividade" class="initialism">12</abbr> </td>
-											<td><abbr title="Qualidade" class="initialism">13</abbr> </td>
-											<td><abbr title="Relacionamento Pessoal e Colaboração" class="initialism">14</abbr> </td>
-											<td><abbr title="Administração" class="initialism">15</abbr> </td>
-											<td>MÉDIA TOTAL </td>
-										</tr>
-									<?php else: ?> Nenhuma Nota ainda cadastrada para este funcionário. Começe a fazer avaliações <a class="info" href="http://rh.pintos.com.br/avaliacao">na Área de Avaliações Abertas</a>. 
-									<?php endif; ?>
-									
-										
-										<?php foreach($compfuncao as $c): ?>
-										<?php foreach($resultado as $n): ?>
-									
-										<tr> 
-											<td><a data-toggle="modal" data-target="#myModal<?php echo e($n->AVALIACAO); ?>"><?php echo e($n->DESCRICAO); ?> </a>
-											
-												<div class="modal fade" id="myModal<?php echo e($n->AVALIACAO); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-												  <div class="modal-dialog" role="document">
-													<div class="modal-content">
-													  <div class="modal-header">
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-														<h4 class="modal-title" id="myModalLabel"><?php echo e($n->DESCRICAO); ?></h4>
-													  </div>
-													  <div class="modal-body">
-														<table class="table table-stripped table-bordered info">
-															<tr  class="info">
-																<th>Avaliação feita por </th>
-																<th>Data </th>
-																<th>Avaliação TOTVS</th>
-																<th>Participante TOTVS</th>
-															</tr>
-															<tr>
-																<td><?php echo e($n->AVALIADOR); ?></td>
-																<td><?php echo e($n->FEITAEM); ?></td>
-																<td><?php echo e($n->AVALIACAO); ?></td>
-																<td><?php echo e($n->PARTICIPANTE); ?></td>
-															</tr>
-														</table>
-														<table class="table table-stripped table-bordered">
-															
-																
-															<tr>
-																<td  class="info"><b>01 - Aprendizagem e Adaptação</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c1==0): ?><?php echo e($n->NOTA1); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS1); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>02 - Apresentação Pessoal</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c2==0): ?><?php echo e($n->NOTA2); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS2); ?> </td>
-															</tr>
-															<tr>
-																<td class="info"><b>03 - Assiduidade </b></td>
-																<td class="warning"><b>Nota: <?php if($c->c3==0): ?><?php echo e($n->NOTA3); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-																
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS3); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>04 - Comunicação</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c4==0): ?><?php echo e($n->NOTA4); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-																
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS4); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>05 - Disciplina e Respeito</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c5==0): ?><?php echo e($n->NOTA5); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS5); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>06 - Estabilidade Emocional</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c6==0): ?><?php echo e($n->NOTA6); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-																
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS6); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>07 - Hábitos de Segurança, Higiene e Zelo</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c7==0): ?><?php echo e($n->NOTA7); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS7); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>08 - Iniciativa e Criatividade</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c8==0): ?><?php echo e($n->NOTA8); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS8); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>09 - Interesse, Dedicação e Sigilo</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c9==0): ?><?php echo e($n->NOTA9); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS9); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>10 - Organização</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c10==0): ?><?php echo e($n->NOTA10); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS10); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>11 - Pontualidade</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c11==0): ?><?php echo e($n->NOTA11); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS11); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>12 - Produtividade</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c12==0): ?><?php echo e($n->NOTA12); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS12); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>13 - Qualidade</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c13==0): ?><?php echo e($n->NOTA13); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS13); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>14 - Relacionamento Pessoal e Colaboração</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c14==0): ?><?php echo e($n->NOTA14); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS14); ?> </td>
-															</tr>
-															<tr>
-																<td  class="info"><b>15 - Administração</b></td>
-																<td class="warning"><b>Nota: <?php if($c->c15==0): ?><?php echo e($n->NOTA15); ?>  <?php else: ?> - <?php endif; ?> </b></td>
-															</tr>
-															<tr>
-																<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS15); ?> </td>
-															</tr>
-															
-														</table>
-													  </div>
-													  <div class="modal-footer">
-														<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-													  </div>
-													</div>
-												  </div>
-												</div>
-											
-											</td>											
-											
-												<td><?php if($c->c1==0): ?><?php echo e($n->NOTA1); ?>  <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c2==0): ?><?php echo e($n->NOTA2); ?>  <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c3==0): ?><?php echo e($n->NOTA3); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c4==0): ?><?php echo e($n->NOTA4); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c5==0): ?><?php echo e($n->NOTA5); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c6==0): ?><?php echo e($n->NOTA6); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c7==0): ?><?php echo e($n->NOTA7); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c8==0): ?><?php echo e($n->NOTA8); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c9==0): ?><?php echo e($n->NOTA9); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c10==0): ?><?php echo e($n->NOTA10); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c11==0): ?><?php echo e($n->NOTA11); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c12==0): ?><?php echo e($n->NOTA12); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c13==0): ?><?php echo e($n->NOTA13); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c14==0): ?><?php echo e($n->NOTA14); ?> <?php else: ?> - <?php endif; ?></td>
-												<td><?php if($c->c15==0): ?><?php echo e($n->NOTA15); ?> <?php else: ?> - <?php endif; ?></td>
-												<td> - </span></td> 
-										
-										<?php endforeach; ?>
-										<?php endforeach; ?>
-									  </tr>			
-									</table>
-									
+
+													<div class="tab-content">
+														  <?php foreach( $anos as $ano ): ?>
+	                            <div class="tab-pane active" id="#tab_<?php echo e($ano->ANO); ?>">
+	                                <div class="panel-group" id="accordion">
+	                                    <div class="panel panel-default">
+	                                        <div class="panel-heading">
+	                                            <h4 class="panel-title">
+	                                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo e($ano->ANO); ?>"  class="text-primary" >
+	                                                    <span class=" glyphicon glyphicon-minus"></span>
+	                                                    <span><?php echo e($ano->ANO); ?></span></a>
+	                                                </h4>
+	                                        </div>
+	                                        <div id="collapse<?php echo e($ano->ANO); ?>" class="panel-collapse collapse in">
+	                                            <div class="panel-body">
+																									<table class="table table-stripped table-bordered ">
+																										<?php if($resultado): ?>
+																											<tr class="primary" style="color:#fff;">
+																												<td>NOME DA AVALIAÇÃO </td>
+																												<td><abbr title="Aprendizagem e Adaptação" class="initialism">01</abbr> </td>
+																												<td><abbr title="Apresentação Pessoal" class="initialism">02</abbr> </td>
+																												<td><abbr title="Assiduidade" class="initialism">03</abbr> </td>
+																												<td><abbr title="Comunicação" class="initialism">04</abbr> </td>
+																												<td><abbr title="Disciplina e Respeito" class="initialism">05</abbr> </td>
+																												<td><abbr title="Estabilidade Emocional" class="initialism">06</abbr> </td>
+																												<td><abbr title="Hábitos de Segurança, Higiene e Zelo" class="initialism">07</abbr> </td>
+																												<td><abbr title="Iniciativa e Criatividade" class="initialism">08</abbr> </td>
+																												<td><abbr title="Interesse, Dedicação e Sigilo" class="initialism">09</abbr> </td>
+																												<td><abbr title="Organização" class="initialism">10</abbr> </td>
+																												<td><abbr title="Pontualidade" class="initialism">11</abbr> </td>
+																												<td><abbr title="Produtividade" class="initialism">12</abbr> </td>
+																												<td><abbr title="Qualidade" class="initialism">13</abbr> </td>
+																												<td><abbr title="Relacionamento Pessoal e Colaboração" class="initialism">14</abbr> </td>
+																												<td><abbr title="Administração" class="initialism">15</abbr> </td>
+																												<td>MÉDIA TOTAL </td>
+																											</tr>
+																										<?php else: ?> Nenhuma Nota ainda cadastrada para este funcionário. Começe a fazer avaliações <a class="info" href="http://rh.pintos.com.br/avaliacao">na Área de Avaliações Abertas</a>.
+																										<?php endif; ?>
+	                                                <!-- conteúdo dos collapses -->
+																									<?php foreach($compfuncao as $c): ?>
+
+																											<?php foreach($resultado as $n): ?>
+																													<?php if($n->ANO == $ano->ANO): ?>
+
+
+
+																													<tr>
+																														<td><a data-toggle="modal" data-target="#myModal<?php echo e($n->AVALIACAO); ?>"><?php echo e($n->DESCRICAO); ?> </a>
+
+																															<div class="modal fade" id="myModal<?php echo e($n->AVALIACAO); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+																																<div class="modal-dialog" role="document">
+																																<div class="modal-content">
+																																	<div class="modal-header">
+																																	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+																																	<h4 class="modal-title" id="myModalLabel"><?php echo e($n->DESCRICAO); ?></h4>
+																																	</div>
+																																	<div class="modal-body">
+																																	<table class="table table-stripped table-bordered info">
+																																		<tr  class="info">
+																																			<th>Avaliação feita por </th>
+																																			<th>Data </th>
+																																			<th>Avaliação TOTVS</th>
+																																			<th>Participante TOTVS</th>
+																																		</tr>
+																																		<tr>
+																																			<td><?php echo e($n->AVALIADOR); ?></td>
+																																			<td><?php echo e($n->FEITAEM); ?></td>
+																																			<td><?php echo e($n->AVALIACAO); ?></td>
+																																			<td><?php echo e($n->PARTICIPANTE); ?></td>
+																																		</tr>
+																																	</table>
+																																	<table class="table table-stripped table-bordered">
+
+
+																																		<tr>
+																																			<td  class="info"><b>01 - Aprendizagem e Adaptação</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c1==0): ?><?php echo e($n->NOTA1); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS1); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>02 - Apresentação Pessoal</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c2==0): ?><?php echo e($n->NOTA2); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS2); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td class="info"><b>03 - Assiduidade </b></td>
+																																			<td class="warning"><b><?php echo e($n->NOTA3); ?> </b></td>
+
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS3); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>04 - Comunicação</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c4==0): ?><?php echo e($n->NOTA4); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS4); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>05 - Disciplina e Respeito</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c5==0): ?><?php echo e($n->NOTA5); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS5); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>06 - Estabilidade Emocional</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c6==0): ?><?php echo e($n->NOTA6); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS6); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>07 - Hábitos de Segurança, Higiene e Zelo</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c7==0): ?><?php echo e($n->NOTA7); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS7); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>08 - Iniciativa e Criatividade</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c8==0): ?><?php echo e($n->NOTA8); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS8); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>09 - Interesse, Dedicação e Sigilo</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c9==0): ?><?php echo e($n->NOTA9); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS9); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>10 - Organização</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c10==0): ?><?php echo e($n->NOTA10); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS10); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>11 - Pontualidade</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c11==0): ?><?php echo e($n->NOTA11); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS11); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>12 - Produtividade</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c12==0): ?><?php echo e($n->NOTA12); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS12); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>13 - Qualidade</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c13==0): ?><?php echo e($n->NOTA13); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS13); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>14 - Relacionamento Pessoal e Colaboração</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c14==0): ?><?php echo e($n->NOTA14); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS14); ?> </td>
+																																		</tr>
+																																		<tr>
+																																			<td  class="info"><b>15 - Administração</b></td>
+																																			<td class="warning"><b>Nota: <?php if($c->c15==0): ?><?php echo e($n->NOTA15); ?>  <?php else: ?> - <?php endif; ?> </b></td>
+																																		</tr>
+																																		<tr>
+																																			<td colspan="2"><b>Observação da nota: </b> <?php echo e($n->OBS15); ?> </td>
+																																		</tr>
+
+																																	</table>
+																																	</div>
+																																	<div class="modal-footer">
+																																	<button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+																																	</div>
+																																</div>
+																																</div>
+																															</div>
+
+																														</td>
+
+																															<td><?php if($c->c1==0): ?><?php echo e($n->NOTA1); ?>  <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c2==0): ?><?php echo e($n->NOTA2); ?>  <?php else: ?> - <?php endif; ?></td>
+																															<td><?php echo e($n->NOTA3); ?> </td>
+																															<td><?php if($c->c4==0): ?><?php echo e($n->NOTA4); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c5==0): ?><?php echo e($n->NOTA5); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c6==0): ?><?php echo e($n->NOTA6); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c7==0): ?><?php echo e($n->NOTA7); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c8==0): ?><?php echo e($n->NOTA8); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c9==0): ?><?php echo e($n->NOTA9); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c10==0): ?><?php echo e($n->NOTA10); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c11==0): ?><?php echo e($n->NOTA11); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c12==0): ?><?php echo e($n->NOTA12); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c13==0): ?><?php echo e($n->NOTA13); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c14==0): ?><?php echo e($n->NOTA14); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td><?php if($c->c15==0): ?><?php echo e($n->NOTA15); ?> <?php else: ?> - <?php endif; ?></td>
+																															<td> <?php if($n->ANO < date('Y')): ?> <?php echo e(round($n->MEDIA,2)); ?> <?php else: ?> - <?php endif; ?></span></td>
+
+																													<?php endif; ?>
+																													<?php endforeach; ?>
+																													</tr>
+																													</table>
+																												
+																													<?php endforeach; ?>
+																									 <!-- conteúdo dos collapses -->
+																									 	</div>
+	                                        </div>
+	                                    </div>
+	                                </div>
+	                            </div>
+															<?php endforeach; ?>
+
 									<?php if($licenciados): ?>
 
 										<div class="alert-warning"> <b>Férias / Licenças: </b>
@@ -503,19 +529,19 @@ Avaliação de Desempenho dos Funcionários
 
 									<?php endif; ?>
 							</div><!-- Dados da avaliação -->
-							
-							
-					
-							
+
+
+
+
 					</div>
 				</div>
-		</div>		
+		</div>
 		<!-- Avaliações -->
-			
+
 
         <!-- //Content Section End -->
 	</div>
-	<?php else: ?> 
+	<?php else: ?>
 	<div class="container">
 		<div class="row">
 			<div class="alert alert-danger">
@@ -540,12 +566,12 @@ Avaliação de Desempenho dos Funcionários
     <script type="text/javascript" src="<?php echo e(asset('assets/vendors/bootstrap-switch/js/bootstrap-switch.js')); ?>"></script>
     <script type="text/javascript" src="<?php echo e(asset('assets/js/frontend/advfeatures.js')); ?>"></script>
 <script>
-	
+
 
 		$("#alert_msg").fadeTo(5800, 1600).slideUp(500, function(){
 		$("#alert_msg").slideUp(500);
 });
-	
+
 	</script>
 <?php $__env->stopSection(); ?>
 

@@ -1,0 +1,130 @@
+<?php /* Page title */ ?>
+<?php $__env->startSection('title'); ?>
+Assiduidade - AD
+@parent
+<?php $__env->stopSection(); ?>
+
+<?php /* page level styles */ ?>
+<?php $__env->startSection('header_styles'); ?>
+
+    <link href="<?php echo e(asset('assets/vendors/bootstrap-form-builder/css/custom.css')); ?>" rel="stylesheet" />
+    <link href="<?php echo e(asset('assets/css/pages/formbuilder.css')); ?>" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendors/datatables/css/dataTables.bootstrap.css')); ?>" />
+	  <link href="<?php echo e(asset('assets/css/pages/tables.css')); ?>" rel="stylesheet" type="text/css" />
+<?php $__env->stopSection(); ?>
+
+<?php /* Page content */ ?>
+<?php $__env->startSection('content'); ?>
+
+<section class="content-header">
+            <!--section starts-->
+            <h1>Assiduidade</h1>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="<?php echo e(route('dashboard')); ?>">
+                        <i class="livicon" data-name="home" data-size="14" data-loop="true"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="active">Inserir Assiduidade para Mês</li>
+            </ol>
+        </section>
+        <!--section ends-->
+        <section class="content">
+          <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-primary">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                              <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                              Inserir Assiduidade na Avaliação do RH
+                          </h3>
+                      </div>
+                      <div class="panel-body">
+                          <div class="row ">
+                              <div class="col-lg-12 panel-body">
+                                <form class="form-horizontal" action="<?php echo e(route('insereNovaAssiduidade')); ?>" method="post">
+                                  <?php echo Form::token(); ?>
+
+                                  <div class="form-group">
+                                    <label for="codavaliacao" class="col-sm-2 control-label">Avaliação</label>
+                                    <div class="col-sm-10">
+                                      <select class="form-control" name="novaAvaliacao">
+                                        <?php foreach($novas as $n): ?>
+                                            <option value="<?php echo e($n->cod); ?>"><?php echo e($n->cod); ?> - <?php echo e($n->nome); ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                      <button type="submit" class="btn btn-primary">Calcular</button>
+                                    </div>
+                                  </div>
+                                </form>
+
+                              </div>
+                          </div>
+                      </div> <!-- fim do painel corpo-->
+                    </div> <!-- fim do painel-->
+
+                    <div class="panel panel-primary">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">
+                              <i class="fa fa-id-card-o" aria-hidden="true"></i>
+                              Recalcular Assiduidade na Avaliação do RH
+                          </h3>
+                      </div>
+                      <div class="panel-body">
+                          <div class="row ">
+                              <div class="col-lg-12 panel-body">
+                                <form class="form-horizontal" action="<?php echo e(route('atualizaAssiduidade')); ?>" method="post">
+                                  <?php echo Form::token(); ?>
+
+                                  <div class="form-group">
+                                    <label for="codavaliacao" class="col-sm-2 control-label">Avaliação</label>
+                                    <div class="col-sm-10">
+                                      <select class="form-control" name="atualizaAvaliacao">
+                                        <?php foreach($feitas as $f): ?>
+                                            <option value="<?php echo e($f->cod); ?>"><?php echo e($f->cod); ?> - <?php echo e($f->nome); ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
+                                      </select>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                      <button type="submit" class="btn btn-primary">Recalcular</button>
+                                    </div>
+                                  </div>
+                                </form>
+
+                              </div>
+                          </div>
+                      </div> <!-- fim do painel corpo-->
+                    </div> <!-- fim do painel-->
+                  </div> <!--fim da coluna-->
+          </div> <!--fim da row-->
+        </section>
+        <!--main content ends-->
+<?php $__env->stopSection(); ?>
+
+<?php /* page level scripts */ ?>
+<?php $__env->startSection('footer_scripts'); ?>
+
+    <script type="text/javascript" src="<?php echo e(asset('assets/vendors/datatables/js/jquery.dataTables.js')); ?>" ></script>
+    <script type="text/javascript" src="<?php echo e(asset('assets/vendors/datatables/js/dataTables.bootstrap.js')); ?>" ></script>
+
+
+	<script>
+	$(document).ready(function() {
+		$('#table').DataTable();
+	});
+	</script>
+
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('admin/layouts/default', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -8,17 +8,8 @@ Média Geral 2016 - Todas as Equipes
 
 {{-- page level styles --}}
 @section('header_styles')
-    
-    <link href="{{ asset('assets/vendors/bootstrap-form-builder/css/custom.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/css/pages/formbuilder.css') }}" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/datatables/css/scroller.bootstrap.css') }}">
-    <script type="stylesheet">
-		.center-block {  
-			display: block;  
-			margin-right: auto;  
-			margin-left: auto;  
-		} 
-	</script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.standalone.min.css" rel="stylesheet" type="text/css" />
+
 @stop
 
 {{-- Page content --}}
@@ -31,38 +22,63 @@ Média Geral 2016 - Todas as Equipes
                         Dashboard
                     </a>
                 </li>
-                <li class="active">Médias 2016</li>
+                <li class="active">Médias Anuais</li>
             </ol>
 	</section>
 	 <section class="content">
-	 
-	       
+
+
             <div class="row">
                 <div class="col-lg-12">
-                           
+
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                                Média Geral 2016
+                                Média Geral de Notas
                             </h3>
                             <span class="pull-right clickable"></span>
                         </div>
                         <div class="panel-body">
                             <div class="row ">
-                                
-								<div class="col-lg-12 panel-body">
 
+								<div class="col-lg-12 panel-body">
+                  <div class="col-lg-8">
+
+                    <form class="form-horizontal" method="get">
+                      <div class="form-group">
+                        <label for="dataInicial" class="col-sm-2 control-label">Data Inicial de Abertura</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="dataInicial"  name="dataInicial"  value="{{ date('d/m/Y',strtotime($dataInicial)) }}">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="dataFinal" class="col-sm-2 control-label">Data Final de Abertura</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="dataFinal"  name="dataFinal" value="{{ date('d/m/Y',strtotime($dataFinal)) }}">
+                        </div>
+                      </div>
+
+                      <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                          <button type="submit" class="btn btn-default">Buscar</button>
+                        </div>
+                      </div>
+                    </form>
+
+                  </div>
 									<div class="col-lg-12">
+
 									<div class="table-responsive">
-										@if(isset($medias))
+
 											<a id="dlink"  style="display:none;"></a>
 
-											<input class="btn btn-primary btn-lg" type="button" onclick="tableToExcel('media2016Tabela', 'media2016Tabela', 'AD2016Geral.xls')" value="Exportar para Excel"> 
+											<input class="btn btn-primary btn-lg" type="button" onclick="tableToExcel('media2016Tabela', 'media2016Tabela', 'AD2016Geral.xls')" value="Exportar para Excel">
 											<a class="btn btn-primary btn-lg" href="mediaImpressao" target="_blank" role="button">Versão para Impressão</a>
 											<hr/>
 											<table class="table table-striped" id="media2016Tabela" style="overflow-x: scroll;">
-												<tr>
+                        @if($medias>0)
+                        <tr>
 														<td>Chapa</td>
 														<td>Nome</td>
 														<td>Função</td>
@@ -74,40 +90,43 @@ Média Geral 2016 - Todas as Equipes
 														<td>Seção</td>
 														<td>Avaliador</td>
 
-													</tr>
-													@foreach($medias as $m)
-														<tr>	
-															<td>{{$m->CHAPA}}</td>
-															<td>{{$m->NOME}}</td>
-															<td>{{$m->FUNCAO}}</td>
-															<td>{{date('d/m/Y', strtotime($m->DATAADMISSAO))}}</td>
-															<td>{{$m->FEITAS}} de {{$m->TOTAL}}</td>
-															<td>{{$m->MEDIA}}</td>
-															<td>{{$m->LOJA}}</td>
-															<td>{{$m->CODSECAO}}</td>
-															<td>{{$m->SECAO}}</td>
-															<td>{{$m->AVALIADOR}}</td>
-														</tr>
-													@endforeach
+												</tr>
+
+    													@foreach($medias as $m)
+    														<tr>
+    															<td>{{$m->CHAPA}}</td>
+    															<td>{{$m->NOME}}</td>
+    															<td>{{$m->FUNCAO}}</td>
+    															<td>{{date('d/m/Y', strtotime($m->DATAADMISSAO))}}</td>
+    															<td>{{$m->FEITAS}} de {{$m->TOTAL}}</td>
+    															<td>{{$m->MEDIA}}</td>
+    															<td>{{$m->LOJA}}</td>
+    															<td>{{$m->CODSECAO}}</td>
+    															<td>{{$m->SECAO}}</td>
+    															<td>{{$m->AVALIADOR}}</td>
+    														</tr>
+    													@endforeach
+                              @endif
+
 											</table>
-											
+
 											<div class="col-md-9 pull-right">
-												
+
 											</div>
-										@endif
-										
+
+
 									</div>
-									
+
 								</div>
-                           		
+
                             </div>
                         </div>
                         <!-- / Building Form. --> </div>
                     <!-- / Components --> </div>
                 <!--form builder ends--> </div>
 	</section>
-	
-	
+
+
 
 
 
@@ -115,6 +134,32 @@ Média Geral 2016 - Todas as Equipes
 
 {{-- page level scripts --}}
 @section('footer_scripts')
+
+	
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js" type="text/javascript"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"> </script>
+
+<script type="text/javascript">
+
+	$('#dataInicial').datepicker({
+		autoclose: true,
+		format: 'dd/mm/yyyy',
+		language: 'pt-BR',
+		todayBtn: 'linked',
+		todayHighlight: true,
+	});
+
+	$('#dataFinal').datepicker({
+		autoclose: true,
+		format: 'dd/mm/yyyy',
+		language: 'pt-BR',
+		todayBtn: 'linked',
+		todayHighlight: true,
+	});
+
+</script>
+
+
   <script type='text/javascript' src="{{ asset('assets/vendors/bootstrap-progressbar/js/bootstrap-progressbar.js') }}" ></script>
   <script type="text/javascript" src="{{ asset('assets/js/pages/general.js') }}" ></script>
   <script data-main="{{ asset('assets/vendors/bootstrap-form-builder/js/main-built.js') }}" src="{{ asset('assets/vendors/bootstrap-form-builder/js/require.js') }}" ></script>
@@ -127,7 +172,7 @@ Média Geral 2016 - Todas as Equipes
         "scrollX": true
     } );
 } );
-	
+
 	var tableToExcel = (function () {
         var uri = 'data:application/vnd.ms-excel;base64,'
         , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta charset="UTF-8" /></head><body><table>{table}</table></body></html>'
@@ -142,8 +187,8 @@ Média Geral 2016 - Todas as Equipes
             document.getElementById("dlink").click();
 
         }
-    })()
-	
+    })();
+
 </script>
 
 @stop
