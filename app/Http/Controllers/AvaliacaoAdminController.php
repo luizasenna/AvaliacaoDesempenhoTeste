@@ -21,6 +21,7 @@ use App\Assiduidade;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Pagination\Paginator;
 
+use DateTime;
 
 class AvaliacaoAdminController extends Controller
 {
@@ -124,7 +125,6 @@ class AvaliacaoAdminController extends Controller
 
 			]);
 
-
 	}
 
 	public function pessoa($id){
@@ -135,7 +135,6 @@ class AvaliacaoAdminController extends Controller
     $codpessoa = Funcionario::where('CHAPA', '=', $id)->get();
 
 		$grupo = '';
-
 
 		if ($chefe == $id)
 			$perm = "Você não pode ver suas próprias notas! =(";
@@ -151,9 +150,11 @@ class AvaliacaoAdminController extends Controller
 							  E.DATAADMISSAO AS DATAADMISSAO,
 							  C.NOME AS CARGO,
 							  I.IMAGEM AS IMAGEM,
-							  Q.DESCRICAO AS LIDER
+							  Q.DESCRICAO AS LIDER,
+                E.CODFILIAL AS FILIAL
 							  from funcionarios as E
-		                      left join funcoes AS C on C.CODIGO = E.CODFUNCAO
+		            left join funcoes AS C on C.CODIGO = E.CODFUNCAO
+                left join secoes as SC on E.CODSECAO = SC.CODIGO
 							  left join pessoas AS P on P.CODIGO = E.CODPESSOA
 							  left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 							  inner join equipes as Q ON Q.CODCLIENTE = E.CODEQUIPE
@@ -171,7 +172,7 @@ class AvaliacaoAdminController extends Controller
       					NOTAAVALIADOR    AS NOTA,
       					P.CHAPAAVALIADO  AS CHAPA,
       					N.CODAVALIACAO   AS AVALIACAO,
-      					V.NOME           AS DESCRICAO,
+      					MID(V.NOME,10,20)           AS DESCRICAO,
       					V.DATAABERTURA   AS DATA, P.CODPARTICIPANTE, P.CODAVALIACAO,
       					N.COMENTARIO     AS OBS,
       					date_format(N.created_at, "%d/%m/%Y")  AS FEITAEM,
@@ -311,11 +312,15 @@ class AvaliacaoAdminController extends Controller
                         E.DATAADMISSAO AS DATAADMISSAO,
                         C.NOME AS CARGO,
                         I.IMAGEM AS IMAGEM,
-                        Q.DESCRICAO AS LIDER
+                        Q.DESCRICAO AS LIDER,
+                        E.CODFILIAL AS FILIAL,
+                        SC.CODIGO   AS CODSECAO,
+                        SC.DESCRICAO AS NOMESECAO
                         from funcionarios as E
                                   left join funcoes AS C on C.CODIGO = E.CODFUNCAO
                         left join pessoas AS P on P.CODIGO = E.CODPESSOA
                         left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
+                        left join secoes as SC on E.CODSECAO = SC.CODIGO
                         inner join equipes as Q ON Q.CODCLIENTE = E.CODEQUIPE
                         where E.CODPESSOA = '.$codigo);
 
@@ -343,7 +348,7 @@ class AvaliacaoAdminController extends Controller
                       inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
                       inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
                       inner JOIN funcionarios AS F ON F.CHAPA = P.CHAPAAVALIADO
-                      where statuslider = 0 and P.CODPESSOA = '.$codigo);
+                      where statuslider = 0 and P.CODPESSOA = '.$codigo.' and YEAR(V.DATAABERTURA) = '.$ano);
 
                       $resultado = DB::select('
                               select
@@ -393,7 +398,6 @@ class AvaliacaoAdminController extends Controller
                               MAX(IF(ITEM = "14", OBS, " - ")) AS OBS14,
                               MAX(IF(ITEM = "15", OBS, " - ")) AS OBS15,
                               0 AS MEDIA
-
                               from notas_temp
                               left join assiduidade AS AE on AE.codpessoa = notas_temp.CODPESSOA AND AE.codavaliacao = notas_temp.AVALIACAO
                               GROUP BY AVALIACAO, CHAPA
@@ -428,7 +432,7 @@ class AvaliacaoAdminController extends Controller
 
                       }
 
-    return view('admin.avaliacao.pessoa', [
+    return view('admin.avaliacao.notasImpressao', [
           'notas' => $notas,
           'funcionario' => $funcionario,
           'resultado' => $resultado,
@@ -1478,9 +1482,11 @@ class AvaliacaoAdminController extends Controller
 
 	public function mediaAvaliacaoTodas(){
 
-      $di = Request::exists('dataInicial') ? date("Y-m-d",strtotime(Request::input('dataInicial'))) : date('Y-m-d');
-      $df = Request::exists('dataFinal') ? date("Y-m-d",strtotime(Request::input('dataFinal'))) : date('Y-m-d');
+      $di = Request::exists('dataInicial') ? DateTime::createFromFormat('d/m/Y',Request::input('dataInicial')) : date('Y-m-d');
+      $df = Request::exists('dataFinal') ? DateTime::createFromFormat('d/m/Y',Request::input('dataFinal')) : date('Y-m-d');
 
+    Request::exists('dataInicial') ?  $di = date('Y-m-d', $di->getTimestamp()) : '';
+    Request::exists('dataFinal') ? $df = date('Y-m-d', $df->getTimestamp()) : '';
 
       if(($di<>0)){
         			DB::statement('drop table if exists notas_temp_todas;');
@@ -1653,7 +1659,6 @@ class AvaliacaoAdminController extends Controller
         				array('CODPESSOA'=>$t->CODPESSOA, 'CHAPA'=>$t->CHAPA, 'AVALIACAO'=>$t->AVALIACAO, 'MEDIA'=>$t->mediames, 'NOME'=>$t->NOME, 'FUNCAO'=>$t->FUNCAO, 'AVALIADOR'=>$t->AVALIADOR));
 
         				}
-
 
         				$medias = DB::select('select f.CHAPA as CHAPA,
         				f.NOME as NOME,
