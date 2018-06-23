@@ -1264,7 +1264,7 @@ class AvaliacaoAdminController extends Controller
 				$soma = 0;
 
 				DB::statement('Drop table if exists feitas');
-				DB::statement('create temporary table feitas
+				/*DB::statement('create temporary table feitas
 							select p.CHAPAAVALIADO AS CHAPAAVALIADO,
 								   p.CODPESSOA as CODPESSOA,
 								   f.NOME AS NOME,
@@ -1274,7 +1274,19 @@ class AvaliacaoAdminController extends Controller
 							inner join funcionarios as f on f.CODPESSOA = p.CODPESSOA
 							left join notas as n on n.CODPARTICIPANTE = p.CODPARTICIPANTE and n.CODCOLIGADA = p.CODCOLIGADA and n.CODAVALIACAO = p.CODAVALIACAO
 							where f.CODEQUIPE = '.$equipe_filter.' and p.CODAVALIACAO between 25 and 36
-							group by p.CODPESSOA, p.CODAVALIACAO');
+							group by p.CODPESSOA, p.CODAVALIACAO'); */
+
+              DB::statement('create temporary table feitas
+            							select p.CHAPAAVALIADO AS CHAPAAVALIADO,
+            								   p.CODPESSOA as CODPESSOA,
+            								   f.NOME AS NOME,
+            								   p.CODAVALIACAO AS CODAVALIACAO,
+            								  (if(n.CODITEMAVAL is not null, 1,0)) as EXISTE
+            							from participantes as p
+            							inner join funcionarios as f on f.CODPESSOA = p.CODPESSOA
+            							left join notas as n on n.CODPARTICIPANTE = p.CODPARTICIPANTE and n.CODCOLIGADA = p.CODCOLIGADA and n.CODAVALIACAO = p.CODAVALIACAO
+            							where p.CODAVALIACAO between 25 and 36
+            							group by p.CODPESSOA, p.CODAVALIACAO');
 
 				DB::statement('Drop table if exists totais');
 				DB::statement('Create temporary table totais
