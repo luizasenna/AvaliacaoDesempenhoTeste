@@ -1623,9 +1623,13 @@ class AvaliacaoAdminController extends Controller
                       where av.DATAABERTURA BETWEEN "'.$di.'"  and "'.$df.'"
                       group by p.CODPARTICIPANTE, p.CODPESSOA, p.CODAVALIACAO');
 
+
+
+
                       DB::statement('Drop table if exists totais');
               				DB::statement('Create temporary table totais
-              							select count(AVALIACAO) AS QTDE, CODPESSOA, NOME from mediageralano GROUP BY CODPESSOA');
+                      select count(CODAVALIACAO) AS QTDE, SUM(EXISTE) AS FEITAS, CHAPAAVALIADO,
++        				      CODPESSOA, NOME from feitas GROUP BY CODPESSOA');
 
         				$medias = DB::select('select f.CHAPA as CHAPA,
                 mediageralano.CODPESSOA,
