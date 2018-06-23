@@ -3,4 +3,5 @@ github
 github.pub
 package.json
 composer.lock
-
+config/database.php
+config/datatables.php
