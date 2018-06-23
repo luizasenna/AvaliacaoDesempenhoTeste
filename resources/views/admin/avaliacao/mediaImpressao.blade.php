@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Média AD 2016</title>
+<title>Média AD Anual</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 
@@ -10,19 +10,19 @@
 	 <section class="content">
 	         <div class="row">
                 <div class="col-md-12">
-                           
+
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                                Média Geral 2016
+                                Média Geral Anual
                             </h3>
                             <span class="pull-right clickable"></span>
                         </div>
                         <div class="panel-body">
                             <div class="row ">
-                               
-								<div class="col-md-12 panel-body">	
+
+								<div class="col-md-12 panel-body">
 									<div class="table-responsive">
 									 @foreach($lider as $l)
                                			<div class="col-md-6"><h5>LÍDER: {{$l->NOME}}</h5></div>
@@ -41,7 +41,7 @@
 
 													</tr>
 													@foreach($medias as $m)
-														<tr>	
+														<tr>
 															<td>{{$m->CHAPA}}</td>
 															<td>{{$m->NOME}}</td>
 															<td>{{$m->FUNCAO}}</td>
@@ -54,9 +54,9 @@
 														</tr>
 													@endforeach
 											</table>
-										
+
 									</div>
-									
+
 								</div>
                             </div>
                         </div>

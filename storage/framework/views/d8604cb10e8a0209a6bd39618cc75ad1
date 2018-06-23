@@ -71,10 +71,10 @@ Média Geral 2016 - Todas as Equipes
 
 											<a id="dlink"  style="display:none;"></a>
 
-											<input class="btn btn-primary btn-lg" type="button" onclick="tableToExcel('media2016Tabela', 'media2016Tabela', 'AD2016Geral.xls')" value="Exportar para Excel">
+											<input class="btn btn-primary btn-lg" type="button" onclick="tableToExcel('mediaAnualTabela', 'mediaAnualTabela', 'ADAnualGeral.xls')" value="Exportar para Excel">
 											<a class="btn btn-primary btn-lg" href="mediaImpressao" target="_blank" role="button">Versão para Impressão</a>
 											<hr/>
-											<table class="table table-striped" id="media2016Tabela" style="overflow-x: scroll;">
+											<table class="table table-striped" id="mediaAnualTabela" style="overflow-x: scroll;">
                         <?php if($medias>0): ?>
                         <tr>
 														<td>Chapa</td>
@@ -133,7 +133,7 @@ Média Geral 2016 - Todas as Equipes
 <?php /* page level scripts */ ?>
 <?php $__env->startSection('footer_scripts'); ?>
 
-	
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js" type="text/javascript"> </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/locales/bootstrap-datepicker.pt-BR.min.js"> </script>
 
@@ -166,7 +166,7 @@ Média Geral 2016 - Todas as Equipes
 
 <script>
 	$(document).ready(function() {
-    $('#media2016Tabela').DataTable( {
+    $('#mediaAnualTabela').DataTable( {
         "scrollX": true
     } );
 } );

@@ -6,9 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 
-<body style="">
-
-
+<body>
     <section class="content-header">
             <!--section starts-->
             <table class="table" width="100%">
@@ -23,8 +21,6 @@
         <!--section ends-->
         <section class="content">
     <!-- Aba de Título -->
-
-
 
     <div class="row" style="min-height:800px;" >
         <!--Content Section Start -->
@@ -51,7 +47,7 @@
 														<td colspan ="2" style="border: none;"><h4 style="padding:0;margin:0;">{{$p->NOME}}</h4></td>
 													</tr>
 													<tr style="font-size:11px;">
-														<td>CHAPA: {{$p->CHAPA}} </td>
+														<td>CODIGO: {{$p->CHAPA}} </td>
 														<td>FUNÇÃO: {{$p->CARGO}} </td>
 													</tr>
 													<tr style="font-size:11px;">
@@ -171,8 +167,6 @@
                     </div>-->
                     <div class="panel-body" style="font-size:10px;margin-bottom:0;" >
                         <!-- Dados da avaliação -->
-
-
                                         <table class="table table-bordered" style="padding:0;margin-bottom:0;">
                                           @if ($resultado)
                                             <tr>
@@ -220,33 +214,38 @@
                                                     <td>@if ($c->c14==0){{$n->NOTA14}} @else - @endif</td>
                                                     <td>@if ($c->c15==0){{$n->NOTA15}} @else - @endif</td>
                                                     <td> @if($n->ANO < date('Y')) {{round($n->MEDIA,2)}} @else - @endif</span></td>
-                                                    <td>Patrícia Pereira Bandeira</td>
+                                                    <td>{{$n->AVALIADOR}}</td>
 
                                                 </tr>
                                                  @endforeach
                                                 </table>
                     @endforeach
-                    <table class="table" width="100%" style="font-size:10px;">
-                    @foreach($resultado as $n)
-                        @if($n->OBS1 != '' or $n->OBS2 != '' or $n->OBS3 != '' or
-                            $n->OBS4 != '' or $n->OBS5 != '' or $n->OBS6 != '' or
-                            $n->OBS7 != '' or $n->OBS8 != '' or $n->OBS9 != '' or
-                            $n->OBS10 != '' or $n->OBS11 != '' or $n->OBS12 != '' or
-                            $n->OBS13 != '' or $n->OBS14 != '' or $n->OBS15 != ''
-                        )
-                        <tr>
-                            <td>{{ substr($n->DESCRICAO,11,16) }}</td>
-                            <td> Item 1:  {{$n->OBS1}} - {{$n->OBS2}} - {{$n->OBS3}} -
-                                {{$n->OBS4}} - {{$n->OBS5}} - {{$n->OBS6}} -
-                                {{$n->OBS7}} - {{$n->OBS8}} - {{$n->OBS9}} -
-                                {{$n->OBS10}} - {{$n->OBS11}} - {{$n->OBS12}} -
-                                {{$n->OBS13}} - {{$n->OBS14}} - {{$n->OBS15}} -
-                            </td>
-                        </tr>
-                        @endif
-                    @endforeach
+                    <table class="table table-bordered" width="100%" style="font-size:10px;">
+                        @foreach($resultado as $res)
+                            @if($res->OBS1 = '')
+                            <tr>
+                                <td>{{ substr($res->DESCRICAO,11,16) }}</td>
+                                <td> Item 1: {{$res->OBS1}} /
+                                     Item 2: {{$res->OBS2}} /
+                                     Item 3: {{$res->OBS3}} /
+                                     Item 4: {{$res->OBS4}} /
+                                     Item 5: {{$res->OBS5}} /
+                                     Item 6: {{$res->OBS6}} /
+                                     Item 7: {{$res->OBS7}} /
+                                    Item 8: {{$res->OBS8}} /
+                                    Item 9: {{$res->OBS9}} /
+                                    Item 10: {{$res->OBS10}} /
+                                    Item 11: {{$res->OBS11}} /
+                                    Item 12: {{$res->OBS12}} /
+                                    Item 13: {{$res->OBS13}} /
+                                    Item 14: {{$res->OBS14}} /
+                                    Item 15: {{$res->OBS15}}
+                                </td>
+                            </tr>
+                            @endif
+                        @endforeach
                     </table>
-<!-- Dados da avaliação -->
+        <!-- Dados da avaliação -->
 
         </div>
     </div>

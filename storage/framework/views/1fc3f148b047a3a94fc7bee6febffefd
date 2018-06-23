@@ -6,9 +6,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 </head>
 
-<body style="">
-
-
+<body>
     <section class="content-header">
             <!--section starts-->
             <table class="table" width="100%">
@@ -23,8 +21,6 @@
         <!--section ends-->
         <section class="content">
     <!-- Aba de Título -->
-
-
 
     <div class="row" style="min-height:800px;" >
         <!--Content Section Start -->
@@ -52,7 +48,7 @@
 														<td colspan ="2" style="border: none;"><h4 style="padding:0;margin:0;"><?php echo e($p->NOME); ?></h4></td>
 													</tr>
 													<tr style="font-size:11px;">
-														<td>CHAPA: <?php echo e($p->CHAPA); ?> </td>
+														<td>CODIGO: <?php echo e($p->CHAPA); ?> </td>
 														<td>FUNÇÃO: <?php echo e($p->CARGO); ?> </td>
 													</tr>
 													<tr style="font-size:11px;">
@@ -172,8 +168,6 @@
                     </div>-->
                     <div class="panel-body" style="font-size:10px;margin-bottom:0;" >
                         <!-- Dados da avaliação -->
-
-
                                         <table class="table table-bordered" style="padding:0;margin-bottom:0;">
                                           <?php if($resultado): ?>
                                             <tr>
@@ -221,33 +215,39 @@
                                                     <td><?php if($c->c14==0): ?><?php echo e($n->NOTA14); ?> <?php else: ?> - <?php endif; ?></td>
                                                     <td><?php if($c->c15==0): ?><?php echo e($n->NOTA15); ?> <?php else: ?> - <?php endif; ?></td>
                                                     <td> <?php if($n->ANO < date('Y')): ?> <?php echo e(round($n->MEDIA,2)); ?> <?php else: ?> - <?php endif; ?></span></td>
-                                                    <td>Patrícia Pereira Bandeira</td>
+                                                    <td><?php echo e($n->AVALIADOR); ?></td>
 
                                                 </tr>
                                                  <?php endforeach; ?>
                                                 </table>
                     <?php endforeach; ?>
-                    <table class="table" width="100%" style="font-size:10px;">
-                    <?php foreach($resultado as $n): ?>
-                        <?php if($n->OBS1 != '' or $n->OBS2 != '' or $n->OBS3 != '' or
-                            $n->OBS4 != '' or $n->OBS5 != '' or $n->OBS6 != '' or
-                            $n->OBS7 != '' or $n->OBS8 != '' or $n->OBS9 != '' or
-                            $n->OBS10 != '' or $n->OBS11 != '' or $n->OBS12 != '' or
-                            $n->OBS13 != '' or $n->OBS14 != '' or $n->OBS15 != ''
-                        ): ?>
-                        <tr>
-                            <td><?php echo e(substr($n->DESCRICAO,11,16)); ?></td>
-                            <td> Item 1:  <?php echo e($n->OBS1); ?> - <?php echo e($n->OBS2); ?> - <?php echo e($n->OBS3); ?> -
-                                <?php echo e($n->OBS4); ?> - <?php echo e($n->OBS5); ?> - <?php echo e($n->OBS6); ?> -
-                                <?php echo e($n->OBS7); ?> - <?php echo e($n->OBS8); ?> - <?php echo e($n->OBS9); ?> -
-                                <?php echo e($n->OBS10); ?> - <?php echo e($n->OBS11); ?> - <?php echo e($n->OBS12); ?> -
-                                <?php echo e($n->OBS13); ?> - <?php echo e($n->OBS14); ?> - <?php echo e($n->OBS15); ?> -
-                            </td>
-                        </tr>
-                        <?php endif; ?>
-                    <?php endforeach; ?>
+                    <table class="table table-bordered" width="100%" style="font-size:10px;">
+                        <?php foreach($resultado as $res): ?>
+                            <?php if($res->OBS1 = ''): ?>
+                            <tr>
+                                <td><?php echo e(substr($res->DESCRICAO,11,16)); ?></td>
+                                <td> Item 1: <?php echo e($res->OBS1); ?> /
+                                     Item 2: <?php echo e($res->OBS2); ?> /
+                                     Item 3: <?php echo e($res->OBS3); ?> /
+                                     Item 4: <?php echo e($res->OBS4); ?> /
+                                     Item 5: <?php echo e($res->OBS5); ?> /
+                                     Item 6: <?php echo e($res->OBS6); ?> /
+                                     Item 7: <?php echo e($res->OBS7); ?> /
+                                    Item 8: <?php echo e($res->OBS8); ?> /
+                                    Item 9: <?php echo e($res->OBS9); ?> /
+                                    Item 10: <?php echo e($res->OBS10); ?> /
+                                    Item 11: <?php echo e($res->OBS11); ?> /
+                                    Item 12: <?php echo e($res->OBS12); ?> /
+                                    Item 13: <?php echo e($res->OBS13); ?> /
+                                    Item 14: <?php echo e($res->OBS14); ?> /
+                                    Item 15: <?php echo e($res->OBS15); ?>
+
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
                     </table>
-<!-- Dados da avaliação -->
+        <!-- Dados da avaliação -->
 
         </div>
     </div>

@@ -1,19 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the Closure to execute when that URI is requested.
-|
-*/
-
-/**
- * Model binding into route
- */
 Route::model('blogcategory', 'App\BlogCategory');
 Route::model('blog', 'App\Blog');
 Route::model('file', 'App\File');
@@ -30,9 +16,6 @@ Route::group(array('prefix' => 'selecoes'), function () {
 		Route::get('/entrar', 'SelecaoController@entrar');
 
 });
-//
-
-
 
 
 Route::group(array('prefix' => 'admin'), function () {
@@ -82,8 +65,6 @@ Route::group(array('prefix' => 'admin'), function () {
 Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), function () {
     # Dashboard / Index
 	Route::get('/', array('as' => 'dashboard','uses' => 'JoshController@showHome'));
-
-
 
     # User Management
     Route::group(array('prefix' => 'users'), function () {
@@ -159,10 +140,8 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 		Route::get('/insereAssiduidade', 'AvaliacaoAdminController@insereAssiduidade')->name('insereAssiduidade');
 		Route::post('/insereNovaAssiduidade', 'AvaliacaoAdminController@insereNovaAssiduidade')->name('insereNovaAssiduidade');
 		Route::post('/atualizaAssiduidade', 'AvaliacaoAdminController@atualizaAssiduidade')->name('atualizaAssiduidade');
+		Route::get('/progresso', 'AvaliacaoAdminController@progressoAvaliacao');
 	});
-
-
-
 
 });
 
@@ -238,7 +217,6 @@ Route::group(array('prefix' => 'agenda'), function () {
 		Route::get('/insereEmpresa', 'AgendaController@insereEmpresa');
 		Route::post('/addPessoa', 'AgendaController@addPessoa');
 		Route::get('/pessoa/{id}', 'AgendaController@pessoa')->name('pessoa_mostra');
-
 
 });
 
