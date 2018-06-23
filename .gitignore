@@ -1,0 +1,6 @@
+*.env
+github
+github.pub
+package.json
+composer.lock
+
