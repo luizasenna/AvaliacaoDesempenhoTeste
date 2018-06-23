@@ -206,8 +206,8 @@ class AvaliacaoAdminController extends Controller
 						CASE
             WHEN (AE.atraso) BETWEEN 0 AND 2       THEN 10
             WHEN (AE.atraso) BETWEEN 2.01 AND 4    THEN 3
-            WHEN (AE.atraso) BETWEEN 4.01 AND 7.99 THEN 1
-            WHEN (AE.atraso) BETWEEN 8 AND 20      THEN 0
+            WHEN (AE.atraso) BETWEEN 4.01 AND 8 THEN 1
+            WHEN (AE.atraso) BETWEEN 8.01 AND 20      THEN 0
 						ELSE 0 END
 						AS	  	                        NOTA3,
 						MAX(IF(ITEM = "04", notas_temp.NOTA, 0)) AS NOTA4,
@@ -327,8 +327,8 @@ class AvaliacaoAdminController extends Controller
                     CASE
                     WHEN (AE.atraso) BETWEEN 0 AND 2       THEN 10
                     WHEN (AE.atraso) BETWEEN 2.01 AND 4    THEN 3
-                    WHEN (AE.atraso) BETWEEN 4.01 AND 7.99 THEN 1
-                    WHEN (AE.atraso) BETWEEN 8 AND 20      THEN 0
+                    WHEN (AE.atraso) BETWEEN 4.01 AND 8 THEN 1
+                    WHEN (AE.atraso) BETWEEN 8.01 AND 20      THEN 0
                     ELSE 0 END
                     AS	  	                                                NOTA3,
                     MAX(IF(ITEM = "04" AND c4 = 0, NOTAAVALIADOR, null)) AS NOTA4,
@@ -1239,8 +1239,8 @@ class AvaliacaoAdminController extends Controller
 						CASE
 						WHEN (AE.atraso) BETWEEN "0" AND "2"      THEN 10
 						WHEN (AE.atraso) BETWEEN "2,01" AND "4"    THEN 3
-						WHEN (AE.atraso) BETWEEN "4,01" AND "7,99" THEN 1
-						WHEN (AE.atraso) BETWEEN "8" AND "20"      THEN 0
+						WHEN (AE.atraso) BETWEEN "4,01" AND "8" THEN 1
+						WHEN (AE.atraso) BETWEEN "8,01" AND "20"      THEN 0
 						ELSE 0 END
 						AS	  	                        NOTA3,
 						MAX(IF(ITEM = "05", NOTA, 0)) AS NOTA5,
@@ -1290,7 +1290,7 @@ class AvaliacaoAdminController extends Controller
 
 				DB::statement('Drop table if exists totais');
 				DB::statement('Create temporary table totais
-							select count(CODAVALIACAO) AS QTDE, SUM(EXISTE) AS FEITAS, CHAPAAVALIADO,
+           select count(CODAVALIACAO) AS QTDE, SUM(EXISTE) AS FEITAS, CHAPAAVALIADO,
 				   CODPESSOA, NOME from feitas GROUP BY CODPESSOA');
 
 				DB::statement('delete from mediageralano');
@@ -1517,8 +1517,8 @@ class AvaliacaoAdminController extends Controller
                   						CASE
                   						WHEN (AE.atraso) BETWEEN 0 AND 2       THEN 10
                   						WHEN (AE.atraso) BETWEEN 2.01 AND 4    THEN 3
-                  						WHEN (AE.atraso) BETWEEN 4.01 AND 7.99 THEN 1
-                  						WHEN (AE.atraso) BETWEEN 8 AND 20      THEN 0
+                  						WHEN (AE.atraso) BETWEEN 4.01 AND 8 THEN 1
+                  						WHEN (AE.atraso) BETWEEN 8.1 AND 20      THEN 0
                   						ELSE 0 END
                   						AS	  	                                                NOTA3,
                               MAX(IF(ITEM = "04" AND c4 = 0, NOTAAVALIADOR, null)) AS NOTA4,
