@@ -828,8 +828,8 @@ class AvaliacaoAdminController extends Controller
 				'notas' => $notas,
 				'funcionario' => $funcionario,
 				'resultado' => $resultado,
-				'status' => 'status',
-        'codpessoa' => $codpessoa
+				'status' => 'status' //,
+      //  'codpessoa' => $codpessoa
 			 ]);
 
 			}
@@ -1365,7 +1365,7 @@ class AvaliacaoAdminController extends Controller
 				$medias = '';
 			}
 
-			if (isset($equipe_filter)){
+
 			$medias = DB::select('select f.CHAPA as CHAPA,
 			f.NOME as NOME,
 			FUNCAO,
@@ -1391,7 +1391,7 @@ class AvaliacaoAdminController extends Controller
 			LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
 			LEFT JOIN totais on totais.CODPESSOA = mediageralano.CODPESSOA
 			WHERE AVALIACAO between 25 and 36 group by mediageralano.CODPESSOA order by MEDIA desc');
-			}
+
 			return view('admin.avaliacao.media2016', [
 
 			'equipes' => $equipes,
@@ -1632,16 +1632,14 @@ class AvaliacaoAdminController extends Controller
                       on n.CODPARTICIPANTE = p.CODPARTICIPANTE
                       and n.CODCOLIGADA = p.CODCOLIGADA
                       and n.CODAVALIACAO = p.CODAVALIACAO
-                      where av.DATAABERTURA BETWEEN "'.$di.'"  and "'.$df.'"
+                      where av.DATAABERTURA BETWEEN "'.$di.'" and "'.$df.'"
                       group by p.CODPARTICIPANTE, p.CODPESSOA, p.CODAVALIACAO');
-
-
 
 
                       DB::statement('Drop table if exists totais');
               				DB::statement('Create temporary table totais
                       select count(CODAVALIACAO) AS QTDE, SUM(EXISTE) AS FEITAS, CHAPAAVALIADO,
-+        				      CODPESSOA, NOME from feitas GROUP BY CODPESSOA');
+        				      CODPESSOA, NOME from feitas GROUP BY CODPESSOA');
 
         				$medias = DB::select('select f.CHAPA as CHAPA,
                 mediageralano.CODPESSOA,
@@ -1663,7 +1661,7 @@ class AvaliacaoAdminController extends Controller
         				s.DESCRICAO as SECAO,
         				AVALIADOR,
         				(totais.QTDE) AS TOTAL,
-                (totais.QTDE) AS FEITAS
+                (totais.FEITAS) AS FEITAS
         				FROM mediageralano
         				left join funcionarios as f on f.CODPESSOA = mediageralano.CODPESSOA
                 inner join avaliacoes as av
