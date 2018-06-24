@@ -1,4 +1,4 @@
-*.env
+.env
 github
 github.pub
 package.json

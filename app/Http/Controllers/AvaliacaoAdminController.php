@@ -1734,7 +1734,7 @@ class AvaliacaoAdminController extends Controller
   public function insereNovaAssiduidade(){
     $codigo = Request::input('novaAvaliacao');
 
-    DB::statement("
+    /*DB::statement("
                   Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
                   select at.CODPESSOA as codpessoa,
                          round((at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60,1) as atraso,
@@ -1757,6 +1757,38 @@ class AvaliacaoAdminController extends Controller
                   inner join funcionarios as f on f.CODPESSOA = at.codpessoa
                   where CODSITUACAO <> 'D' and av.CODAVALIACAO = ".$codigo."
                   group by at.CODPESSOA, at.ANO, at.MES, at.CODPESSOA;
+    "); */
+
+    DB::statement("
+                  Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
+                  select p.CODPESSOA as codpessoa,
+                         round((IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60,1) as atraso,
+                         p.CHAPAAVALIADO as chapa,
+                          CASE
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 0 AND 1.99    THEN 10
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 2 AND 4     THEN 3
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 4.01 AND 8 	THEN 1
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 8.1 AND 100   THEN 0
+                              ELSE 0 END
+                           AS	nota,
+                          aval.ANO as ano,
+                          aval.MES as mes,
+                          aval.CODAVALIACAO as codavaliacao,
+                          3 as idusuario
+                          from participantes as p
+                          inner join funcionarios as f on f.CODPESSOA = p.CODPESSOA
+                          inner join avaliacoes as aval
+                          on aval.CODAVALIACAO = p.CODAVALIACAO
+                          left join abonoslancados as ab
+                          on ab.CODPESSOA = p.CODPESSOA
+                          and aval.ANO = ab.ANO
+                          and aval.MES = ab.MES
+                          left join atrasosfaltas as at
+                          ON at.CODPESSOA = p.CODPESSOA
+                          and aval.ANO = at.ANO
+                          and aval.MES = at.MES
+                          where CODSITUACAO <> 'D' and aval.CODAVALIACAO = ".$codigo."
+                          group by p.CODPESSOA, aval.ANO, aval.MES, p.CODPESSOA
     ");
     DB::statement("
                   insert into assiduidade(codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
@@ -1790,27 +1822,34 @@ class AvaliacaoAdminController extends Controller
     DB::statement("delete from assiduidade where codavaliacao = ".$codigo);
     DB::statement("
                   Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
-                  select at.CODPESSOA as codpessoa,
-                         round((at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60,1) as atraso,
-                         f.CHAPA as chapa,
+                  select p.CODPESSOA as codpessoa,
+                         round((IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60,1) as atraso, 
+                         p.CHAPAAVALIADO as chapa,
                           CASE
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 0 AND 1.99    THEN 10
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 2 AND 4     THEN 3
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 4.01 AND 8 	THEN 1
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 8.1 AND 100   THEN 0
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 0 AND 1.99    THEN 10
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 2 AND 4     THEN 3
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 4.01 AND 8 	THEN 1
+                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 8.1 AND 100   THEN 0
                               ELSE 0 END
                            AS	nota,
-                          at.ANO as ano,
-                          at.MES as mes,
-                          av.CODAVALIACAO as codavaliacao,
+                          aval.ANO as ano,
+                          aval.MES as mes,
+                          aval.CODAVALIACAO as codavaliacao,
                           3 as idusuario
-                          from atrasosfaltas as at
-                  left join abonoslancados as ab
-                  on ab.CODPESSOA = at.CODPESSOA and at.ANO = ab.ANO and at.MES = ab.MES
-                  inner join avaliacoes as av on at.ANO = YEAR(DATAABERTURA) and at.MES = MONTH(DATAABERTURA)
-                  inner join funcionarios as f on f.CODPESSOA = at.codpessoa
-                  where CODSITUACAO <> 'D' and av.CODAVALIACAO = ".$codigo."
-                  group by at.CODPESSOA, at.ANO, at.MES, at.CODPESSOA;
+                          from participantes as p
+                          inner join funcionarios as f on f.CODPESSOA = p.CODPESSOA
+                          inner join avaliacoes as aval
+                          on aval.CODAVALIACAO = p.CODAVALIACAO
+                          left join abonoslancados as ab
+                          on ab.CODPESSOA = p.CODPESSOA
+                          and aval.ANO = ab.ANO
+                          and aval.MES = ab.MES
+                          left join atrasosfaltas as at
+                          ON at.CODPESSOA = p.CODPESSOA
+                          and aval.ANO = at.ANO
+                          and aval.MES = at.MES
+                          where CODSITUACAO <> 'D' and aval.CODAVALIACAO = ".$codigo."
+                          group by p.CODPESSOA, aval.ANO, aval.MES, p.CODPESSOA;
     ");
     DB::statement("
                   insert into assiduidade(codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
