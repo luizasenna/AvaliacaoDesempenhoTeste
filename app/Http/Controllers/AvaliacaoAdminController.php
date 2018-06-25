@@ -1762,13 +1762,13 @@ class AvaliacaoAdminController extends Controller
     DB::statement("
                   Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
                   select p.CODPESSOA as codpessoa,
-                    round((SUM(IFNULL(ffm.atraso/60,0)) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)),1) as atraso,
+                    round((SUM(IFNULL(ffm.atraso/60,0)) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)),1) as atraso,
                    p.CHAPAAVALIADO as chapa,
                     CASE
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 0 AND 1.99    THEN 10
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 2 AND 4     THEN 3
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 4.01 AND 8 	THEN 1
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 8.1 AND 100   THEN 0
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 0 AND 1.99    THEN 10
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 2 AND 4     THEN 3
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 4.01 AND 8 	THEN 1
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 8.1 AND 100   THEN 0
                         ELSE 0 END
                           AS	nota,
                           aval.ANO as ano,
@@ -1827,13 +1827,13 @@ class AvaliacaoAdminController extends Controller
     DB::statement("
                   Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
                   select p.CODPESSOA as codpessoa,
-                  round((SUM(IFNULL(ffm.atraso/60,0)) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)),1) as atraso,
+                  round((SUM(IFNULL(ffm.atraso/60,0)) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)),1) as atraso,
                    p.CHAPAAVALIADO as chapa,
                     CASE
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 0 AND 1.99    THEN 10
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 2 AND 4     THEN 3
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 4.01 AND 8 	THEN 1
-                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 8.1 AND 100   THEN 0
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 0 AND 1.99    THEN 10
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 2 AND 4     THEN 3
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 4.01 AND 8 	THEN 1
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0)/60 + IFNULL(ab.ABONO/60,0)) BETWEEN 8.1 AND 100   THEN 0
                         ELSE 0 END
                           AS	nota,
                           aval.ANO as ano,
