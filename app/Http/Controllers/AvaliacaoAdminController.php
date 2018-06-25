@@ -1762,15 +1762,15 @@ class AvaliacaoAdminController extends Controller
     DB::statement("
                   Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
                   select p.CODPESSOA as codpessoa,
-                         round((IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60,1) as atraso,
-                         p.CHAPAAVALIADO as chapa,
-                          CASE
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 0 AND 1.99    THEN 10
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 2 AND 4     THEN 3
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 4.01 AND 8 	THEN 1
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 8.1 AND 100   THEN 0
-                              ELSE 0 END
-                           AS	nota,
+                    round((SUM(IFNULL(ffm.atraso/60,0)) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)),1) as atraso,
+                   p.CHAPAAVALIADO as chapa,
+                    CASE
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 0 AND 1.99    THEN 10
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 2 AND 4     THEN 3
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 4.01 AND 8 	THEN 1
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 8.1 AND 100   THEN 0
+                        ELSE 0 END
+                          AS	nota,
                           aval.ANO as ano,
                           aval.MES as mes,
                           aval.CODAVALIACAO as codavaliacao,
@@ -1787,6 +1787,10 @@ class AvaliacaoAdminController extends Controller
                           ON at.CODPESSOA = p.CODPESSOA
                           and aval.ANO = at.ANO
                           and aval.MES = at.MES
+                          left join faltasfolhamanual as ffm
+                          on ffm.codpessoa = p.CODPESSOA
+                          AND ffm.Ano = aval.ANO
+                          AND ffm.Mes = aval.MES
                           where CODSITUACAO <> 'D' and aval.CODAVALIACAO = ".$codigo."
                           group by p.CODPESSOA, aval.ANO, aval.MES, p.CODPESSOA
     ");
@@ -1823,15 +1827,15 @@ class AvaliacaoAdminController extends Controller
     DB::statement("
                   Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
                   select p.CODPESSOA as codpessoa,
-                         round((IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60,1) as atraso, 
-                         p.CHAPAAVALIADO as chapa,
-                          CASE
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 0 AND 1.99    THEN 10
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 2 AND 4     THEN 3
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 4.01 AND 8 	THEN 1
-                              WHEN (IFNULL(at.MINUTOS,0) + IFNULL(FALTA,0) + IFNULL(ab.ABONO,0))/60 BETWEEN 8.1 AND 100   THEN 0
-                              ELSE 0 END
-                           AS	nota,
+                  round((SUM(IFNULL(ffm.atraso/60,0)) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)),1) as atraso,
+                   p.CHAPAAVALIADO as chapa,
+                    CASE
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 0 AND 1.99    THEN 10
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 2 AND 4     THEN 3
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 4.01 AND 8 	THEN 1
+                        WHEN (IFNULL(SUM(ffm.atraso/60),0) + IFNULL(at.MINUTOS,0)/60 + IFNULL(FALTA,0) + IFNULL(ab.ABONO/60,0)) BETWEEN 8.1 AND 100   THEN 0
+                        ELSE 0 END
+                          AS	nota,
                           aval.ANO as ano,
                           aval.MES as mes,
                           aval.CODAVALIACAO as codavaliacao,
@@ -1848,6 +1852,10 @@ class AvaliacaoAdminController extends Controller
                           ON at.CODPESSOA = p.CODPESSOA
                           and aval.ANO = at.ANO
                           and aval.MES = at.MES
+                          left join faltasfolhamanual as ffm
+                          on ffm.codpessoa = p.CODPESSOA
+                          AND ffm.Ano = aval.ANO
+                          AND ffm.Mes = aval.MES
                           where CODSITUACAO <> 'D' and aval.CODAVALIACAO = ".$codigo."
                           group by p.CODPESSOA, aval.ANO, aval.MES, p.CODPESSOA;
     ");
