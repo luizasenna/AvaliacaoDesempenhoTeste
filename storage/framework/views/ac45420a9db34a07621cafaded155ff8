@@ -6,7 +6,7 @@ Delegação de Avaliado - AD
 
 <?php /* page level styles */ ?>
 <?php $__env->startSection('header_styles'); ?>
-    
+
     <link href="<?php echo e(asset('assets/vendors/bootstrap-form-builder/css/custom.css')); ?>" rel="stylesheet" />
     <link href="<?php echo e(asset('assets/css/pages/formbuilder.css')); ?>" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="<?php echo e(asset('assets/vendors/datatables/css/dataTables.bootstrap.css')); ?>" />
@@ -32,12 +32,12 @@ Delegação de Avaliado - AD
         <!--section ends-->
         <section class="content">
             <!--main content-->
-         
-            
-            
+
+
+
             <div class="row">
                 <div class="col-md-12">
-                           
+
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">
@@ -60,9 +60,8 @@ Delegação de Avaliado - AD
 												<td class="text-uppercase"><?php echo e($e->DESCRICAO); ?></td>
 												<td><?php echo e($e->CODINTERNO); ?></td>
 												 <td>
-													<a href="func?e=<?php echo e($e->CODINTERNO); ?>">
-														<i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="delegar equipe"></i>
-													</a>
+                          <a href="func?e=<?php echo e($e->CODINTERNO); ?>" class="btn btn-info" href="#" role="button">Ver Membros da Equipe</a>
+                          <a href="delegaEquipe?e=<?php echo e($e->CODINTERNO); ?>" class="btn btn-info" href="#" role="button">Delegar Equipe Inteira</a>
 												</td>
 											</tr>
 										<?php endforeach; ?>
@@ -74,14 +73,14 @@ Delegação de Avaliado - AD
 										</div>
 									</div>
 								</div>
-                              
+
                             </div>
                         </div>
                         <!-- / Building Form. --> </div>
                     <!-- / Components --> </div>
                 <!--form builder ends--> </div>
         </section>
-        <!--main content ends--> 
+        <!--main content ends-->
 <?php $__env->stopSection(); ?>
 
 <?php /* page level scripts */ ?>
@@ -89,7 +88,7 @@ Delegação de Avaliado - AD
 
     <script type="text/javascript" src="<?php echo e(asset('assets/vendors/datatables/js/jquery.dataTables.js')); ?>" ></script>
     <script type="text/javascript" src="<?php echo e(asset('assets/vendors/datatables/js/dataTables.bootstrap.js')); ?>" ></script>
- 
+
 
 	<script>
 	$(document).ready(function() {

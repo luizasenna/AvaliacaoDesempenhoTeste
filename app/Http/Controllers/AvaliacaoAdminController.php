@@ -21,6 +21,7 @@ use App\Assiduidade;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Pagination\Paginator;
 
+
 use DateTime;
 
 class AvaliacaoAdminController extends Controller
@@ -82,8 +83,6 @@ class AvaliacaoAdminController extends Controller
     }
 
 
-
-
     public function valida()
     {
         return view('avaliacao.valida');
@@ -99,7 +98,7 @@ class AvaliacaoAdminController extends Controller
 
 			/*$people = DB::table('funcionarios')->join('participantes', 'participantes.CHAPAAVALIADO', '=', 'funcionarios.CHAPA')->join('equipes', 'CODINTERNO', '=', 'CODEQUIPE')->whereNotNull('CHAPAAVALIADO')->groupBy('CHAPA')->orderBy('NOME')->get();*/
 
-			$people = Funcionario::has('participante')->groupBy('CHAPA')->orderBy('NOME');
+			$people = Funcionario::has('participante')->groupBy('CODPESSOA')->orderBy('NOME');
 
 			if ($nome_filter) {
             $people = $people->where('NOME','like', '%' . "$nome_filter" . '%');
@@ -133,6 +132,7 @@ class AvaliacaoAdminController extends Controller
 		$chefe = Sentinel::getUser()->chapa;
 		$lider = Funcionario::where('CHAPA', '=', $chefe)->get();
     $codpessoa = Funcionario::where('CHAPA', '=', $id)->get();
+    $chapas = Participante::where('CODPESSOA', '=', $codpessoa)->get();
 
 		$grupo = '';
 
@@ -151,7 +151,8 @@ class AvaliacaoAdminController extends Controller
 							  C.NOME AS CARGO,
 							  I.IMAGEM AS IMAGEM,
 							  Q.DESCRICAO AS LIDER,
-                E.CODFILIAL AS FILIAL
+                E.CODFILIAL AS FILIAL,
+                E.CODPESSOA AS CODPESSOA
 							  from funcionarios as E
 		            left join funcoes AS C on C.CODIGO = E.CODFUNCAO
                 left join secoes as SC on E.CODSECAO = SC.CODIGO
@@ -160,25 +161,26 @@ class AvaliacaoAdminController extends Controller
 							  inner join equipes as Q ON Q.CODCLIENTE = E.CODEQUIPE
 							  where E.CHAPA = '.$id);
 
-
-
 		$licenciados = DB::select('select * from licenciados where CHAPAVALIADO = '.$id);
 		$licencas = DB::select('select * from licencas where CHAPA = '.$id);
 
 	    $notas =   DB::statement('create temporary table notas_temp
 		            select
-    				    N.CODITEMAVAL   AS ITEM,
-      					S.NOME           AS NOMECOMPETENCIA,
-      					NOTAAVALIADOR    AS NOTA,
-      					P.CHAPAAVALIADO  AS CHAPA,
-      					N.CODAVALIACAO   AS AVALIACAO,
-      					MID(V.NOME,10,20)           AS DESCRICAO,
-      					V.DATAABERTURA   AS DATA, P.CODPARTICIPANTE, P.CODAVALIACAO,
-      					N.COMENTARIO     AS OBS,
+    				    N.CODITEMAVAL       AS ITEM,
+      					S.NOME              AS NOMECOMPETENCIA,
+      					NOTAAVALIADOR       AS NOTA,
+      					P.CHAPAAVALIADO     AS CHAPA,
+      					N.CODAVALIACAO      AS AVALIACAO,
+      					MID(V.NOME,10,20)   AS DESCRICAO,
+      					V.DATAABERTURA      AS DATA,
+                P.CODPARTICIPANTE   AS CODPARTICIPANTE,
+                P.CODAVALIACAO      AS CODAVALIACAO,
+      					N.COMENTARIO        AS OBS,
       					date_format(N.created_at, "%d/%m/%Y")  AS FEITAEM,
-      					N.CODPARTICIPANTE  AS PARTICIPANTE,
-      					P.CHAPAAVALIADOR  AS AVALIADOR,
-      					F.CODPESSOA     AS CODPESSOA,
+      					N.CODPARTICIPANTE   AS PARTICIPANTE,
+      					P.CHAPAAVALIADOR    AS AVALIADOR,
+                LIDER.NOME          AS NOMEAVALIADOR,
+      					F.CODPESSOA         AS CODPESSOA,
 								YEAR(V.DATAABERTURA) AS ANO
       					from notas AS N
       					inner join participantes AS P on N.CODAVALIACAO = P.CODAVALIACAO and N.CODPARTICIPANTE = P.CODPARTICIPANTE
@@ -186,6 +188,7 @@ class AvaliacaoAdminController extends Controller
       					inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
       					inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
       					inner JOIN funcionarios AS F ON F.CHAPA = P.CHAPAAVALIADO
+                left join funcionarios as LIDER ON LIDER.CODPESSOA = F.CODEQUIPE
       					where statuslider = 0 and P.CHAPAAVALIADO = '.$id);
 
 
@@ -198,6 +201,7 @@ class AvaliacaoAdminController extends Controller
 						FEITAEM,
 						PARTICIPANTE,
 						AVALIADOR,
+            NOMEAVALIADOR,
             notas_temp.CODPESSOA,
             notas_temp.ANO AS ANO,
 						MAX(IF(ITEM = "01", notas_temp.NOTA, 0)) AS NOTA1,
@@ -245,11 +249,10 @@ class AvaliacaoAdminController extends Controller
             $anos = DB::select('select ANO
 																from notas_temp group by ANO');
 
-		$aa = 0;
-
-		$t = 1;
-		$qt = 0;
-		$total = 0;
+  		$aa = 0;
+  		$t = 1;
+  		$qt = 0;
+  		$total = 0;
 
 
 		foreach ($resultado as $r) {
@@ -426,13 +429,7 @@ class AvaliacaoAdminController extends Controller
 
     } //fim foreach
 
-
-
     // fim media geral por ano
-
-
-
-
 
 
 	    return view('admin.avaliacao.pessoa', [
@@ -676,27 +673,26 @@ class AvaliacaoAdminController extends Controller
 
     public function visao()
     {
-		$usuario = Sentinel::getUser()->codequipe;
-		$id = Request::input('id');
-		$notas = DB::select('select C.CODCOMPETENCIA AS "ITEM",
-							S.NOME          AS "NOME",
-							NOTAAVALIADOR   AS "NOTA"  from notas AS N
-							LEFT JOIN competenciasassociadas AS C
-							on C.CODAVALIACAO = N.CODAVALIACAO AND N.CODITEMAVAL= C.CODIGO
-							INNER JOIN competencias AS S ON C.CODCOMPETENCIA = S.CODCOMPETENCIA
-							where N.CODAVALIACAO = '.$id.' and N.CODPARTICIPANTE = '.$participante);
+    		$usuario = Sentinel::getUser()->codequipe;
+    		$id = Request::input('id');
+    		$notas = DB::select('select C.CODCOMPETENCIA AS "ITEM",
+    							S.NOME          AS "NOME",
+    							NOTAAVALIADOR   AS "NOTA"  from notas AS N
+    							LEFT JOIN competenciasassociadas AS C
+    							on C.CODAVALIACAO = N.CODAVALIACAO AND N.CODITEMAVAL= C.CODIGO
+    							INNER JOIN competencias AS S ON C.CODCOMPETENCIA = S.CODCOMPETENCIA
+    							where N.CODAVALIACAO = '.$id.' and N.CODPARTICIPANTE = '.$participante);
 
 
-		$avaliado = Participante::where('CODPARTICIPANTE', '=', $participante)->get();
-		$avaliacao = Avaliacao::where('CODAVALIACAO', '=', $id)->get();
+    		$avaliado = Participante::where('CODPARTICIPANTE', '=', $participante)->get();
+    		$avaliacao = Avaliacao::where('CODAVALIACAO', '=', $id)->get();
 
-
-           return view('/avaliacao/visao', [
-            'id' => $id,
-            'participante' => $participante,
-            'notas' => $notas,
-            'avaliado' => $avaliado
-         ]);
+               return view('/avaliacao/visao', [
+                'id' => $id,
+                'participante' => $participante,
+                'notas' => $notas,
+                'avaliado' => $avaliado
+             ]);
     }
 
 
@@ -817,7 +813,6 @@ class AvaliacaoAdminController extends Controller
 								MAX(IF(ITEM = "14", OBS, " - ")) AS OBS14,
 								MAX(IF(ITEM = "15", OBS, " - ")) AS OBS15,
 								0 AS MEDIA
-
 								from notas_temp
 								GROUP BY AVALIACAO, CHAPA
 								ORDER BY AVALIACAO');
@@ -828,8 +823,7 @@ class AvaliacaoAdminController extends Controller
 				'notas' => $notas,
 				'funcionario' => $funcionario,
 				'resultado' => $resultado,
-				'status' => 'status' //,
-      //  'codpessoa' => $codpessoa
+				'status' => 'status'
 			 ]);
 
 			}
@@ -1086,18 +1080,25 @@ class AvaliacaoAdminController extends Controller
 
 	public function historicoDelegacao(){
 
-        $func_filter = Request::exists('func_filter') ? Request::input('func_filter') : '';
+        $funcionario_filter = Request::exists('func_filter') ? Request::input('func_filter') : '';
         $lider_filter = Request::exists('lider_filter') ? Request::input('lider_filter') : '';
 
-        if ($lider_filter != '') {
-			$historico = Delegacao::where('user', '=', $lider_filter)->orderBy('created_at', 'desc')->paginate(20);
-		}
+        if ($lider_filter) {
+  			       $historico = Delegacao::where('user', '=', $lider_filter)->orderBy('created_at', 'desc')->paginate(20);
+  		         }
 
-		if ($lider_filter == '') {
-			$historico = Delegacao::orderBy('created_at', 'desc')->paginate(20);
-		}
+        if ($funcionario_filter) {
+              $historico = DB::table('delegacoes')
+                     ->join('funcionarios', 'funcionarios.CHAPA', '=', 'delegacoes.chapaavaliado')
+                     ->where('funcionarios.NOME', 'like', '%'."oscar".'%')
+                     ->orderBy('created_at', 'desc')
+                     ->get();
+                   }else{
 
-		$lideres = Equipe::all();
+                   $historico = Delegacao::orderBy('created_at', 'desc')->paginate(20);
+                   }
+
+		$lideres = Equipe::orderBy('DESCRICAO')->get();
 
 		return view('admin/avaliacao/historicoDelegacao', [
 				'historico' => $historico,
@@ -1107,6 +1108,27 @@ class AvaliacaoAdminController extends Controller
 				 ]);
 
 		}
+
+ public function delegaEquipe(){
+
+    $avaliador = Request::exists('e') ? Request::input('e') : '';
+    $l = Equipe::where('CODCLIENTE','=',$avaliador)->get();
+   	$lideres = Equipe::orderBy('DESCRICAO')->get();
+    $funcionarios = Funcionario::where('CODEQUIPE','=',$avaliador)->groupBy('CODPESSOA')->orderBy('NOME')->get();
+    $avaliacoes = DB::select('select * from avaliacoes
+                      where month(DATAABERTURA) >= month(now())-3
+                      and year(DATAABERTURA) = year(now());
+                        ');
+   return view('admin/avaliacao/delegaEquipe', [
+       'lideres' => $lideres,
+       'avaliador' => $avaliador,
+       'funcionarios' =>$funcionarios,
+       'l' =>$l,
+       'avaliacoes' => $avaliacoes
+
+        ]);
+ }
+
 
 
 	public function equipe(){
@@ -1264,17 +1286,7 @@ class AvaliacaoAdminController extends Controller
 				$soma = 0;
 
 				DB::statement('Drop table if exists feitas');
-				/*DB::statement('create temporary table feitas
-							select p.CHAPAAVALIADO AS CHAPAAVALIADO,
-								   p.CODPESSOA as CODPESSOA,
-								   f.NOME AS NOME,
-								   p.CODAVALIACAO AS CODAVALIACAO,
-								  (if(n.CODITEMAVAL is not null, 1,0)) as EXISTE
-							from participantes as p
-							inner join funcionarios as f on f.CODPESSOA = p.CODPESSOA
-							left join notas as n on n.CODPARTICIPANTE = p.CODPARTICIPANTE and n.CODCOLIGADA = p.CODCOLIGADA and n.CODAVALIACAO = p.CODAVALIACAO
-							where f.CODEQUIPE = '.$equipe_filter.' and p.CODAVALIACAO between 25 and 36
-							group by p.CODPESSOA, p.CODAVALIACAO'); */
+
 
               DB::statement('create temporary table feitas
             							select p.CHAPAAVALIADO AS CHAPAAVALIADO,
@@ -1365,32 +1377,31 @@ class AvaliacaoAdminController extends Controller
 				$medias = '';
 			}
 
-
-			$medias = DB::select('select f.CHAPA as CHAPA,
-			f.NOME as NOME,
-			FUNCAO,
-			f.DATAADMISSAO AS DATAADMISSAO,
-			ROUND(SUM(MEDIA)/COUNT(f.CHAPA),2) as MEDIA,
-			CASE(f.CODFILIAL)
-			WHEN 1 THEN "PINTOS MAGAZINE"
-			WHEN 3 THEN "PINTOS RIVERSIDE"
-			WHEN 5 THEN "PINTOS RIO BRANCO"
-			WHEN 6 THEN "PINTOS CD1"
-			WHEN 8 THEN "PINTOS CALÇADOS"
-			WHEN 9 THEN "PINTOS FREI SERAFIM"
-			WHEN 10 THEN "PINTOS CD2"
-			WHEN 11 THEN "PINTOS SHOPPING"
-			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
-			f.CODSECAO AS CODSECAO,
-			s.DESCRICAO as SECAO,
-			AVALIADOR AS AVALIADOR,
-			(totais.QTDE) AS TOTAL,
-			(totais.FEITAS) AS FEITAS
-			FROM mediageralano
-			inner join funcionarios as f on f.CHAPA = mediageralano.chapa
-			LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
-			LEFT JOIN totais on totais.CODPESSOA = mediageralano.CODPESSOA
-			WHERE AVALIACAO between 25 and 36 group by mediageralano.CODPESSOA order by MEDIA desc');
+  			$medias = DB::select('select f.CHAPA as CHAPA,
+  			f.NOME as NOME,
+  			FUNCAO,
+  			f.DATAADMISSAO AS DATAADMISSAO,
+  			ROUND(SUM(MEDIA)/COUNT(f.CHAPA),2) as MEDIA,
+  			CASE(f.CODFILIAL)
+  			WHEN 1 THEN "PINTOS MAGAZINE"
+  			WHEN 3 THEN "PINTOS RIVERSIDE"
+  			WHEN 5 THEN "PINTOS RIO BRANCO"
+  			WHEN 6 THEN "PINTOS CD1"
+  			WHEN 8 THEN "PINTOS CALÇADOS"
+  			WHEN 9 THEN "PINTOS FREI SERAFIM"
+  			WHEN 10 THEN "PINTOS CD2"
+  			WHEN 11 THEN "PINTOS SHOPPING"
+  			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
+  			f.CODSECAO AS CODSECAO,
+  			s.DESCRICAO as SECAO,
+  			AVALIADOR AS AVALIADOR,
+  			(totais.QTDE) AS TOTAL,
+  			(totais.FEITAS) AS FEITAS
+  			FROM mediageralano
+  			inner join funcionarios as f on f.CHAPA = mediageralano.chapa
+  			LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
+  			LEFT JOIN totais on totais.CODPESSOA = mediageralano.CODPESSOA
+  			WHERE AVALIACAO between 25 and 36 group by mediageralano.CODPESSOA order by MEDIA desc');
 
 			return view('admin.avaliacao.media2016', [
 
@@ -1405,39 +1416,39 @@ class AvaliacaoAdminController extends Controller
 		public function mediaImpressao(){
 
 
-			$medias = DB::select('select f.CHAPA as CHAPA,
-			f.NOME as NOME,
-			FUNCAO,
-			f.DATAADMISSAO AS DATAADMISSAO,
-			replace(round(SUM(MEDIA)/COUNT(f.CHAPA),4),".",",") as MEDIA,
-			CASE(f.CODFILIAL)
-			WHEN 1 THEN "PINTOS MAGAZINE"
-			WHEN 3 THEN "PINTOS RIVERSIDE"
-			WHEN 5 THEN "PINTOS RIO BRANCO"
-			WHEN 6 THEN "PINTOS CD1"
-			WHEN 8 THEN "PINTOS CALÇADOS"
-			WHEN 9 THEN "PINTOS FREI SERAFIM"
-			WHEN 10 THEN "PINTOS CD2"
-			WHEN 11 THEN "PINTOS SHOPPING"
-			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
-			f.CODSECAO AS CODSECAO,
-			s.DESCRICAO as SECAO,
-			AVALIADOR AS AVALIADOR
-			FROM mediageralano
-			left join funcionarios as f on f.CHAPA = mediageralano.chapa
-			LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
-			WHERE AVALIACAO between 25 and 36 and F.CODSITUACAO <> "D"
-      group by f.CODPESSOA order by MEDIA desc');
-			$equipe = Request::Input('e');
-			if ($equipe == 'all') {$lider = "Todos os avaliadores";}
-			else{
-			$lider = Funcionario::Where('CODPESSOA', '=', $equipe)->groupBy('CODPESSOA')->get();}
+  			$medias = DB::select('select f.CHAPA as CHAPA,
+  			f.NOME as NOME,
+  			FUNCAO,
+  			f.DATAADMISSAO AS DATAADMISSAO,
+  			replace(round(SUM(MEDIA)/COUNT(f.CHAPA),4),".",",") as MEDIA,
+  			CASE(f.CODFILIAL)
+  			WHEN 1 THEN "PINTOS MAGAZINE"
+  			WHEN 3 THEN "PINTOS RIVERSIDE"
+  			WHEN 5 THEN "PINTOS RIO BRANCO"
+  			WHEN 6 THEN "PINTOS CD1"
+  			WHEN 8 THEN "PINTOS CALÇADOS"
+  			WHEN 9 THEN "PINTOS FREI SERAFIM"
+  			WHEN 10 THEN "PINTOS CD2"
+  			WHEN 11 THEN "PINTOS SHOPPING"
+  			WHEN 12 THEN "PINTOS RIO POTY" END AS LOJA,
+  			f.CODSECAO AS CODSECAO,
+  			s.DESCRICAO as SECAO,
+  			AVALIADOR AS AVALIADOR
+  			FROM mediageralano
+  			left join funcionarios as f on f.CHAPA = mediageralano.chapa
+  			LEFT JOIN secoes as s on s.CODIGO = f.CODSECAO
+  			WHERE AVALIACAO between 25 and 36 and F.CODSITUACAO <> "D"
+        group by f.CODPESSOA order by MEDIA desc');
+  			$equipe = Request::Input('e');
+  			if ($equipe == 'all') {$lider = "Todos os avaliadores";}
+  			else{
+  			$lider = Funcionario::Where('CODPESSOA', '=', $equipe)->groupBy('CODPESSOA')->get();}
 
-			return view('admin.avaliacao.mediaImpressao', [
-			'medias' => $medias,
-			'lider'=> $lider
+  			return view('admin.avaliacao.mediaImpressao', [
+  			'medias' => $medias,
+  			'lider'=> $lider
 
-			]);
+			   ]);
 
 		}
 
@@ -1676,8 +1687,6 @@ class AvaliacaoAdminController extends Controller
               //} //fim anoMedia
             //  else {$total = 0; $medias = 0;}
 
-
-
 			return view('admin.avaliacao.media2016Geral', [
 			'total' => $total,
 			'medias' => $medias,
@@ -1687,26 +1696,19 @@ class AvaliacaoAdminController extends Controller
       'contador' => $contador
 
 			]);
-
-
 	}
 
   public function mostraAssiduidade(){
 
-        $todas = Assiduidade::groupBy('ano','mes')->orderBy('ano','mes')->paginate(12);
-        //  $todas = DB::table('assiduidade')->groupBy('ano','mes')->get();
+          $todas = Assiduidade::groupBy('ano','mes')->orderBy('ano','mes')->paginate(12);
 
           return view('admin.avaliacao.assiduidade.assiduidade', [
           'todas' => $todas
 
           ]);
-
   }
 
   public function insereAssiduidade(){
-
-        //$todas = Assiduidade::groupBy('ano','mes')->orderBy('ano','mes')->paginate(12);
-        //  $todas = DB::table('assiduidade')->groupBy('ano','mes')->get();
 
           $feitas = DB::select('select ava.CODAVALIACAO as cod, ava.NOME as nome
                                from avaliacoes as ava
@@ -1727,37 +1729,10 @@ class AvaliacaoAdminController extends Controller
           'feitas' => $feitas,
           'novas' => $novas
           ]);
-
-
   }
 
   public function insereNovaAssiduidade(){
     $codigo = Request::input('novaAvaliacao');
-
-    /*DB::statement("
-                  Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
-                  select at.CODPESSOA as codpessoa,
-                         round((at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60,1) as atraso,
-                         f.CHAPA as chapa,
-                          CASE
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 0 AND 1.99    THEN 10
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 2 AND 4     THEN 3
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 4.01 AND 8 	THEN 1
-                              WHEN (at.MINUTOS + FALTA + IFNULL(ab.ABONO,0))/60 BETWEEN 8.1 AND 100   THEN 0
-                              ELSE 0 END
-                           AS	nota,
-                          at.ANO as ano,
-                          at.MES as mes,
-                          av.CODAVALIACAO as codavaliacao,
-                          3 as idusuario
-                          from atrasosfaltas as at
-                  left join abonoslancados as ab
-                  on ab.CODPESSOA = at.CODPESSOA and at.ANO = ab.ANO and at.MES = ab.MES
-                  inner join avaliacoes as av on at.ANO = YEAR(DATAABERTURA) and at.MES = MONTH(DATAABERTURA)
-                  inner join funcionarios as f on f.CODPESSOA = at.codpessoa
-                  where CODSITUACAO <> 'D' and av.CODAVALIACAO = ".$codigo."
-                  group by at.CODPESSOA, at.ANO, at.MES, at.CODPESSOA;
-    "); */
 
     DB::statement("
                   Insert into assiduidade (codpessoa, atraso, chapa, nota, ano, mes, codavaliacao, idusuario)
@@ -1815,8 +1790,6 @@ class AvaliacaoAdminController extends Controller
     ");
 
   return redirect()->intended(route('mostraAssiduidade'))->withInput()->with('status' , 'Assiduidade inserida com sucesso');
-
-
 
   }
 
@@ -1879,11 +1852,7 @@ class AvaliacaoAdminController extends Controller
                   where p.CODAVALIACAO = ".$codigo." and a.codpessoa is null;
     ");
 
-
-
     return redirect()->intended(route('mostraAssiduidade'))->withInput()->with('status' , 'Assiduidade inserida com sucesso');
-
-
 
   }
 

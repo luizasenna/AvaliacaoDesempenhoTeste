@@ -8,7 +8,7 @@ Delegação de Avaliado - AD
 
 {{-- page level styles --}}
 @section('header_styles')
-    
+
     <link href="{{ asset('assets/vendors/bootstrap-form-builder/css/custom.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/pages/formbuilder.css') }}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/vendors/datatables/css/dataTables.bootstrap.css') }}" />
@@ -34,12 +34,12 @@ Delegação de Avaliado - AD
         <!--section ends-->
         <section class="content">
             <!--main content-->
-         
-            
-            
+
+
+
             <div class="row">
                 <div class="col-md-12">
-                           
+
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">
@@ -62,9 +62,8 @@ Delegação de Avaliado - AD
 												<td class="text-uppercase">{{ $e->DESCRICAO }}</td>
 												<td>{{ $e->CODINTERNO }}</td>
 												 <td>
-													<a href="func?e={{ $e->CODINTERNO }}">
-														<i class="livicon" data-name="edit" data-size="18" data-loop="true" data-c="#428BCA" data-hc="#428BCA" title="delegar equipe"></i>
-													</a>
+                          <a href="func?e={{ $e->CODINTERNO }}" class="btn btn-info" href="#" role="button">Ver Membros da Equipe</a>
+                          <a href="delegaEquipe?e={{ $e->CODINTERNO }}" class="btn btn-info" href="#" role="button">Delegar Equipe Inteira</a>
 												</td>
 											</tr>
 										@endforeach
@@ -75,14 +74,14 @@ Delegação de Avaliado - AD
 										</div>
 									</div>
 								</div>
-                              
+
                             </div>
                         </div>
                         <!-- / Building Form. --> </div>
                     <!-- / Components --> </div>
                 <!--form builder ends--> </div>
         </section>
-        <!--main content ends--> 
+        <!--main content ends-->
 @stop
 
 {{-- page level scripts --}}
@@ -90,7 +89,7 @@ Delegação de Avaliado - AD
 
     <script type="text/javascript" src="{{ asset('assets/vendors/datatables/js/jquery.dataTables.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('assets/vendors/datatables/js/dataTables.bootstrap.js') }}" ></script>
- 
+
 
 	<script>
 	$(document).ready(function() {

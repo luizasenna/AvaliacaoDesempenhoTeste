@@ -130,8 +130,9 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 		Route::get('/delegaTodas', 'AvaliacaoAdminController@delegaTodas');
 		Route::get('/delegaUma', 'AvaliacaoAdminController@delegaUma');
 		Route::get('/delegaVarias', 'AvaliacaoAdminController@delegaVarias');
+		Route::get('/delegaEquipe', 'AvaliacaoAdminController@delegaEquipe');
 		Route::get('/teste', 'AvaliacaoAdminController@teste');
-		Route::get('/historicoDelegacao', 'AvaliacaoAdminController@historicoDelegacao');
+		Route::get('/historicoDelegacao', 'AvaliacaoAdminController@historicoDelegacao')->name('historicoDelegacao');
 		Route::get('/mudaequipe', 'AvaliacaoAdminController@mudaEquipe');
 		Route::get('/func', 'AvaliacaoAdminController@verTime');
 		Route::post('/outraEquipe', 'AvaliacaoAdminController@outraEquipe');

@@ -60,7 +60,7 @@ Avaliação de Desempenho
 							<!-- Foto -->
 
 							<!-- Dados do funcionario -->
-							<div class="panel-body col-md-6">
+							<div class="panel-body col-md-8">
 									<table class="table table-stripped ">
 										    @if (!$funcionario)
 												{{"Pessoa não encontrada"}}
@@ -68,20 +68,17 @@ Avaliação de Desempenho
 
 												@foreach ($funcionario as $p)
 													<tr>
-														<td colspan ="2" >NOME: {{$p->NOME}}</td>
+														<td colspan ="3" >NOME: {{$p->NOME}}</td>
 													</tr>
 													<tr>
-														<td>CHAPA: {{$p->CHAPA}} </td>
-														<td>CARGO: {{$p->CARGO}} </td>
+														<td>COD: {{$p->CODPESSOA}}  /  CHAPA: {{$p->CHAPA}} </td>
+														<td colspan="2">CARGO: {{$p->CARGO}} </td>
 													</tr>
 													<tr>
 														<td>ADMISSÃO: {{date("d/m/Y", strtotime($p->DATAADMISSAO))}}</td>
-														<td></td>
-													</tr>
-													<tr>
 														<td colspan ="2">LIDER ATUAL: {{$p->LIDER}} </td>
 													</tr>
-													<tr >
+													<tr>
 														<td> <a style="color:#ffffff;" href="/avaliacao/delegaTodas?c={{$p->CHAPA}}" class="btn btn-danger" title="Delegar as avaliações de funcáionrio para outro lider"><span class="glyphicon glyphicon-random"></span> Delegar as avaliações deste funcionário</a></td>
 														<td>
 															<button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
@@ -126,7 +123,7 @@ Avaliação de Desempenho
 							</div><!-- Dados do funcionario -->
 
 							<!-- Gráfico -->
-							<div class="panel-body col-md-3">
+							<div class="panel-body col-md-1">
 									<!--<img src="/assets/images/avaliacao/grafico.png" width="350px" height="180px"/>-->
 							</div> <!-- Gráfico -->
 
@@ -269,7 +266,7 @@ Avaliação de Desempenho
                                         <table class="table table-stripped table-bordered ">
                                           @if ($resultado)
                                             <tr class="primary" style="color:#fff;">
-                                              <td>NOME DA AVALIAÇÃO </td>
+                                              <td style="font-size:12px;">AVALIAÇÃO </td>
                                               <td><abbr title="Aprendizagem e Adaptação" class="initialism">01</abbr> </td>
                                               <td><abbr title="Apresentação Pessoal" class="initialism">02</abbr> </td>
                                               <td><abbr title="Assiduidade" class="initialism">03</abbr> </td>
@@ -285,7 +282,8 @@ Avaliação de Desempenho
                                               <td><abbr title="Qualidade" class="initialism">13</abbr> </td>
                                               <td><abbr title="Relacionamento Pessoal e Colaboração" class="initialism">14</abbr> </td>
                                               <td><abbr title="Administração" class="initialism">15</abbr> </td>
-                                              <td>MÉDIA TOTAL </td>
+                                              <td style="font-size:12px;">MÉDIA</td>
+                                              <td style="font-size:11px;">FEITA POR</td>
                                             </tr>
                                           @else Nenhuma Nota ainda cadastrada para este funcionário. Começe a fazer avaliações <a class="info" href="http://rh.pintos.com.br/avaliacao">na Área de Avaliações Abertas</a>.
                                           @endif
@@ -298,7 +296,7 @@ Avaliação de Desempenho
 
 
                                                 <tr>
-                                                  <td><a data-toggle="modal" data-target="#myModal{{$n->AVALIACAO}}">{{$n->DESCRICAO}} </a>
+                                                  <td style="font-size:11px;"><a data-toggle="modal" data-target="#myModal{{$n->AVALIACAO}}">{{$n->DESCRICAO}} </a>
 
                                                     <div class="modal fade" id="myModal{{$n->AVALIACAO}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                                                       <div class="modal-dialog" role="document">
@@ -445,22 +443,23 @@ Avaliação de Desempenho
 
                                                   </td>
 
-                                                    <td>@if ($c->c1==0){{$n->NOTA1}}  @else - @endif</td>
-                                                    <td>@if ($c->c2==0){{$n->NOTA2}}  @else - @endif</td>
-                                                    <td>{{$n->NOTA3}} </td>
-                                                    <td>@if ($c->c4==0){{$n->NOTA4}} @else - @endif</td>
-                                                    <td>@if ($c->c5==0){{$n->NOTA5}} @else - @endif</td>
-                                                    <td>@if ($c->c6==0){{$n->NOTA6}} @else - @endif</td>
-                                                    <td>@if ($c->c7==0){{$n->NOTA7}} @else - @endif</td>
-                                                    <td>@if ($c->c8==0){{$n->NOTA8}} @else - @endif</td>
-                                                    <td>@if ($c->c9==0){{$n->NOTA9}} @else - @endif</td>
-                                                    <td>@if ($c->c10==0){{$n->NOTA10}} @else - @endif</td>
-                                                    <td>@if ($c->c11==0){{$n->NOTA11}} @else - @endif</td>
-                                                    <td>@if ($c->c12==0){{$n->NOTA12}} @else - @endif</td>
-                                                    <td>@if ($c->c13==0){{$n->NOTA13}} @else - @endif</td>
-                                                    <td>@if ($c->c14==0){{$n->NOTA14}} @else - @endif</td>
-                                                    <td>@if ($c->c15==0){{$n->NOTA15}} @else - @endif</td>
-                                                    <td> @if($n->ANO < date('Y')) {{round($n->MEDIA,2)}} @else - @endif</span></td>
+                                                    <td style="font-size:11px;"> @if ($c->c1==0){{$n->NOTA1}}  @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c2==0){{$n->NOTA2}}  @else - @endif</td>
+                                                    <td style="font-size:11px;">{{$n->NOTA3}} </td>
+                                                    <td style="font-size:11px;">@if ($c->c4==0){{$n->NOTA4}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c5==0){{$n->NOTA5}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c6==0){{$n->NOTA6}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c7==0){{$n->NOTA7}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c8==0){{$n->NOTA8}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c9==0){{$n->NOTA9}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c10==0){{$n->NOTA10}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c11==0){{$n->NOTA11}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c12==0){{$n->NOTA12}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c13==0){{$n->NOTA13}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c14==0){{$n->NOTA14}} @else - @endif</td>
+                                                    <td style="font-size:11px;">@if ($c->c15==0){{$n->NOTA15}} @else - @endif</td>
+                                                    <td style="font-size:11px;"> @if($n->ANO < date('Y')) {{round($n->MEDIA,2)}} @else - @endif</span></td>
+                                                    <td style="font-size:11px;">{{$n->NOMEAVALIADOR}}</td>
 
                                                 @endif
                                                 @endforeach
