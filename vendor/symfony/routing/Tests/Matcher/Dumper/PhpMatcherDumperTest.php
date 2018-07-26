@@ -11,12 +11,41 @@
 
 namespace Symfony\Component\Routing\Tests\Matcher\Dumper;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Matcher\Dumper\PhpMatcherDumper;
+use Symfony\Component\Routing\Matcher\RedirectableUrlMatcherInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcher;
+use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class PhpMatcherDumperTest extends \PHPUnit_Framework_TestCase
+class PhpMatcherDumperTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    private $matcherClass;
+
+    /**
+     * @var string
+     */
+    private $dumpPath;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->matcherClass = uniqid('ProjectUrlMatcher');
+        $this->dumpPath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'php_matcher.'.$this->matcherClass.'.php';
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+
+        @unlink($this->dumpPath);
+    }
+
     /**
      * @expectedException \LogicException
      */
@@ -33,6 +62,23 @@ class PhpMatcherDumperTest extends \PHPUnit_Framework_TestCase
         ));
         $dumper = new PhpMatcherDumper($collection);
         $dumper->dump();
+    }
+
+    public function testRedirectPreservesUrlEncoding()
+    {
+        $collection = new RouteCollection();
+        $collection->add('foo', new Route('/foo:bar/'));
+
+        $class = $this->generateDumpedMatcher($collection, true);
+
+        $matcher = $this->getMockBuilder($class)
+                        ->setMethods(array('redirect'))
+                        ->setConstructorArgs(array(new RequestContext()))
+                        ->getMock();
+
+        $matcher->expects($this->once())->method('redirect')->with('/foo%3Abar/', 'foo');
+
+        $matcher->match('/foo%3Abar');
     }
 
     /**
@@ -186,8 +232,6 @@ class PhpMatcherDumperTest extends \PHPUnit_Framework_TestCase
         $route1 = new Route('/route1', array(), array(), array(), 'a.example.com');
         $collection1->add('route1', $route1);
 
-        $collection2 = new RouteCollection();
-
         $route2 = new Route('/c2/route2', array(), array(), array(), 'a.example.com');
         $collection1->add('route2', $route2);
 
@@ -285,5 +329,32 @@ class PhpMatcherDumperTest extends \PHPUnit_Framework_TestCase
            array($redirectCollection, 'url_matcher2.php', array('base_class' => 'Symfony\Component\Routing\Tests\Fixtures\RedirectableUrlMatcher')),
            array($rootprefixCollection, 'url_matcher3.php', array()),
         );
+    }
+
+    /**
+     * @param $dumper
+     */
+    private function generateDumpedMatcher(RouteCollection $collection, $redirectableStub = false)
+    {
+        $options = array('class' => $this->matcherClass);
+
+        if ($redirectableStub) {
+            $options['base_class'] = '\Symfony\Component\Routing\Tests\Matcher\Dumper\RedirectableUrlMatcherStub';
+        }
+
+        $dumper = new PhpMatcherDumper($collection);
+        $code = $dumper->dump($options);
+
+        file_put_contents($this->dumpPath, $code);
+        include $this->dumpPath;
+
+        return $this->matcherClass;
+    }
+}
+
+abstract class RedirectableUrlMatcherStub extends UrlMatcher implements RedirectableUrlMatcherInterface
+{
+    public function redirect($path, $route, $scheme = null)
+    {
     }
 }

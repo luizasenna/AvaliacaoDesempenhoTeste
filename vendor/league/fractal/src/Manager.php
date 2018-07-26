@@ -32,6 +32,20 @@ class Manager
     protected $requestedIncludes = [];
 
     /**
+     * Array of scope identifiers for resources to exclude.
+     *
+     * @var array
+     */
+    protected $requestedExcludes = [];
+
+    /**
+     * Array of requested fieldsets.
+     *
+     * @var array
+     */
+    protected $requestedFieldsets = [];
+
+    /**
      * Array containing modifiers as keys and an array value of params.
      *
      * @var array
@@ -60,6 +74,18 @@ class Manager
     protected $serializer;
 
     /**
+     * Factory used to create new configured scopes.
+     *
+     * @var ScopeFactoryInterface
+     */
+    private $scopeFactory;
+
+    public function __construct(ScopeFactoryInterface $scopeFactory = null)
+    {
+        $this->scopeFactory = $scopeFactory ?: new ScopeFactory();
+    }
+
+    /**
      * Create Data.
      *
      * Main method to kick this all off. Make a resource then pass it over, and use toArray()
@@ -72,18 +98,11 @@ class Manager
      */
     public function createData(ResourceInterface $resource, $scopeIdentifier = null, Scope $parentScopeInstance = null)
     {
-        $scopeInstance = new Scope($this, $resource, $scopeIdentifier);
-
-        // Update scope history
         if ($parentScopeInstance !== null) {
-            // This will be the new children list of parents (parents parents, plus the parent)
-            $scopeArray = $parentScopeInstance->getParentScopes();
-            $scopeArray[] = $parentScopeInstance->getScopeIdentifier();
-
-            $scopeInstance->setParentScopes($scopeArray);
+            return $this->scopeFactory->createChildScopeFor($this, $parentScopeInstance, $resource, $scopeIdentifier);
         }
 
-        return $scopeInstance;
+        return $this->scopeFactory->createScopeFor($this, $resource, $scopeIdentifier);
     }
 
     /**
@@ -91,15 +110,11 @@ class Manager
      *
      * @param string $include
      *
-     * @return \League\Fractal\ParamBag|null
+     * @return \League\Fractal\ParamBag
      */
     public function getIncludeParams($include)
     {
-        if (! isset($this->includeParams[$include])) {
-            return;
-        }
-
-        $params = $this->includeParams[$include];
+        $params = isset($this->includeParams[$include]) ? $this->includeParams[$include] : [];
 
         return new ParamBag($params);
     }
@@ -112,6 +127,16 @@ class Manager
     public function getRequestedIncludes()
     {
         return $this->requestedIncludes;
+    }
+
+    /**
+     * Get Requested Excludes.
+     *
+     * @return array
+     */
+    public function getRequestedExcludes()
+    {
+        return $this->requestedExcludes;
     }
 
     /**
@@ -191,6 +216,83 @@ class Manager
 
         // This should be optional and public someday, but without it includes would never show up
         $this->autoIncludeParents();
+
+        return $this;
+    }
+
+    /**
+     * Parse field parameter.
+     *
+     * @param array $fieldsets Array of fields to include. It must be an array
+     *                         whose keys are resource types and values a string
+     *                         of the fields to return, separated by a comma
+     *
+     * @return $this
+     */
+    public function parseFieldsets(array $fieldsets)
+    {
+        $this->requestedFieldsets = [];
+        foreach ($fieldsets as $type => $fields) {
+            //Remove empty and repeated fields
+            $this->requestedFieldsets[$type] = array_unique(array_filter(explode(',', $fields)));
+        }
+        return $this;
+    }
+
+    /**
+     * Get requested fieldsets.
+     *
+     * @return array
+     */
+    public function getRequestedFieldsets()
+    {
+        return $this->requestedFieldsets;
+    }
+
+    /**
+     * Get fieldset params for the specified type.
+     *
+     * @param string $type
+     *
+     * @return \League\Fractal\ParamBag|null
+     */
+    public function getFieldset($type)
+    {
+        return !isset($this->requestedFieldsets[$type]) ?
+            null :
+            new ParamBag($this->requestedFieldsets[$type]);
+    }
+
+    /**
+     * Parse Exclude String.
+     *
+     * @param array|string $excludes Array or csv string of resources to exclude
+     *
+     * @return $this
+     */
+    public function parseExcludes($excludes)
+    {
+        $this->requestedExcludes = [];
+
+        if (is_string($excludes)) {
+            $excludes = explode(',', $excludes);
+        }
+
+        if (! is_array($excludes)) {
+            throw new \InvalidArgumentException(
+                'The parseExcludes() method expects a string or an array. '.gettype($excludes).' given'
+            );
+        }
+
+        foreach ($excludes as $excludeName) {
+            $excludeName = $this->trimToAcceptableRecursionLevel($excludeName);
+
+            if (in_array($excludeName, $this->requestedExcludes)) {
+                continue;
+            }
+
+            $this->requestedExcludes[] = $excludeName;
+        }
 
         return $this;
     }

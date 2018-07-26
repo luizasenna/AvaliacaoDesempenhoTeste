@@ -14,6 +14,7 @@
 namespace PhpSpec\Console;
 
 use PhpSpec\Console\Prompter\Factory;
+use PhpSpec\Loader\StreamWrapper;
 use PhpSpec\Process\Context\JsonExecutionContext;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Input\InputInterface;
@@ -85,7 +86,20 @@ class Application extends BaseApplication
 
         $this->setDispatcher($this->container->get('console_event_dispatcher'));
 
-        $this->container->get('console.io')->setConsoleWidth($this->getTerminalWidth());
+        if (class_exists('\Symfony\Component\Console\Terminal')) {
+            $terminal = new \Symfony\Component\Console\Terminal();
+            $consoleWidth = $terminal->getWidth();
+        } else {
+            $consoleWidth = $this->getTerminalWidth();
+        }
+
+        $this->container->get('console.io')->setConsoleWidth($consoleWidth);
+
+        StreamWrapper::reset();
+        foreach ($this->container->getByPrefix('loader.resource_loader.spec_transformer') as $transformer) {
+            StreamWrapper::addTransformer($transformer);
+        }
+        StreamWrapper::register();
 
         return parent::doRun($input, $output);
     }
@@ -133,6 +147,8 @@ class Application extends BaseApplication
     {
         $config = $this->parseConfigurationFile($input);
 
+        $this->populateContainerParameters($container, $config);
+
         foreach ($config as $key => $val) {
             if ('extensions' === $key && is_array($val)) {
                 foreach ($val as $class) {
@@ -147,7 +163,14 @@ class Application extends BaseApplication
 
                     $extension->load($container);
                 }
-            } else {
+            }
+        }
+    }
+
+    private function populateContainerParameters(ServiceContainer $container, array $config)
+    {
+        foreach ($config as $key => $val) {
+            if ('extensions' !== $key) {
                 $container->setParam($key, $val);
             }
         }

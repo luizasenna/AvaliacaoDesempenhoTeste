@@ -17,8 +17,8 @@
         "phpspec/phpspec": "~2.1",
 	"cartalyst/sentinel": "2.0.*",
 	"laravelcollective/html": "5.1.*",
-	"cviebrock/eloquent-sluggable": "dev-master",
-	"cviebrock/eloquent-taggable": "dev-master",
+	"cviebrock/eloquent-sluggable": "3.0.*",
+	"cviebrock/eloquent-taggable": "2.0",
 	"yajra/laravel-datatables-oracle": "~5.0"
     },
     "autoload": {

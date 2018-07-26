@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\Dumper;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\Dumper\YamlFileDumper;
 
-class YamlFileDumperTest extends \PHPUnit_Framework_TestCase
+class YamlFileDumperTest extends TestCase
 {
     public function testDump()
     {
@@ -25,7 +26,7 @@ class YamlFileDumperTest extends \PHPUnit_Framework_TestCase
         $dumper = new YamlFileDumper();
         $dumper->dump($catalogue, array('path' => $tempDir));
 
-        $this->assertEquals(file_get_contents(__DIR__.'/../fixtures/resources.yml'), file_get_contents($tempDir.'/messages.en.yml'));
+        $this->assertFileEquals(__DIR__.'/../fixtures/resources.yml', $tempDir.'/messages.en.yml');
 
         unlink($tempDir.'/messages.en.yml');
     }

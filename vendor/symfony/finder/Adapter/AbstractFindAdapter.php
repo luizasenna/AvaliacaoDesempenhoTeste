@@ -26,14 +26,8 @@ use Symfony\Component\Finder\Comparator\DateComparator;
  */
 abstract class AbstractFindAdapter extends AbstractAdapter
 {
-    /**
-     * @var Shell
-     */
     protected $shell;
 
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->shell = new Shell();
@@ -94,7 +88,7 @@ abstract class AbstractFindAdapter extends AbstractAdapter
         $command->setErrorHandler(
             $this->ignoreUnreadableDirs
                 // If directory is unreadable and finder is set to ignore it, `stderr` is ignored.
-                ? function ($stderr) { return; }
+                ? function ($stderr) { }
                 : function ($stderr) { throw new AccessDeniedException($stderr); }
         );
 

@@ -11,10 +11,10 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel
- * @version    2.0.7
+ * @version    2.0.17
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011-2015, Cartalyst LLC
+ * @copyright  (c) 2011-2017, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -48,14 +48,14 @@ class SentinelBootstrapper
     /**
      * The event dispatcher.
      *
-     * @var \Illuminate\Events\Dispatcher
+     * @var \Illuminate\Contracts\Events\Dispatcher
      */
     protected $dispatcher;
 
     /**
      * Constructor.
      *
-     * @param  arry  $config
+     * @param  array  $config
      * @return void
      */
     public function __construct($config = null)
@@ -88,9 +88,11 @@ class SentinelBootstrapper
             $dispatcher
         );
 
+        $throttle = $this->createThrottling();
+
         $ipAddress = $this->getIpAddress();
 
-        $checkpoints = $this->createCheckpoints($activations, $ipAddress);
+        $checkpoints = $this->createCheckpoints($activations, $throttle, $ipAddress);
 
         foreach ($checkpoints as $key => $checkpoint) {
             $sentinel->addCheckpoint($key, $checkpoint);
@@ -101,6 +103,8 @@ class SentinelBootstrapper
         $sentinel->setActivationRepository($activations);
 
         $sentinel->setReminderRepository($reminders);
+
+        $sentinel->setThrottleRepository($throttle);
 
         return $sentinel;
     }
@@ -116,7 +120,11 @@ class SentinelBootstrapper
 
         $cookie = $this->createCookie();
 
-        return new IlluminatePersistenceRepository($session, $cookie);
+        $model = $this->config['persistences']['model'];
+
+        $single = $this->config['persistences']['single'];
+
+        return new IlluminatePersistenceRepository($session, $cookie, $model, $single);
     }
 
     /**
@@ -234,17 +242,18 @@ class SentinelBootstrapper
      * Create activation and throttling checkpoints.
      *
      * @param  \Cartalyst\Sentinel\Activations\IlluminateActivationRepository  $activations
+     * @param  \Cartalyst\Sentinel\Throttling\IlluminateThrottleRepository  $throttle
      * @param  string  $ipAddress
      * @return array
      * @throws \InvalidArgumentException
      */
-    protected function createCheckpoints(IlluminateActivationRepository $activations, $ipAddress)
+    protected function createCheckpoints(IlluminateActivationRepository $activations, IlluminateThrottleRepository $throttle, $ipAddress)
     {
         $activeCheckpoints = $this->config['checkpoints'];
 
         $activation = $this->createActivationCheckpoint($activations);
 
-        $throttle = $this->createThrottleCheckpoint($ipAddress);
+        $throttle = $this->createThrottleCheckpoint($throttle, $ipAddress);
 
         $checkpoints = [];
 
@@ -262,14 +271,13 @@ class SentinelBootstrapper
     /**
      * Create a throttle checkpoint.
      *
+     * @param  \Cartalyst\Sentinel\Throttling\IlluminateThrottleRepository  $throttle
      * @param  string  $ipAddress
      * @return \Cartalyst\Sentinel\Checkpoints\ThrottleCheckpoint
      */
-    protected function createThrottleCheckpoint($ipAddress)
+    protected function createThrottleCheckpoint(IlluminateThrottleRepository $throtte, $ipAddress)
     {
-        $throttling = $this->createThrottling();
-
-        return new ThrottleCheckpoint($throttling, $ipAddress);
+        return new ThrottleCheckpoint($throtte, $ipAddress);
     }
 
     /**
@@ -301,7 +309,7 @@ class SentinelBootstrapper
     /**
      * Returns the event dispatcher.
      *
-     * @return \Illuminate\Events\Dispatcher
+     * @return \Illuminate\Contracts\Events\Dispatcher
      */
     protected function getEventDispatcher()
     {

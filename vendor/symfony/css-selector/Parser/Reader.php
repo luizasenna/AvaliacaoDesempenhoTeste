@@ -18,22 +18,13 @@ namespace Symfony\Component\CssSelector\Parser;
  * which is copyright Ian Bicking, @see https://github.com/SimonSapin/cssselect.
  *
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
+ *
+ * @internal
  */
 class Reader
 {
-    /**
-     * @var string
-     */
     private $source;
-
-    /**
-     * @var int
-     */
     private $length;
-
-    /**
-     * @var int
-     */
     private $position = 0;
 
     /**
@@ -95,7 +86,7 @@ class Reader
     /**
      * @param string $pattern
      *
-     * @return bool
+     * @return array|false
      */
     public function findPattern($pattern)
     {
@@ -116,8 +107,6 @@ class Reader
         $this->position += $length;
     }
 
-    /**
-     */
     public function moveToEnd()
     {
         $this->position = $this->length;

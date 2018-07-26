@@ -2,7 +2,7 @@
 
 namespace Laravel\Socialite\Two;
 
-use GuzzleHttp\ClientInterface;
+use Illuminate\Support\Arr;
 
 class GoogleProvider extends AbstractProvider implements ProviderInterface
 {
@@ -38,23 +38,6 @@ class GoogleProvider extends AbstractProvider implements ProviderInterface
     protected function getTokenUrl()
     {
         return 'https://accounts.google.com/o/oauth2/token';
-    }
-
-    /**
-     * Get the access token for the given code.
-     *
-     * @param  string  $code
-     * @return string
-     */
-    public function getAccessToken($code)
-    {
-        $postKey = (version_compare(ClientInterface::VERSION, '6') === 1) ? 'form_params' : 'body';
-
-        $response = $this->getHttpClient()->post($this->getTokenUrl(), [
-            $postKey => $this->getTokenFields($code),
-        ]);
-
-        return $this->parseAccessToken($response->getBody());
     }
 
     /**
@@ -94,8 +77,9 @@ class GoogleProvider extends AbstractProvider implements ProviderInterface
     protected function mapUserToObject(array $user)
     {
         return (new User)->setRaw($user)->map([
-            'id' => $user['id'], 'nickname' => array_get($user, 'nickname'), 'name' => $user['displayName'],
-            'email' => $user['emails'][0]['value'], 'avatar' => array_get($user, 'image')['url'],
+            'id' => $user['id'], 'nickname' => Arr::get($user, 'nickname'), 'name' => $user['displayName'],
+            'email' => $user['emails'][0]['value'], 'avatar' => Arr::get($user, 'image')['url'],
+            'avatar_original' => preg_replace('/\?sz=([0-9]+)/', '', Arr::get($user, 'image')['url']),
         ]);
     }
 }

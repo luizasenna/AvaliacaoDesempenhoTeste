@@ -1,28 +1,5 @@
 # Change Log
 
-## 3.1.2 - 07-Nov-2015
-
-- Fix some namespacing issues in docblocks (#195)
-- Lots of PSR-2 fixes
-
-## 3.1.1 - 26-Oct-2015
-
-- Fix missing class reference (#192)
-- Clean up migration code (#191 thanks @natzim)
-- Fix when using magic getters (#188 thanks @ChrisReid)
-
-## 3.1.0 - 14-Oct-2015
-
-- Convert code-base to PSR-2
-- If the source is empty, then set the slug to `null` (#162 thanks @PallMallShow)
-- Ability to use a model's relations in the `build_from` configuration (#171 thanks @blaxxi)
-- Added `getSlugEngine()` method so that the Cocur\Slugify class can be configured
-- Updated the migration stub for Laravel 5.1's PSR-2 changes (#174 thanks @39digits)
-- Added `slugging` and `slugged` Eloquent model events
-- Fix for `findBySlugOrId()` methods when the slug is numeric (#161 thanks @canvural)
-- Add static method `Model::createSlug('some string')` (#185 thanks @phroggyy)
-
-
 ## 3.0.0 - 06-Jul-2015
 
 - Don't increment unique suffix if slug is unchanged (#108 thanks @kkiernan)

@@ -11,10 +11,10 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel
- * @version    2.0.7
+ * @version    2.0.17
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011-2015, Cartalyst LLC
+ * @copyright  (c) 2011-2017, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -68,7 +68,7 @@ class CICookie implements CookieInterface
     public function put($value)
     {
         $options = array_merge($this->options, [
-            'value'  => serialize($value),
+            'value'  => json_encode($value),
             'expire' => 2628000,
         ]);
 
@@ -83,7 +83,7 @@ class CICookie implements CookieInterface
         $value = $this->input->cookie($this->options['name']);
 
         if ($value) {
-            return unserialize($value);
+            return json_decode($value);
         }
     }
 

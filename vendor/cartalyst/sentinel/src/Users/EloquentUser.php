@@ -11,10 +11,10 @@
  * bundled with this package in the LICENSE file.
  *
  * @package    Sentinel
- * @version    2.0.7
+ * @version    2.0.17
  * @author     Cartalyst LLC
  * @license    BSD License (3-clause)
- * @copyright  (c) 2011-2015, Cartalyst LLC
+ * @copyright  (c) 2011-2017, Cartalyst LLC
  * @link       http://cartalyst.com
  */
 
@@ -45,6 +45,13 @@ class EloquentUser extends Model implements RoleableInterface, PermissibleInterf
         'last_name',
         'first_name',
         'permissions',
+    ];
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $hidden = [
+        'password',
     ];
 
     /**
@@ -194,19 +201,23 @@ class EloquentUser extends Model implements RoleableInterface, PermissibleInterf
      */
     public function inRole($role)
     {
-        $role = array_first($this->roles, function ($index, $instance) use ($role) {
+        if ($role instanceof RoleInterface) {
+            $roleId = $role->getRoleId();
+        }
+
+        foreach ($this->roles as $instance) {
             if ($role instanceof RoleInterface) {
-                return ($instance->getRoleId() === $role->getRoleId());
+                if ($instance->getRoleId() === $roleId) {
+                    return true;
+                }
+            } else {
+                if ($instance->getRoleId() == $role || $instance->getRoleSlug() == $role) {
+                    return true;
+                }
             }
+        }
 
-            if ($instance->getRoleId() == $role || $instance->getRoleSlug() == $role) {
-                return true;
-            }
-
-            return false;
-        });
-
-        return $role !== null;
+        return false;
     }
 
     /**
@@ -399,7 +410,9 @@ class EloquentUser extends Model implements RoleableInterface, PermissibleInterf
      */
     public function delete()
     {
-        if ($this->exists) {
+        $isSoftDeleted = array_key_exists('Illuminate\Database\Eloquent\SoftDeletes', class_uses($this));
+
+        if ($this->exists && ! $isSoftDeleted) {
             $this->activations()->delete();
             $this->persistences()->delete();
             $this->reminders()->delete();
@@ -407,7 +420,7 @@ class EloquentUser extends Model implements RoleableInterface, PermissibleInterf
             $this->throttle()->delete();
         }
 
-        parent::delete();
+        return parent::delete();
     }
 
     /**

@@ -1,7 +1,0 @@
-
-<?php if(session('status')): ?>
-    <div id="alert_msg" class="alert alert-info alert-dismissable">
-        <strong><?php echo e(session('status')); ?></strong>
-    </div>
-<?php endif; ?>
-

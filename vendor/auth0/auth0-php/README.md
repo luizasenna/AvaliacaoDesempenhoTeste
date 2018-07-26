@@ -9,8 +9,13 @@
 [![License](https://poser.pugx.org/auth0/auth0-php/license)](https://packagist.org/packages/auth0/auth0-php)
 [![Total Downloads](https://poser.pugx.org/auth0/auth0-php/downloads)](https://packagist.org/packages/auth0/auth0-php)
 
-
 ## Installation
+
+Installing via composer
+
+```
+$ composer require auth0/auth0-php
+```
 
 Check our docs page to get a complete guide on how to install it in an existing project or download a pre configured seedproject:
 
@@ -19,14 +24,93 @@ Check our docs page to get a complete guide on how to install it in an existing 
 
 > If you find something wrong in our docs, PR are welcome in our docs repo: https://github.com/auth0/docs
 
+## Getting started
+
+### Oauth2 authentication
+
+```
+require __DIR__ . '/vendor/autoload.php';
+
+use Auth0\SDK\Auth0;
+
+$domain        = 'YOUR_NAMESPACE';
+$client_id     = 'YOUR_CLIENT_ID';
+$client_secret = 'YOUR_CLIENT_SECRET';
+$redirect_uri  = 'http://YOUR_APP/callback';
+
+$auth0 = new Auth0(array(
+    'domain'        => $domain,
+    'client_id'     => $client_id,
+    'client_secret' => $client_secret,
+    'redirect_uri'  => $redirect_uri
+));
+
+$profile = $auth0->getUser();
+
+if (!$profile) {
+    $authorize_url = "https://$domain/authorize?response_type=code&scope=openid&client_id=$client_id&redirect_uri=http://'.$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'] ;
+
+    header("Location: $authorize_url");
+    exit;
+}
+
+var_dump($profile);
+```
+
+> For more info, check the quickstart docs for [Regular webapp](https://auth0.com/docs/quickstart/webapp/php/) and [Web API](https://auth0.com/docs/quickstart/backend/php/).
+
+### Calling the management API
+
+```
+require __DIR__ . '/vendor/autoload.php';
+
+use Auth0\SDK\Auth0Api;
+
+$token = "eyJhbGciO....eyJhdWQiOiI....1ZVDisdL...";
+$domain = "account.auth0.com";
+
+$auth0Api = new Auth0Api($token, $domain);
+
+$usersList = $auth0Api->users->search([ "q" => "email@test.com" ]);
+
+var_dump($usersList);
+```
+
+### Calling the Authentication API
+
+```
+require __DIR__ . '/vendor/autoload.php';
+
+use Auth0\SDK\Auth0AuthApi;
+
+$domain = "account.auth0.com";
+$client_id = '...';
+$client_secret = '...'; // This is optional, only needed for impersonation or t fetch an access token
+
+$auth0Api = new Auth0AuthApi($domain, $client_id, $client_secret); 
+
+$tokens = $auth0Api->authorize_with_ro('theemail@test.com','thepassword');
+
+$access_token = $auth0Api->get_access_token();
+```
+
 ## Troubleshoot
 
-#### I am getting `curl error 60: SSL certificate problem: self signed certificate in certificate chain` on Windows
+> I am getting `curl error 60: SSL certificate problem: self signed certificate in certificate chain` on Windows
 
 This is a common issue with latest PHP versions under windows (related to a incompatibility between windows and openssl CAs database).
 
 - download this CAs database `https://curl.haxx.se/ca/cacert.pem` to `c:/cacert.pem`
 - you need to edit your php.ini and add `openssl.capath=c:/cacert.pem` (it should point to the file you downloaded)
+
+> I am not using composer, my host does not allow using Composer
+
+This package uses composer for mantianing dependencies. However, if you cannot use composer on your server. Please follow the following steps and upload these dependencies manually.
+
+- Download and install composer on your local environment.
+- Install auth0-PHP using composer.
+- Once you have everything working upload your scripts to the host along with the vendor folder.
+
 
 ## News
 
@@ -35,7 +119,11 @@ This is a common issue with latest PHP versions under windows (related to a inco
 
 ### *NOTICE* Backward compatibility breaks
 
-3.0
+#### 3.2
+- Now the SDK supports RS256 codes, it will decode using the `.well-known/jwks.json` endpoint to fetch the public key
+
+#### 3.x
+
 - SDK api changes, now the Auth0 API client is not build of static clases anymore. Usage example:
 ```
 $token = "eyJhbGciO....eyJhdWQiOiI....1ZVDisdL...";
@@ -47,15 +135,20 @@ $auth0Api = new \Auth0\SDK\Auth0Api($token, $domain, $guzzleOptions); /* $guzzle
 $usersList = $auth0Api->users->search([ "q" => "email@test.com" ]);
 ```
 
-2.x
+#### 2.2
+- Now the SDK fetches the user using the `tokeninfo` endpoint to be fully compliant with the openid spec
+- Now the SDK supports RS256 codes, it will decode using the `.well-known/jwks.json` endpoint to fetch the public key
+
+#### 2.x
+
 - Session storage now returns null (and null is expected by the sdk) if there is no info stored (this change was made since false is a valid value to be stored in session).
 - Guzzle 6.1 required
 
-1.x
+#### 1.x
+
 - Now, all the SDK is under the namespace `\Auth0\SDK`
 - The exceptions were moved to the namespace `\Auth0\SDK\Exceptions`
 - The method `Auth0::getUserInfo` is deprecated and soon to be removed. We encourage to use `Auth0::getUser` to enforce the adoption of the API v2
-
 
 ### New features
 
@@ -64,6 +157,7 @@ $usersList = $auth0Api->users->search([ "q" => "email@test.com" ]);
 - The new service `\Auth0\SDK\API\ApiUsers` provides an easy way to consume the API v2 Users endpoints.
 - A simple API client (`\Auth0\SDK\API\ApiClient`) is also available to use.
 - A JWT generator and decoder is also available (`\Auth0\SDK\Auth0JWT`)
+- Now provides an interface for the [Authentication API](https://auth0.com/docs/auth-api).
 
 >***Note:*** API V2 restrict the access to the endpoints via scopes. By default, the user token has granted certain scopes that let update the user metadata but not the root attributes nor app_metadata. To update this information and access another endpoints, you need an special token with this scopes granted. For more information about scopes, check [the API v2 docs](https://auth0.com/docs/apiv2Changes#6).
 
@@ -92,12 +186,13 @@ $ composer install
 $ php -S localhost:3000
 ```
 
-## Migration guide from 1.x
+## Migration guide 
+
+### from 1.x
 
 1. If you use Guzzle (or some other dependency does), you will need to update it to work with Guzzle 6.1.
-2. 
 
-## Migration guide from 0.6.6
+### from 0.6.6
 
 1. First is important to read the [API v2 changes document](https://auth0.com/docs/apiv2Changes) to catch up the latest changes to the API.
 2. Update your composer.json file.
@@ -108,17 +203,14 @@ $ php -S localhost:3000
 
 ## Develop
 
-This SDK uses [Composer](http://getcomposer.org/doc/01-basic-usage.md) to manage its dependencies.
-
-### `.env` format
+### _.env_ format
 
 - GLOBAL_CLIENT_ID
 - GLOBAL_CLIENT_SECRET
 - DOMAIN
 
 ### Install dependencies
-
-    php composer.phar install
+This SDK uses [Composer](http://getcomposer.org/doc/01-basic-usage.md) to manage its dependencies.
 
 ## Configure example
 
@@ -156,10 +248,3 @@ If you have found a bug or if you have a feature request, please report them at 
 ## License
 
 This project is licensed under the MIT license. See the [LICENSE](LICENSE.txt) file for more info.
-
-## TODO
-
-- Better code documentation
-- Better user guide
-- Create an interface for the store
-- Drink coffee

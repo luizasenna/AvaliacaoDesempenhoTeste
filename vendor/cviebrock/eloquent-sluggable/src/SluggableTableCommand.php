@@ -4,113 +4,93 @@ use Illuminate\Database\Console\Migrations\BaseCommand;
 use Illuminate\Foundation\Composer;
 use Symfony\Component\Console\Input\InputArgument;
 
-/**
- * Class SluggableTableCommand
- *
- * @package Cviebrock\EloquentSluggable
- */
-class SluggableTableCommand extends BaseCommand
-{
-    /**
-     * The console command name.
-     *
-     * @var string
-     */
-    protected $name = 'sluggable:table';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Create a migration for the Sluggable database columns';
+class SluggableTableCommand extends BaseCommand {
 
-    /**
-     * @var SluggableMigrationCreator
-     */
-    protected $creator;
+	/**
+	 * The console command name.
+	 *
+	 * @var string
+	 */
+	protected $name = 'sluggable:table';
 
-    /**
-     * @var \Illuminate\Foundation\Composer
-     */
-    protected $composer;
+	/**
+	 * The console command description.
+	 *
+	 * @var string
+	 */
+	protected $description = 'Create a migration for the Sluggable database columns';
 
-    /**
-     * Create a new migration sluggable instance.
-     *
-     * @param SluggableMigrationCreator $creator
-     * @param Composer $composer
-     */
-    public function __construct(
-      SluggableMigrationCreator $creator,
-      Composer $composer
-    ) {
-        parent::__construct();
+	/**
+	 * @var SluggableMigrationCreator
+	 */
+	protected $creator;
 
-        $this->creator = $creator;
-        $this->composer = $composer;
-    }
+	/**
+	 * @var \Illuminate\Foundation\Composer
+	 */
+	protected $composer;
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
-    public function fire()
-    {
-        $table = $this->input->getArgument('table');
+	/**
+	 * Create a new migration sluggable instance.
+	 *
+	 * @param SluggableMigrationCreator $creator
+	 * @param Composer $composer
+	 */
+	public function __construct(SluggableMigrationCreator $creator, Composer $composer) {
+		parent::__construct();
 
-        $column = $this->input->getArgument('column');
+		$this->creator = $creator;
+		$this->composer = $composer;
+	}
 
-        $name = 'add_' . $column . '_to_' . $table . '_table';
+	/**
+	 * Execute the console command.
+	 *
+	 * @return void
+	 */
+	public function fire() {
+		$table = $this->input->getArgument('table');
 
-        // Now we are ready to write the migration out to disk. Once we've written
-        // the migration out, we will dump-autoload for the entire framework to
-        // make sure that the migrations are registered by the class loaders.
-        $this->writeMigration($name, $table, $column);
+		$column = $this->input->getArgument('column');
 
-        $this->composer->dumpAutoloads();
-    }
+		$name = 'add_' . $column . '_to_' . $table . '_table';
 
-    /**
-     * Write the migration file to disk.
-     *
-     * @param  string $name
-     * @param  string $table
-     * @param  bool $column
-     * @return string
-     */
-    protected function writeMigration($name, $table, $column)
-    {
-        $path = $this->getMigrationPath();
+		// Now we are ready to write the migration out to disk. Once we've written
+		// the migration out, we will dump-autoload for the entire framework to
+		// make sure that the migrations are registered by the class loaders.
+		$this->writeMigration($name, $table, $column);
 
-        $this->creator->setColumn($column);
+		$this->composer->dumpAutoloads();
+	}
 
-        $file = pathinfo($this->creator->create($name, $path, $table),
-          PATHINFO_FILENAME);
+	/**
+	 * Write the migration file to disk.
+	 *
+	 * @param  string $name
+	 * @param  string $table
+	 * @param  bool $column
+	 * @return string
+	 */
+	protected function writeMigration($name, $table, $column) {
+		$path = $this->getMigrationPath();
 
-        $this->line("<info>Created Migration:</info> $file");
-    }
+		$this->creator->setColumn($column);
 
-    /**
-     * Get the console command arguments.
-     *
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-          [
-            'table',
-            InputArgument::REQUIRED,
-            'The name of your sluggable table.'
-          ],
-          [
-            'column',
-            InputArgument::OPTIONAL,
-            'The name of your slugged column (defaults to "slug").',
-            'slug'
-          ],
-        ];
-    }
+		$file = pathinfo($this->creator->create($name, $path, $table), PATHINFO_FILENAME);
+
+		$this->line("<info>Created Migration:</info> $file");
+	}
+
+	/**
+	 * Get the console command arguments.
+	 *
+	 * @return array
+	 */
+	protected function getArguments() {
+		return [
+			['table', InputArgument::REQUIRED, 'The name of your sluggable table.'],
+			['column', InputArgument::OPTIONAL, 'The name of your slugged column (defaults to "slug").', 'slug'],
+		];
+	}
 }

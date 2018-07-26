@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC-3',
+    'timezone' => 'UTC',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'key' => 'xzSctlBL7yG7k48fYRHR8zNNLc6PF4CW',
+    'key' => env('APP_KEY','LiwSNvpKBBTfC6FuJYr1WnqjRMv9okqA'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -137,11 +137,11 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
-		Collective\Html\HtmlServiceProvider::class,
-		Cviebrock\EloquentSluggable\SluggableServiceProvider::class,
-		Cviebrock\EloquentTaggable\ServiceProvider::class,
-		yajra\Datatables\DatatablesServiceProvider::class,
-		App\Providers\JoshCrudGeneratorServiceProvider::class,
+    		Collective\Html\HtmlServiceProvider::class,
+    		Cviebrock\EloquentSluggable\SluggableServiceProvider::class,
+    		Cviebrock\EloquentTaggable\ServiceProvider::class,
+    		yajra\Datatables\DatatablesServiceProvider::class,
+    		App\Providers\JoshCrudGeneratorServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -150,7 +150,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-	
+
 	    Laravel\Socialite\SocialiteServiceProvider::class,
 
 
@@ -204,12 +204,12 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Activation' => Cartalyst\Sentinel\Laravel\Facades\Activation::class,
 		'Reminder'   => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
-		'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
+			'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
 		'Form' => Collective\Html\FormFacade::class,
 		'Html' => Collective\Html\HtmlFacade::class,
 		'Datatables' => yajra\Datatables\Datatables::class,
 		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-	
+
 
     ],
 

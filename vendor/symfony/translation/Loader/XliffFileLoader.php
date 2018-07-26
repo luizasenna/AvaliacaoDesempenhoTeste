@@ -112,10 +112,9 @@ class XliffFileLoader implements LoaderInterface
      *
      * @param string $file
      *
-     * @throws \RuntimeException
-     *
      * @return \SimpleXMLElement
      *
+     * @throws \RuntimeException
      * @throws InvalidResourceException
      */
     private function parseFile($file)
@@ -130,22 +129,32 @@ class XliffFileLoader implements LoaderInterface
 
         $location = str_replace('\\', '/', __DIR__).'/schema/dic/xliff-core/xml.xsd';
         $parts = explode('/', $location);
+        $locationstart = 'file:///';
         if (0 === stripos($location, 'phar://')) {
             $tmpfile = tempnam(sys_get_temp_dir(), 'sf2');
             if ($tmpfile) {
                 copy($location, $tmpfile);
                 $parts = explode('/', str_replace('\\', '/', $tmpfile));
+            } else {
+                array_shift($parts);
+                $locationstart = 'phar:///';
             }
         }
         $drive = '\\' === DIRECTORY_SEPARATOR ? array_shift($parts).'/' : '';
-        $location = 'file:///'.$drive.implode('/', array_map('rawurlencode', $parts));
+        $location = $locationstart.$drive.implode('/', array_map('rawurlencode', $parts));
 
         $source = file_get_contents(__DIR__.'/schema/dic/xliff-core/xliff-core-1.2-strict.xsd');
         $source = str_replace('http://www.w3.org/2001/xml.xsd', $location, $source);
 
+        $disableEntities = libxml_disable_entity_loader(false);
+
         if (!@$dom->schemaValidateSource($source)) {
+            libxml_disable_entity_loader($disableEntities);
+
             throw new InvalidResourceException(sprintf('Invalid resource provided: "%s"; Errors: %s', $file, implode("\n", $this->getXmlErrors($internalErrors))));
         }
+
+        libxml_disable_entity_loader($disableEntities);
 
         $dom->normalizeDocument();
 

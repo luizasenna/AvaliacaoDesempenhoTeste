@@ -18,8 +18,8 @@
 ?>
 <html>
     <head>
-        <script src="http://code.jquery.com/jquery-2.2.1.min.js" type="text/javascript"></script>
-        <script src="https://cdn.auth0.com/js/lock-9.0.min.js"></script>
+        <script src="http://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
+        <script src="https://cdn.auth0.com/js/lock/10.0/lock.min.js"></script>
 
         <script type="text/javascript" src="//use.typekit.net/iws6ohy.js"></script>
         <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
@@ -33,8 +33,7 @@
         <script>
           var AUTH0_CLIENT_ID = '<?php echo getenv("AUTH0_CLIENT_ID") ?>';
           var AUTH0_DOMAIN = '<?php echo getenv("AUTH0_DOMAIN") ?>';
-          var AUTH0_CALLBACK_URL = '<?php echo is_null(getenv("AUTH0_CALLBACK_URL")) ?
-            "http://localhost:3000/index.php" : getenv("AUTH0_CALLBACK_URL") ?>';
+          var AUTH0_CALLBACK_URL = '<?php echo getenv("AUTH0_CALLBACK_URL") ?>';
         </script>
 
 

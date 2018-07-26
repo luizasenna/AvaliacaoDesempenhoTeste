@@ -11,6 +11,24 @@ We do not give estimated times for completion on `Accepted` Proposals.
 
 ---
 
+### v2.0.1 - 2017-02-23
+
+`UPDATED`
+
+- use various laravel contracts.
+
+### v2.0.0 - 2017-02-23
+
+`UPDATED`
+
+- use `Illuminate\Contracts\Events\Dispatcher` for events.
+
+### v1.2.0 - 2016-06-21
+
+`ADDED`
+
+- `NamespacedEntityInterface` A contract for namespacing entities.
+
 ### v1.1.2 - 2015-06-24
 
 `UPDATED`

@@ -11,6 +11,7 @@
 
 namespace Symfony\Component\HttpKernel\Profiler;
 
+use Symfony\Component\HttpFoundation\Exception\ConflictingHeadersException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
@@ -24,9 +25,6 @@ use Psr\Log\LoggerInterface;
  */
 class Profiler
 {
-    /**
-     * @var ProfilerStorageInterface
-     */
     private $storage;
 
     /**
@@ -34,9 +32,6 @@ class Profiler
      */
     private $collectors = array();
 
-    /**
-     * @var LoggerInterface
-     */
     private $logger;
 
     /**
@@ -44,12 +39,6 @@ class Profiler
      */
     private $enabled = true;
 
-    /**
-     * Constructor.
-     *
-     * @param ProfilerStorageInterface $storage A ProfilerStorageInterface instance
-     * @param LoggerInterface          $logger  A LoggerInterface instance
-     */
     public function __construct(ProfilerStorageInterface $storage, LoggerInterface $logger = null)
     {
         $this->storage = $storage;
@@ -75,9 +64,7 @@ class Profiler
     /**
      * Loads the Profile for the given Response.
      *
-     * @param Response $response A Response instance
-     *
-     * @return Profile A Profile instance
+     * @return Profile|false A Profile instance
      */
     public function loadProfileFromResponse(Response $response)
     {
@@ -102,8 +89,6 @@ class Profiler
 
     /**
      * Saves a Profile.
-     *
-     * @param Profile $profile A Profile instance
      *
      * @return bool
      */
@@ -134,8 +119,6 @@ class Profiler
     /**
      * Exports the current profiler data.
      *
-     * @param Profile $profile A Profile instance
-     *
      * @return string The exported data
      */
     public function export(Profile $profile)
@@ -148,7 +131,7 @@ class Profiler
      *
      * @param string $data A data string as exported by the export() method
      *
-     * @return Profile A Profile instance
+     * @return Profile|false A Profile instance
      */
     public function import($data)
     {
@@ -185,10 +168,6 @@ class Profiler
     /**
      * Collects data for the given Response.
      *
-     * @param Request    $request   A Request instance
-     * @param Response   $response  A Response instance
-     * @param \Exception $exception An exception instance if the request threw one
-     *
      * @return Profile|null A Profile instance or null if the profiler is disabled
      */
     public function collect(Request $request, Response $response, \Exception $exception = null)
@@ -200,9 +179,13 @@ class Profiler
         $profile = new Profile(substr(hash('sha256', uniqid(mt_rand(), true)), 0, 6));
         $profile->setTime(time());
         $profile->setUrl($request->getUri());
-        $profile->setIp($request->getClientIp());
         $profile->setMethod($request->getMethod());
         $profile->setStatusCode($response->getStatusCode());
+        try {
+            $profile->setIp($request->getClientIp());
+        } catch (ConflictingHeadersException $e) {
+            $profile->setIp('Unknown');
+        }
 
         $response->headers->set('X-Debug-Token', $profile->getToken());
 
@@ -241,8 +224,6 @@ class Profiler
 
     /**
      * Adds a Collector.
-     *
-     * @param DataCollectorInterface $collector A DataCollectorInterface instance
      */
     public function add(DataCollectorInterface $collector)
     {

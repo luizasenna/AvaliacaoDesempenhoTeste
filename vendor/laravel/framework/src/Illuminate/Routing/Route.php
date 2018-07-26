@@ -14,8 +14,8 @@ use Illuminate\Routing\Matching\UriValidator;
 use Illuminate\Routing\Matching\HostValidator;
 use Illuminate\Routing\Matching\MethodValidator;
 use Illuminate\Routing\Matching\SchemeValidator;
-use Symfony\Component\Routing\Route as SymfonyRoute;
 use Illuminate\Http\Exception\HttpResponseException;
+use Symfony\Component\Routing\Route as SymfonyRoute;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Route
@@ -261,7 +261,7 @@ class Route
      * Get or set the middlewares attached to the route.
      *
      * @param  array|string|null $middleware
-     * @return array
+     * @return $this|array
      */
     public function middleware($middleware = null)
     {
@@ -274,7 +274,7 @@ class Route
         }
 
         $this->action['middleware'] = array_merge(
-            Arr::get($this->action, 'middleware', []), $middleware
+            (array) Arr::get($this->action, 'middleware', []), $middleware
         );
 
         return $this;
@@ -463,7 +463,6 @@ class Route
         if (isset($this->parameters)) {
             return array_map(function ($value) {
                 return is_string($value) ? rawurldecode($value) : $value;
-
             }, $this->parameters);
         }
 
@@ -477,7 +476,9 @@ class Route
      */
     public function parametersWithoutNulls()
     {
-        return array_filter($this->parameters(), function ($p) { return ! is_null($p); });
+        return array_filter($this->parameters(), function ($p) {
+            return ! is_null($p);
+        });
     }
 
     /**
@@ -503,7 +504,9 @@ class Route
     {
         preg_match_all('/\{(.*?)\}/', $this->domain().$this->uri, $matches);
 
-        return array_map(function ($m) { return trim($m, '?'); }, $matches[1]);
+        return array_map(function ($m) {
+            return trim($m, '?');
+        }, $matches[1]);
     }
 
     /**
@@ -606,6 +609,12 @@ class Route
     {
         foreach ($parameters as $key => &$value) {
             $value = isset($value) ? $value : Arr::get($this->defaults, $key);
+        }
+
+        foreach ($this->defaults as $key => $value) {
+            if (! isset($parameters[$key])) {
+                $parameters[$key] = $value;
+            }
         }
 
         return $parameters;

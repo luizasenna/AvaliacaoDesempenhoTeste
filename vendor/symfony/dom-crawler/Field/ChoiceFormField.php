@@ -59,6 +59,10 @@ class ChoiceFormField extends FormField
      */
     public function isDisabled()
     {
+        if (parent::isDisabled() && 'select' === $this->type) {
+            return true;
+        }
+
         foreach ($this->options as $option) {
             if ($option['value'] == $this->value && $option['disabled']) {
                 return true;
@@ -93,14 +97,14 @@ class ChoiceFormField extends FormField
     }
 
     /**
-     * Ticks a checkbox.
+     * Unticks a checkbox.
      *
      * @throws \LogicException When the type provided is not correct
      */
     public function untick()
     {
         if ('checkbox' !== $this->type) {
-            throw new \LogicException(sprintf('You cannot tick "%s" as it is not a checkbox (%s).', $this->name, $this->type));
+            throw new \LogicException(sprintf('You cannot untick "%s" as it is not a checkbox (%s).', $this->name, $this->type));
         }
 
         $this->setValue(false);
@@ -109,7 +113,7 @@ class ChoiceFormField extends FormField
     /**
      * Sets the value of the field.
      *
-     * @param string $value The value of the field
+     * @param string|array $value The value of the field
      *
      * @throws \InvalidArgumentException When value type provided is not correct
      */
@@ -151,11 +155,11 @@ class ChoiceFormField extends FormField
     /**
      * Adds a choice to the current ones.
      *
-     * This method should only be used internally.
-     *
      * @param \DOMElement $node
      *
      * @throws \LogicException When choice provided is not multiple nor radio
+     *
+     * @internal
      */
     public function addChoice(\DOMElement $node)
     {
@@ -259,7 +263,8 @@ class ChoiceFormField extends FormField
     {
         $option = array();
 
-        $defaultValue = (isset($node->nodeValue) && !empty($node->nodeValue)) ? $node->nodeValue : 'on';
+        $defaultDefaultValue = 'select' === $this->node->nodeName ? '' : 'on';
+        $defaultValue = (isset($node->nodeValue) && !empty($node->nodeValue)) ? $node->nodeValue : $defaultDefaultValue;
         $option['value'] = $node->hasAttribute('value') ? $node->getAttribute('value') : $defaultValue;
         $option['disabled'] = $node->hasAttribute('disabled');
 

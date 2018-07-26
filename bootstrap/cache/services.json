@@ -49,6 +49,7 @@
         "Illuminate\\View\\ViewServiceProvider",
         "Cartalyst\\Sentinel\\Laravel\\SentinelServiceProvider",
         "Cviebrock\\EloquentSluggable\\SluggableServiceProvider",
+        "Cviebrock\\EloquentTaggable\\ServiceProvider",
         "yajra\\Datatables\\DatatablesServiceProvider",
         "App\\Providers\\JoshCrudGeneratorServiceProvider",
         "App\\Providers\\AppServiceProvider",
@@ -145,7 +146,6 @@
         "form": "Collective\\Html\\HtmlServiceProvider",
         "Collective\\Html\\HtmlBuilder": "Collective\\Html\\HtmlServiceProvider",
         "Collective\\Html\\FormBuilder": "Collective\\Html\\HtmlServiceProvider",
-        "taggable.command.table": "Cviebrock\\EloquentTaggable\\ServiceProvider",
         "Laravel\\Socialite\\Contracts\\Factory": "Laravel\\Socialite\\SocialiteServiceProvider"
     },
     "when": {
@@ -162,7 +162,6 @@
         "Illuminate\\Auth\\Passwords\\PasswordResetServiceProvider": [],
         "Illuminate\\Translation\\TranslationServiceProvider": [],
         "Collective\\Html\\HtmlServiceProvider": [],
-        "Cviebrock\\EloquentTaggable\\ServiceProvider": [],
         "Laravel\\Socialite\\SocialiteServiceProvider": []
     }
 }

@@ -13,8 +13,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Contracts\Queue\Queue;
 use Illuminate\Contracts\Bus\SelfHandling;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Bus\HandlerResolver;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Bus\QueueingDispatcher;
 use Illuminate\Contracts\Bus\Dispatcher as DispatcherContract;
 
@@ -137,7 +137,7 @@ class Dispatcher implements DispatcherContract, QueueingDispatcher, HandlerResol
     }
 
     /**
-     * Get a parameter value for a marshaled command.
+     * Get a parameter value for a marshalled command.
      *
      * @param  string  $command
      * @param  \ArrayAccess  $source
@@ -145,8 +145,7 @@ class Dispatcher implements DispatcherContract, QueueingDispatcher, HandlerResol
      * @param  array  $extras
      * @return mixed
      */
-    protected function getParameterValueForCommand($command, ArrayAccess $source,
-        ReflectionParameter $parameter, array $extras = [])
+    protected function getParameterValueForCommand($command, ArrayAccess $source, ReflectionParameter $parameter, array $extras = [])
     {
         if (array_key_exists($parameter->name, $extras)) {
             return $extras[$parameter->name];
@@ -254,7 +253,7 @@ class Dispatcher implements DispatcherContract, QueueingDispatcher, HandlerResol
      */
     protected function pushCommandToQueue($queue, $command)
     {
-        if (isset($command->queue) && isset($command->delay)) {
+        if (isset($command->queue, $command->delay)) {
             return $queue->laterOn($command->queue, $command->delay, $command);
         }
 

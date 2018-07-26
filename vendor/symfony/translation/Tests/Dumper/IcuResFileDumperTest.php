@@ -11,10 +11,11 @@
 
 namespace Symfony\Component\Translation\Tests\Dumper;
 
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\Dumper\IcuResFileDumper;
 
-class IcuResFileDumperTest extends \PHPUnit_Framework_TestCase
+class IcuResFileDumperTest extends TestCase
 {
     /**
      * @requires extension mbstring
@@ -28,7 +29,7 @@ class IcuResFileDumperTest extends \PHPUnit_Framework_TestCase
         $dumper = new IcuResFileDumper();
         $dumper->dump($catalogue, array('path' => $tempDir));
 
-        $this->assertEquals(file_get_contents(__DIR__.'/../fixtures/resourcebundle/res/en.res'), file_get_contents($tempDir.'/messages/en.res'));
+        $this->assertFileEquals(__DIR__.'/../fixtures/resourcebundle/res/en.res', $tempDir.'/messages/en.res');
 
         @unlink($tempDir.'/messages/en.res');
         @rmdir($tempDir.'/messages');

@@ -51,8 +51,6 @@ abstract class Bundle extends ContainerAware implements BundleInterface
      *
      * This method can be overridden to register compilation passes,
      * other extensions, ...
-     *
-     * @param ContainerBuilder $container A ContainerBuilder instance
      */
     public function build(ContainerBuilder $container)
     {
@@ -127,7 +125,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
     /**
      * Returns the bundle parent name.
      *
-     * @return string The Bundle parent name it overrides or null if no parent
+     * @return string|null The Bundle parent name it overrides or null if no parent
      */
     public function getParent()
     {
@@ -157,13 +155,15 @@ abstract class Bundle extends ContainerAware implements BundleInterface
      *
      * * Commands are in the 'Command' sub-directory
      * * Commands extend Symfony\Component\Console\Command\Command
-     *
-     * @param Application $application An Application instance
      */
     public function registerCommands(Application $application)
     {
         if (!is_dir($dir = $this->getPath().'/Command')) {
             return;
+        }
+
+        if (!class_exists('Symfony\Component\Finder\Finder')) {
+            throw new \RuntimeException('You need the symfony/finder component to register bundle commands.');
         }
 
         $finder = new Finder();
@@ -173,7 +173,7 @@ abstract class Bundle extends ContainerAware implements BundleInterface
         foreach ($finder as $file) {
             $ns = $prefix;
             if ($relativePath = $file->getRelativePath()) {
-                $ns .= '\\'.strtr($relativePath, '/', '\\');
+                $ns .= '\\'.str_replace('/', '\\', $relativePath);
             }
             $class = $ns.'\\'.$file->getBasename('.php');
             if ($this->container) {

@@ -46,22 +46,20 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Psr\Log\LoggerInterface;
 
 /**
- * {$options['class']}
- *
  * This class has been auto-generated
  * by the Symfony Routing Component.
  */
 class {$options['class']} extends {$options['base_class']}
 {
-    private static \$declaredRoutes = {$this->generateDeclaredRoutes()};
+    private static \$declaredRoutes;
 
-    /**
-     * Constructor.
-     */
     public function __construct(RequestContext \$context, LoggerInterface \$logger = null)
     {
         \$this->context = \$context;
         \$this->logger = \$logger;
+        if (null === self::\$declaredRoutes) {
+            self::\$declaredRoutes = {$this->generateDeclaredRoutes()};
+        }
     }
 
 {$this->generateGenerateMethod()}
@@ -104,16 +102,16 @@ EOF;
      */
     private function generateGenerateMethod()
     {
-        return <<<EOF
-    public function generate(\$name, \$parameters = array(), \$referenceType = self::ABSOLUTE_PATH)
+        return <<<'EOF'
+    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
-        if (!isset(self::\$declaredRoutes[\$name])) {
-            throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', \$name));
+        if (!isset(self::$declaredRoutes[$name])) {
+            throw new RouteNotFoundException(sprintf('Unable to generate a URL for the named route "%s" as such route does not exist.', $name));
         }
 
-        list(\$variables, \$defaults, \$requirements, \$tokens, \$hostTokens, \$requiredSchemes) = self::\$declaredRoutes[\$name];
+        list($variables, $defaults, $requirements, $tokens, $hostTokens, $requiredSchemes) = self::$declaredRoutes[$name];
 
-        return \$this->doGenerate(\$variables, \$defaults, \$requirements, \$tokens, \$parameters, \$name, \$referenceType, \$hostTokens, \$requiredSchemes);
+        return $this->doGenerate($variables, $defaults, $requirements, $tokens, $parameters, $name, $referenceType, $hostTokens, $requiredSchemes);
     }
 EOF;
     }
