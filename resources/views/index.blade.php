@@ -22,7 +22,7 @@ Home
 @section('content')
     <div class="container" style="min-height:500px;">
         <section class="purchas-main" >
-           
+
         </section>
         <!-- Service Section Start-->
         <div class="row">
@@ -70,13 +70,13 @@ Home
                         <h3 class="primary text-center">Ponto Eletrônico</h3>
                         <p>Envie e acompanhe as Justificativas de Ponto dos seus funcionários.</p>
                         <div class="text-right">
-                           <span class="danger"> <a href="https://app.smartsheet.com/b/form?EQBCT=41420567586445f7a76f0bdbe10adf5b">Horas Extras</a> </span> | 
+                           <span class="danger"> <a href="https://app.smartsheet.com/b/form?EQBCT=41420567586445f7a76f0bdbe10adf5b">Horas Extras</a> </span> |
                             <span class="danger"> <a href="https://app.smartsheet.com/b/form?EQBCT=645aa945b8084e24ad7259b56f720526">Atrasos</a> </span>
                         </div>
                     </div>
                 </div>
             </div>
-           
+
             <!-- //Clean Design Section End -->
             <!-- 20+ Page Section Start -->
             <div class="col-sm-6 col-md-3">
@@ -98,7 +98,7 @@ Home
     </div>
 
     <!-- Accordions Section End -->
-  
+
         <div class="row">
 
             <div class="col-md-6 col-sm-12">
@@ -107,7 +107,7 @@ Home
                     <!-- Tabbablw-line Start -->
                     <div class="tabbable-line">
                         <!-- Nav Nav-tabs Start -->
-                 
+
                         <!-- //Nav Nav-tabs End -->
                         <!-- Tab-content Start -->
                         <div class="tab-content">
@@ -116,14 +116,10 @@ Home
                                     <div class="media-left tab col-sm-12">
                                       <h3 class="text-center primary" style="line-height:middle;"><i class="livicon" data-name="gift" data-size="30" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
                                       Aniversariantes do Mês no seu setor</h3>
-                                        
+
                                     </div>
                                 </div>
-                                <p>
-                                    1 - Luiza Senna <br/>
-                                    2 - Patricia Bandeira<br/>
-                                    3 - Ivaney Sales<br/>
-                                </p>
+
                             </div>
                             <div class="tab-pane" id="tab_default_2">
                                 <div class="media">
@@ -146,7 +142,7 @@ Home
                                     </div>
                                 </div>
                                 <p>
-                                     Beta analytics startup direct mailing leverage learning curve www.discoverartisans.com business-to-consumer. IPad metrics channels pivot deployment business plan android burn rate hackathon vesting period research & development launch party user experience. Seed round freemium value proposition learning curve series A financing funding research & development crowdsource. 
+                                     Beta analytics startup direct mailing leverage learning curve www.discoverartisans.com business-to-consumer. IPad metrics channels pivot deployment business plan android burn rate hackathon vesting period research & development launch party user experience. Seed round freemium value proposition learning curve series A financing funding research & development crowdsource.
                                 </p>
                             </div>
                             <div class="tab-pane" id="tab_default_4">
@@ -158,7 +154,7 @@ Home
                                     </div>
                                 </div>
                                 <p>
-                                    Paradigm shift twitter pitch research & development venture. Startup partnership www.discoverartisans.com supply chain crowdsource hackathon metrics paradigm shift interaction design influencer holy grail first mover advantage ramen validation. User experience founders burn rate learning curve infographic leverage gen-z supply chain first mover advantage. 
+                                    Paradigm shift twitter pitch research & development venture. Startup partnership www.discoverartisans.com supply chain crowdsource hackathon metrics paradigm shift interaction design influencer holy grail first mover advantage ramen validation. User experience founders burn rate learning curve infographic leverage gen-z supply chain first mover advantage.
                                 </p>
                             </div>
                         </div>
@@ -178,15 +174,19 @@ Home
                             <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                 <span class=" glyphicon glyphicon-plus success"></span>
-                                <span class="success">Solicitação de Serviços ao RH</span></a>
+                                <span class="success">Perguntas e Dúvidas Mais Frequentes</span></a>
                             </h4>
                         </div>
                         <!-- //Panel-heading End -->
                         <!-- Collapseone Start -->
                         <div id="collapseOne" class="panel-collapse collapse">
                             <div class="panel-body">
-                                <p>Formulário de Solicitação
-                                </p>
+                                <p>1 - Como Delegar uma AD? </p>
+                                <p>2 - Como ver notas de alguém que não é da minha equipe?</p>
+                                <p>3 - Como identificar para quem delegar?</p>
+                                <p>4 - Como ver nota que foi feita?</p>
+                                <p>5 - Como ver a própria equipe?</p>
+
                             </div>
                         </div>
                         <!-- Collapseone End -->
@@ -207,10 +207,10 @@ Home
 									<i class="livicon" data-name="cellphone" data-size="25" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
                                     Telefone: (86) 2107-4000 <br/>
                                 </p>
-                               
-									<h4 style="vertical-align: middle;"><i class="livicon" data-name="mail" data-size="25" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>  
+
+									<h4 style="vertical-align: middle;"><i class="livicon" data-name="mail" data-size="25" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
 									Emails: </h4>
-									<p>  
+									<p>
                                     Francisca: franciscarocha@pintos.com.br<br/>
                                     Angélica: angelica@pintos.com.br<br/>
                                     Auricélia: auricelia@pintos.com.br<br/>
@@ -243,7 +243,7 @@ Home
         </div>
         <!-- //Accordions Section End -->
 
-  
+
     <!-- //Container End -->
 @stop
 
