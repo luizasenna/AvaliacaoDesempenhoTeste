@@ -179,7 +179,7 @@ Home
                         </div>
                         <!-- //Panel-heading End -->
                         <!-- Collapseone Start -->
-                        <div id="collapseOne" class="panel-collapse collapse">
+                        <div id="collapseOne" class="panel-collapse">
                             <div class="panel-body">
                                 <p>1 - Como Delegar uma AD? </p>
                                 <p>2 - Como ver notas de alguém que não é da minha equipe?</p>

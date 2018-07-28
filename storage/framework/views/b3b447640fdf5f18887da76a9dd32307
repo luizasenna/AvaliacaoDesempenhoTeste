@@ -117,7 +117,7 @@ Home
 
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="tab-pane" id="tab_default_2">
                                 <div class="media">
@@ -172,15 +172,19 @@ Home
                             <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                 <span class=" glyphicon glyphicon-plus success"></span>
-                                <span class="success">Solicitação de Serviços ao RH</span></a>
+                                <span class="success">Perguntas e Dúvidas Mais Frequentes</span></a>
                             </h4>
                         </div>
                         <!-- //Panel-heading End -->
                         <!-- Collapseone Start -->
                         <div id="collapseOne" class="panel-collapse collapse">
                             <div class="panel-body">
-                                <p>Formulário de Solicitação
-                                </p>
+                                <p>1 - Como Delegar uma AD? </p>
+                                <p>2 - Como ver notas de alguém que não é da minha equipe?</p>
+                                <p>3 - Como identificar para quem delegar?</p>
+                                <p>4 - Como ver nota que foi feita?</p>
+                                <p>5 - Como ver a própria equipe?</p>
+
                             </div>
                         </div>
                         <!-- Collapseone End -->
