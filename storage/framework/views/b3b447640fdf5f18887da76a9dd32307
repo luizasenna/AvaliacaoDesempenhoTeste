@@ -177,13 +177,18 @@ Home
                         </div>
                         <!-- //Panel-heading End -->
                         <!-- Collapseone Start -->
-                        <div id="collapseOne" class="panel-collapse collapse">
+                        <div id="collapseOne" class="panel-collapse">
                             <div class="panel-body">
-                                <p>1 - Como Delegar uma AD? </p>
-                                <p>2 - Como ver notas de alguém que não é da minha equipe?</p>
-                                <p>3 - Como identificar para quem delegar?</p>
-                                <p>4 - Como ver nota que foi feita?</p>
-                                <p>5 - Como ver a própria equipe?</p>
+                                <p><i class="livicon" data-name="check" data-size="13" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
+                                  1 - Como Delegar uma AD? </p>
+                                <p><i class="livicon" data-name="check" data-size="13" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
+                                  2 - Como ver notas de alguém que não é da minha equipe?</p>
+                                <p><i class="livicon" data-name="check" data-size="13" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
+                                  3 - Como identificar para quem delegar?</p>
+                                <p><i class="livicon" data-name="check" data-size="13" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
+                                  4 - Como ver nota que foi feita?</p>
+                                <p><i class="livicon" data-name="check" data-size="13" data-loop="true" data-c="#418bca" data-hc="#418bca"></i>
+                                  5 - Como ver a própria equipe?</p>
 
                             </div>
                         </div>
