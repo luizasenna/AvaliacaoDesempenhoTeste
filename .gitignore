@@ -10,3 +10,4 @@ storage/framework/sessions/*
 storage/logs/*
 config/session.php
 composer.phar
+vendor/*
