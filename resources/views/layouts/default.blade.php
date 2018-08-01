@@ -36,12 +36,12 @@
         <div class="icon-section">
             <div class="container">
                 <ul class="list-inline">
-               
-               
-              
+
+
+
                     <li class="pull-right">
                         <ul class="list-inline icon-position">
-                          
+
                         </ul>
                     </li>
                 </ul>
@@ -62,7 +62,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li {!! (Request::is('/') ? 'class="active"' : '') !!}><a href="{{ route('home') }}"> Home</a>
                     </li>
-                              
+
                     {{--based on anyone login or not display menu items--}}
                     @if(Sentinel::guest())
                         <li><a href="{{ URL::to('login') }}">Login</a>
@@ -83,7 +83,7 @@
         <!-- Nav bar End -->
     </header>
     <!-- //Header End -->
-    
+
     <!-- slider / breadcrumbs section -->
     @yield('top')
 
@@ -96,12 +96,12 @@
     <!-- Footer Section Start -->
     <footer>
         <div class="container footer-text">
-   
+
 
         </div>
     </footer>
     <!-- //Footer Section End -->
-    
+
     	<!-- Analytics Intranet RH-->
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -114,10 +114,10 @@
 
 		</script>
     	<!-- Analytics Intranet RH-->
-    
+
     <div class="copyright">
         <div class="container">
-        <p>Feito com amor pelo Centro de Informática da Pintos, 2017 - Versão 2.1.1 - pintos.com.br</p>
+        <p>Feito com <3 pelo Centro de Informática da Pintos, 2017 - Versão 2.1.1 - pintos.com.br</p>
         </div>
     </div>
     <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Subir para o topo" data-toggle="tooltip" data-placement="left">
