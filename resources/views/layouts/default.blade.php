@@ -117,7 +117,7 @@
 
     <div class="copyright">
         <div class="container">
-        <p>Feito com <3 pelo Centro de Informática da Pintos, 2017 - Versão 2.1.1 - pintos.com.br</p>
+        <p>Feito com <3 pelo Centro de Informática da Pintos, 2018 - Versão 2.1.2 - pintos.com.br</p>
         </div>
     </div>
     <a id="back-to-top" href="#" class="btn btn-primary btn-lg back-to-top" role="button" title="Subir para o topo" data-toggle="tooltip" data-placement="left">
