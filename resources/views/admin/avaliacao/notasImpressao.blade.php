@@ -32,12 +32,12 @@
 							<!-- Foto -->
 							<div class="col-md-2" style="width:15%;float:left;margin-left:100px;;margin-bottom:0;padding:0;">
 								@foreach ($funcionario as $f)
-								<img width="80px" height="100px" style="margin-top:5px;" src="data:image/jpeg;base64,{{ base64_encode( $f->IMAGEM )}}"/>
+								<img width="80px" height="100px" style="margin-top:10px;" src="data:image/jpeg;base64,{{ base64_encode( $f->IMAGEM )}}"/>
 								@endforeach
 							</div>
 							<!-- Foto -->
 							<!-- Dados do funcionario -->
-							<div class="col-md-6 pull-right" style="width:61%;margin-right:56px;padding-bottom:0;margin-bottom:0;">
+							<div class="col-md-6 pull-right" style="width:61%;margin-right:56px;padding-bottom:0;margin-bottom:0;margin-top:10px;">
 									<table class="table col-md-6" >
 										    @if (!$funcionario)
 												{{"Pessoa não encontrada"}}
@@ -216,26 +216,30 @@
                                                  @endforeach
                                                 </table>
                     @endforeach
-                    @if(isset($meses))
-                      <h5 class="text-primary" style="margin-left:15px;">Observações deixadas pelos Avaliadores</h5>
-                    @endif
+                    <div class="panel panel-info" style="margin-top:20px;">
+                      <div class="panel-heading">
+                          <h5 class="panel-title">Observações deixadas pelos Avaliadores</h5>
+                      </div>
+        						<div class="panel-body"  style="padding:0;">
+
                     <table class="table table-bordered" width="100%" style="font-size:9px;">
 
                         @foreach($meses as $m)
                         <tr style="font-size:9px;">
-                            <td> <b>{{ substr($m->DESCRICAO,11,16) }} </b></td>
+                            <td class="col-md-2"> <b>{{ substr($m->DESCRICAO,11,16) }} </b></td>
                             <td>
                               @foreach($observacoes as $res)
                                  @if($m->DESCRICAO = $res->DESCRICAO)
-                                        ITEM {{$res->ITEM}}:  {{$res->OBS}}  <br/>
+                                        <b>ITEM {{$res->ITEM}}:</b>  {{$res->OBS}}  <br/>
                                  @endif
                               @endforeach
                             </td>
                             </tr>
-
-
                         @endforeach
                     </table>
+                  </div>
+              </div>
+            </div>
         <!-- Dados da avaliação -->
 
 

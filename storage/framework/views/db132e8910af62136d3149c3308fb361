@@ -32,12 +32,12 @@
 							<!-- Foto -->
 							<div class="col-md-2" style="width:15%;float:left;margin-left:100px;;margin-bottom:0;padding:0;">
 								<?php foreach($funcionario as $f): ?>
-								<img width="80px" height="100px" style="margin-top:5px;" src="data:image/jpeg;base64,<?php echo e(base64_encode( $f->IMAGEM )); ?>"/>
+								<img width="80px" height="100px" style="margin-top:10px;" src="data:image/jpeg;base64,<?php echo e(base64_encode( $f->IMAGEM )); ?>"/>
 								<?php endforeach; ?>
 							</div>
 							<!-- Foto -->
 							<!-- Dados do funcionario -->
-							<div class="col-md-6 pull-right" style="width:61%;margin-right:56px;padding-bottom:0;margin-bottom:0;">
+							<div class="col-md-6 pull-right" style="width:61%;margin-right:56px;padding-bottom:0;margin-bottom:0;margin-top:10px;">
 									<table class="table col-md-6" >
 										    <?php if(!$funcionario): ?>
 												<?php echo e("Pessoa não encontrada"); ?>
@@ -217,26 +217,30 @@
                                                  <?php endforeach; ?>
                                                 </table>
                     <?php endforeach; ?>
-                    <?php if(isset($meses)): ?>
-                      <h5 class="text-primary" style="margin-left:15px;">Observações deixadas pelos Avaliadores</h5>
-                    <?php endif; ?>
+                    <div class="panel panel-info" style="margin-top:20px;">
+                      <div class="panel-heading">
+                          <h5 class="panel-title">Observações deixadas pelos Avaliadores</h5>
+                      </div>
+        						<div class="panel-body"  style="padding:0;">
+
                     <table class="table table-bordered" width="100%" style="font-size:9px;">
 
                         <?php foreach($meses as $m): ?>
                         <tr style="font-size:9px;">
-                            <td> <b><?php echo e(substr($m->DESCRICAO,11,16)); ?> </b></td>
+                            <td class="col-md-2"> <b><?php echo e(substr($m->DESCRICAO,11,16)); ?> </b></td>
                             <td>
                               <?php foreach($observacoes as $res): ?>
                                  <?php if($m->DESCRICAO = $res->DESCRICAO): ?>
-                                        ITEM <?php echo e($res->ITEM); ?>:  <?php echo e($res->OBS); ?>  <br/>
+                                        <b>ITEM <?php echo e($res->ITEM); ?>:</b>  <?php echo e($res->OBS); ?>  <br/>
                                  <?php endif; ?>
                               <?php endforeach; ?>
                             </td>
                             </tr>
-
-
                         <?php endforeach; ?>
                     </table>
+                  </div>
+              </div>
+            </div>
         <!-- Dados da avaliação -->
 
 
