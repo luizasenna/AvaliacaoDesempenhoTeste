@@ -217,13 +217,12 @@
                                                 </table>
                     @endforeach
                     <table class="table table-bordered" width="100%" style="font-size:9px;">
+
                         @foreach($observacoes as $res)
 
                             <tr style="font-size:9px;">
-                                <td>{{ substr($res->DESCRICAO,11,16) }} - Teste</td>
-                                <td> Item 1: {{$res->OBS}} /
-
-                                </td>
+                                <td> <b>{{ $desc = substr($res->DESCRICAO,11,16) }} </b></td>
+                                <td> @while($desc = substr($res->DESCRICAO,11,16) ) {{$res->OBS}} @endwhile</td>
                             </tr>
 
                         @endforeach

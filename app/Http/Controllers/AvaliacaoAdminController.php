@@ -594,29 +594,21 @@ class AvaliacaoAdminController extends Controller
                       }
 
 
-                      $observacoes = DB::select("                select
-                                N.CODITEMAVAL   AS ITEM,
-                                S.NOME           AS NOMECOMPETENCIA,
-                                NOTAAVALIADOR    AS NOTA,
-                                P.CHAPAAVALIADO  AS CHAPA,
-                                N.CODAVALIACAO   AS AVALIACAO,
-                                V.NOME           AS DESCRICAO,
-                                V.DATAABERTURA   AS DATA, P.CODPARTICIPANTE, P.CODAVALIACAO,
-                                N.COMENTARIO     AS OBS,
-                                date_format(N.created_at, '%d/%m/%Y')  AS FEITAEM,
-                                N.CODPARTICIPANTE  AS PARTICIPANTE,
-                                LIDER.NOME      AS AVALIADOR,
-                                F.CODPESSOA     AS CODPESSOA,
-                                YEAR(V.DATAABERTURA) AS ANO
-                                from notas AS N
-                                inner join participantes AS P on N.CODAVALIACAO = P.CODAVALIACAO and N.CODPARTICIPANTE = P.CODPARTICIPANTE
-                                inner JOIN competencias AS S ON N.CODITEMAVAL = S.CODCOMPETENCIA
-                                inner JOIN avaliacoes AS  V ON V.CODAVALIACAO = N.CODAVALIACAO
-                                inner JOIN veravaliacoes AS VAV on V.CODAVALIACAO = VAV.codigoavaliacao
-                                inner JOIN funcionarios AS F ON F.CHAPA = P.CHAPAAVALIADO
-                                INNER JOIN funcionarios as LIDER ON LIDER.CHAPA = P.CHAPAAVALIADOR
-                                where statuslider = 0 and '.$codigo.' and YEAR(V.DATAABERTURA) = '.$ano.' and  N.COMENTARIO <> ''
-                                and CODITEMAVAL <> 3;");
+                      /*$observacoes = DB::select(' select MID(DESCRICAO,11,16) AS DESCRICAO,
+                                    CONCAT(OBS, " ITEM ", ITEM, ":  ", OBS) AS OBS
+                                    from
+                                    ObservacoesNota
+                                    where CODPESSOA = '.$codigo.' and ANO = '.$ano. ' GROUP BY DESCRICAO');*/
+
+                                    $observacoes = DB::select(' select *
+                                                  from
+                                                  ObservacoesNota
+                                                  where CODPESSOA = '.$codigo.' and ANO = '.$ano);
+                                    $meses = DB::select(' select *
+                                                  from
+                                                  ObservacoesNota
+                                                  where CODPESSOA = '.$codigo.' and ANO = '.$ano);
+
 
     return view('admin.avaliacao.notasImpressao', [
           'notas' => $notas,

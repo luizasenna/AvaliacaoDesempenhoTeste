@@ -218,11 +218,12 @@
                                                 </table>
                     <?php endforeach; ?>
                     <table class="table table-bordered" width="100%" style="font-size:9px;">
+
                         <?php foreach($observacoes as $res): ?>
 
                             <tr style="font-size:9px;">
-                                <td><?php echo e(substr($res->DESCRICAO,11,16)); ?> - Teste</td>
-                                <td> Item 1: <?php echo e($res->OBS); ?> /
+                                <td> <b><?php echo e($desc = substr($res->DESCRICAO,11,16)); ?> </b>
+                                <?php echo e($res->OBS); ?> /
 
                                 </td>
                             </tr>
