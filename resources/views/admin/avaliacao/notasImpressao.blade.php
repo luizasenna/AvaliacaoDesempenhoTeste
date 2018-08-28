@@ -216,14 +216,23 @@
                                                  @endforeach
                                                 </table>
                     @endforeach
+                    @if(isset($meses))
+                      <h5 class="text-primary" style="margin-left:15px;">Observações deixadas pelos Avaliadores</h5>
+                    @endif
                     <table class="table table-bordered" width="100%" style="font-size:9px;">
 
-                        @foreach($observacoes as $res)
-
-                            <tr style="font-size:9px;">
-                                <td> <b>{{ $desc = substr($res->DESCRICAO,11,16) }} </b></td>
-                                <td> @while($desc = substr($res->DESCRICAO,11,16) ) {{$res->OBS}} @endwhile</td>
+                        @foreach($meses as $m)
+                        <tr style="font-size:9px;">
+                            <td> <b>{{ substr($m->DESCRICAO,11,16) }} </b></td>
+                            <td>
+                              @foreach($observacoes as $res)
+                                 @if($m->DESCRICAO = $res->DESCRICAO)
+                                        ITEM {{$res->ITEM}}:  {{$res->OBS}}  <br/>
+                                 @endif
+                              @endforeach
+                            </td>
                             </tr>
+
 
                         @endforeach
                     </table>

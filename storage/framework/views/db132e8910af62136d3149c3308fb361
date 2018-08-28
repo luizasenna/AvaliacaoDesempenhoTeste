@@ -217,16 +217,23 @@
                                                  <?php endforeach; ?>
                                                 </table>
                     <?php endforeach; ?>
+                    <?php if(isset($meses)): ?>
+                      <h5 class="text-primary" style="margin-left:15px;">Observações deixadas pelos Avaliadores</h5>
+                    <?php endif; ?>
                     <table class="table table-bordered" width="100%" style="font-size:9px;">
 
-                        <?php foreach($observacoes as $res): ?>
-
-                            <tr style="font-size:9px;">
-                                <td> <b><?php echo e($desc = substr($res->DESCRICAO,11,16)); ?> </b>
-                                <?php echo e($res->OBS); ?> /
-
-                                </td>
+                        <?php foreach($meses as $m): ?>
+                        <tr style="font-size:9px;">
+                            <td> <b><?php echo e(substr($m->DESCRICAO,11,16)); ?> </b></td>
+                            <td>
+                              <?php foreach($observacoes as $res): ?>
+                                 <?php if($m->DESCRICAO = $res->DESCRICAO): ?>
+                                        ITEM <?php echo e($res->ITEM); ?>:  <?php echo e($res->OBS); ?>  <br/>
+                                 <?php endif; ?>
+                              <?php endforeach; ?>
+                            </td>
                             </tr>
+
 
                         <?php endforeach; ?>
                     </table>
