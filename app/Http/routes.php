@@ -114,6 +114,7 @@ Route::group(array('prefix' => 'admin', 'middleware' => 'SentinelAdmin'), functi
 		Route::get('/painel', 'AvaliacaoAdminController@avaliacoes')->name('painel');
 		Route::get('/media2016', 'AvaliacaoAdminController@mediaAvaliacao')->name('media2016');
 		Route::get('/mediaImpressao', 'AvaliacaoAdminController@mediaImpressao')->name('mediaImpressao');
+		Route::get('/notaBaixa', 'AvaliacaoAdminController@notaBaixa')->name('notaBaixa');
 	/*	Route::get('/media2016Geral/', function () {
 			return View::make('admin.avaliacao.media2016Geral');
 		});*/
