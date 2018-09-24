@@ -47,14 +47,14 @@ Relatório de Notas Baixas
 
                     <form class="form-horizontal" method="get">
                       <div class="form-group">
-                        <label for="dataInicial" class="col-sm-2 control-label">Data Inicial da Avaliação</label>
-                        <div class="col-sm-10">
+                        <label for="dataInicial" class="col-sm-4 control-label">Data Inicial da Avaliação</label>
+                        <div class="col-sm-6">
                           <input type="text" class="form-control" id="dataInicial"  name="dataInicial"  value="">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="dataFinal" class="col-sm-2 control-label">Data Final da Avaliação</label>
-                        <div class="col-sm-10">
+                        <label for="dataFinal" class="col-sm-4 control-label">Data Final da Avaliação</label>
+                        <div class="col-sm-6">
                           <input type="text" class="form-control" id="dataFinal"  name="dataFinal" value="">
                         </div>
                       </div>
@@ -73,10 +73,10 @@ Relatório de Notas Baixas
 
 											<a id="dlink"  style="display:none;"></a>
 
-											<input class="btn btn-primary btn-lg" type="button" onclick="tableToExcel('mediaAnualTabela', 'mediaAnualTabela', 'ADAnualGeral.xls')" value="Exportar para Excel">
-											<a class="btn btn-primary btn-lg" href="mediaImpressao" target="_blank" role="button">Versão para Impressão</a>
+											<input class="btn btn-primary btn-lg" type="button" onclick="tableToExcel('notasBaixas', 'notasBaixas', 'ADNotasBaixas.xls')" value="Exportar para Excel">
+											<!--<a class="btn btn-primary btn-lg" href="mediaImpressao" target="_blank" role="button">Versão para Impressão</a>-->
 											<hr/>
-											<table class="table table-striped" id="mediaAnualTabela" style="overflow-x: scroll;">
+											<table class="table table-striped" id="notasBaixas" style="overflow-x: scroll;">
                         @if($medias>0)
                         <tr>
 														<td>Codigo</td>
@@ -159,7 +159,7 @@ Relatório de Notas Baixas
 
 <script>
 	$(document).ready(function() {
-    $('#mediaAnualTabela').DataTable( {
+    $('#notasBaixas').DataTable( {
         "scrollX": true
     } );
 } );

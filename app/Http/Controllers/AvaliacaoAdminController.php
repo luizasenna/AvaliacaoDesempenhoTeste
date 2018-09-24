@@ -2090,7 +2090,7 @@ class AvaliacaoAdminController extends Controller
                         f.CODFILIAL AS LOJA,
                         f.CODSECAO AS CODSECAO,
                         MID(s.DESCRICAO,1,15) as SECAO,
-                        MID(AVALIADOR,1,22) AS AVALIADOR
+                        MID(AVALIADOR,1,20) AS AVALIADOR
                         FROM notasbaixas
                         left join funcionarios as f on f.CODPESSOA = notasbaixas.CODPESSOA
                         inner join avaliacoes as av
