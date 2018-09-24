@@ -99,10 +99,10 @@
                 Visualização de ADs Importadas
             </a>
 			</li>
-            <li {!! (Request::is('admin/notas') ? 'class="active" id="active"' : '') !!}>
-            <a href="{{ URL::to('admin/notas') }}">
+            <li {!! (Request::is('admin/avaliacao/notaBaixa') ? 'class="active" id="active"' : '') !!}>
+            <a href="{{ URL::to('admin/avaliacao/notaBaixa') }}">
                 <i class="fa fa-angle-double-right"></i>
-                Notas
+                Notas Baixas
             </a>
         </li>
         <li {!! (Request::is('admin/vercargos') ? 'class="active" id="active"' : '') !!}>
