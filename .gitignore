@@ -12,3 +12,4 @@ config/session.php
 composer.phar
 vendor/*
 .ftpconfig
+README.md
