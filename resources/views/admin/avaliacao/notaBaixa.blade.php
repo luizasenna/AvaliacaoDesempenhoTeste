@@ -22,7 +22,7 @@ Relatório de Notas Baixas
                         Dashboard =)
                     </a>
                 </li>
-                <li class="active">Médias Anuais</li>
+                <li class="active">Funcionários com baixo desempenho</li>
             </ol>
 	</section>
 	 <section class="content">
