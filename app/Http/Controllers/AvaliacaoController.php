@@ -369,7 +369,7 @@ class AvaliacaoController extends Controller
 									where E.CHAPA = '.$id);
 
 
-			$obs = Anotacao::where('codpessoa', '=', $pessoa->CODIGO)->get();
+			$obs = Anotacao::where('codpessoa', '=', $pessoa[0]->CODIGO)->get();
 
 
 			return view('/avaliacao/observacoes',[

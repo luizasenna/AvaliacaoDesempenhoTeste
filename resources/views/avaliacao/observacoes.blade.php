@@ -98,7 +98,14 @@ Avaliação de Desempenho dos Funcionários
             @endforeach
           </div>
         </div>
+
+        <div>
+          <table class="table table-stripped">
+
+          </table>
+        </div>
         <!- fim coluna12 -->
+
   </div>
 </div>
 </div>
