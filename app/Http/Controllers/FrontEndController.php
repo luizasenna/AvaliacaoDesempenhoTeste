@@ -38,7 +38,8 @@ class FrontEndController extends JoshController
     {
         // Is the user logged in?
         if (Sentinel::check()) {
-            return Redirect::route('index');
+            $user = Sentinel::getUser();
+            return View('index')->with('user', $user);
         }
 
         // Show the login page
@@ -48,8 +49,10 @@ class FrontEndController extends JoshController
 
 	 public function inicio()
     {
-    	if(Sentinel::check())
-			return View('index');
+    	if(Sentinel::check()){
+          $user = Sentinel::getUser();
+           return View('index')->with('user', $user);
+      }
 		else
 			return Redirect::to('login')->with('erro', 'Você deve estar logado (a).');
     }
@@ -65,7 +68,13 @@ class FrontEndController extends JoshController
         try {
             // Try to log the user in
             if (Sentinel::authenticate($request->only('email', 'password'), $request->get('lembre-me', 0))) {
-                return View('index')->with('successo', 'Olá, Bem-vindo(a) =)');
+                $user = Sentinel::getUser();
+              /*  return View('index', [
+                  'successo', 'Olá, Bem-vindo(a) =)',
+                  'user', $user
+
+                ]);*/
+                 return View('index')->with('user', $user);
             } else {
                 return Redirect::to('login')->with('error', 'Usuário ou senha inválidos.');
                 //return Redirect::back()->withInput()->withErrors($validator);

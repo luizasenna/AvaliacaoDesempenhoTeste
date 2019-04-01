@@ -27,9 +27,13 @@ Home
         <!-- Service Section Start-->
         <div class="row">
             <!-- Responsive Section Start -->
+            <div style="margin-top:40px;"></div>
             <div class="text-center">
                 <h3 class="border-primary"><span class="heading_border bg-primary">Recursos Humanos</span></h3>
+                <h4  style="padding:30px;"> Olá, <span class="text-primary"><b>{{$user->first_name}}</b></span>.
+                  Não é você? Saia clicando <a href="{{ URL::to('logout') }}">aqui</a>.</h4>
             </div>
+
             <div class="col-sm-6 col-md-3">
                 <div class="box">
                     <div class="box-icon">

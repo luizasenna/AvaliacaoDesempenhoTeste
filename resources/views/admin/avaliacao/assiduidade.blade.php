@@ -25,7 +25,7 @@ Assiduidade - AD
                 <li>
                     <a href="{{ route('dashboard') }}">
                         <i class="livicon" data-name="home" data-size="14" data-loop="true"></i>
-                        Dashboard
+                        Dashboard =)
                     </a>
                 </li>
                 <li class="active">Cálculo de Assiduidade</li>
@@ -40,7 +40,7 @@ Assiduidade - AD
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 <i class="fa fa-id-card-o" aria-hidden="true"></i>
-                                Cálculo de Assiduidade na Avaliação do RH
+                                Cálculo de Assiduidade na Avaliação do RH =)
                             </h3>
                         </div>
                         <div class="panel-body">
