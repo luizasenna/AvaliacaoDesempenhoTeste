@@ -15,6 +15,7 @@ use App\Competencia;
 use App\Nota;
 use App\Equipe;
 use App\Licenciado;
+use App\Anotacao;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Illuminate\Database\QueryException;
@@ -65,6 +66,7 @@ class AvaliacaoController extends Controller
 								  E.CHAPA AS CHAPA,
 								  E.DATAADMISSAO AS DATAADMISSAO,
 								  C.NOME AS CARGO,
+									E.CODPESSOA AS CODIGO,
 								  E.DATADEMISSAO AS DATADEMISSAO,
 								  E.CODFILIAL AS CODFILIAL,
 								  E.CODPESSOA AS CODPESSOA
@@ -350,6 +352,36 @@ class AvaliacaoController extends Controller
 
          ]);
     }
+
+		public function observacoes(){
+
+			$id = Request::input('id');
+			$pessoa =  DB::select('select E.NOME AS NOME,
+									E.CHAPA AS CHAPA,
+									E.DATAADMISSAO AS DATAADMISSAO,
+									C.NOME AS CARGO,
+									I.IMAGEM AS IMAGEM,
+									E.CODPESSOA AS CODIGO
+									from funcionarios as E
+														inner join funcoes AS C on C.CODIGO = E.CODFUNCAO
+									left join pessoas AS P on P.CODIGO = E.CODPESSOA
+									left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
+									where E.CHAPA = '.$id);
+
+
+			$obs = Anotacao::where('codpessoa', '=', $pessoa->CODIGO)->get();
+
+
+			return view('/avaliacao/observacoes',[
+				'chapa' => $id,
+				'pessoa' => $pessoa,
+				'obs' => $obs
+			]);
+		}
+
+
+
+
 
     public function mostra()
     {
@@ -717,10 +749,7 @@ class AvaliacaoController extends Controller
 									            		$message->to($email, Sentinel::getUser()->first_name)
 																					->subject('Avaliação Feita');
 									        	}
-
 								});
-
-
 
 		return redirect()->intended('avaliacao/mostra?id='.$id)->withInput()->with('status' , 'Nota adicionada com sucesso');
 

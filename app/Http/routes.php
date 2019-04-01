@@ -195,6 +195,7 @@ Route::get('/atualizacao', 'AtualizacaoController@index');
 Route::get('/avaliacao/index', array('as' => 'avaliacao','uses' => 'AvaliacaoController@index'));
 Route::get('/avaliacao/', 'AvaliacaoController@index')->name('avaliacao');
 Route::get('/avaliacao/painel', 'AvaliacaoController@painel');
+Route::get('/avaliacao/observacoes', 'AvaliacaoController@observacoes')->name('observacoes');
 Route::get('/avaliacao/mostra', 'AvaliacaoController@mostra')->name('mostra');
 Route::get('/avaliacao/insere', 'AvaliacaoController@insere');
 Route::get('/avaliacao/notas', 'AvaliacaoController@visao');

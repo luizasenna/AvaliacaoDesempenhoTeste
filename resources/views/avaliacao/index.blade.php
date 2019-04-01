@@ -98,6 +98,7 @@ Avaliação de Desempenho dos Funcionários
 									<td>ADMISSAO</td>
 									<td>VISUALIZAR</td>
 									<td>SITUAÇÃO</td>
+									<td>OBSERVAÇÕES <span class="small text-danger">Novo!<span></td>
 								</tr>
 								@foreach ($todos as $p)
 							    <!-- código escondido -->
@@ -108,6 +109,7 @@ Avaliação de Desempenho dos Funcionários
 									   <td> {{date("d/m/Y", strtotime($p->DATAADMISSAO))}}</td>
 									   <td><a style="color:#ffffff;" href="/avaliacao/painel?id={{$p->CHAPA}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-zoom-in"></span> Desempenho</a></td>
 										 <td> <a style="color:#ffffff;" href="/avaliacao/avaliado?id={{$p->CHAPA}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-zoom-in"></span> Ver situação</a></td>
+										  <td> <a style="color:#ffffff;" href="/avaliacao/observacoes?id={{$p->CHAPA}}" class="btn btn-sm btn-success"><span class="glyphicon glyphicon-zoom-in"></span> Ver / Anotar Observações</a></td>
 									</tr>
 								@endforeach
 								@endif
