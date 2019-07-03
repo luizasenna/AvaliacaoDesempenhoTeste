@@ -604,6 +604,7 @@ class AvaliacaoAdminController extends Controller
                                                   from
                                                   ObservacoesNota
                                                   where CODPESSOA = '.$codigo.' and ANO = '.$ano);
+                                                  
                                     $meses = DB::select(' select DESCRICAO, AVALIACAO
                                                   from
                                                   ObservacoesNota

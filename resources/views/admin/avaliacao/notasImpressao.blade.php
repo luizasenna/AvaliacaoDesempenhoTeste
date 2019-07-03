@@ -231,7 +231,7 @@
 
                               @foreach($observacoes as $res)
                                  @if($m->AVALIACAO == $res->AVALIACAO)
-                                        <b>ITEM {{$res->ITEM}}:</b>  {{ iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $res->OBS)}} {{ utf8_encode($res->OBS)}}  <br/>
+                                        <b>ITEM {{$res->ITEM}}:</b>  {{ utf8_encode($res->OBS)}}  <br/>
                                  @endif
                               @endforeach
                             </td>
