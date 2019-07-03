@@ -228,9 +228,10 @@
                         <tr style="font-size:9px;">
                             <td class="col-md-2"> <b>{{ substr($m->DESCRICAO,11,16) }} </b></td>
                             <td>
+
                               @foreach($observacoes as $res)
-                                 @if($m->DESCRICAO = $res->DESCRICAO)
-                                        <b>ITEM {{$res->ITEM}}:</b>  {{$res->OBS}}  <br/>
+                                 @if($m->AVALIACAO == $res->AVALIACAO)
+                                        <b>ITEM {{$res->ITEM}}:</b>  {{ iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $res->OBS)}} {{ utf8_encode($res->OBS)}}  <br/>
                                  @endif
                               @endforeach
                             </td>

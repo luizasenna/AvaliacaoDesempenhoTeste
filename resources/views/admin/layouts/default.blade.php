@@ -21,7 +21,7 @@
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-
+    <? header('content-type: text/plain;charset=utf-8'); ?>
     <!-- font Awesome -->
 
 
@@ -44,10 +44,10 @@
         </div>
         <div class="navbar-right">
             <ul class="nav navbar-nav">
-               
+
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                       
-                       
+
+
                         <div class="riot">
                             <div>
                                 {{ Sentinel::getUser()->first_name }} {{ Sentinel::getUser()->last_name }}
@@ -58,7 +58,7 @@
                         </div>
                     </a>
                     <ul class="dropdown-menu">
-      
+
                         <li>
                             <a href="{{ URL::route('users.show',Sentinel::getUser()->id) }}">
                                 <i class="livicon" data-name="user" data-s="18"></i>
@@ -85,7 +85,7 @@
                             </a>
                         </li>
                         <!-- Menu Footer-->
-                    
+
                     </ul>
                 </li>
             </ul>
@@ -97,7 +97,7 @@
     <aside class="left-side sidebar-offcanvas">
         <section class="sidebar ">
             <div class="page-sidebar  sidebar-nav">
-                
+
                 <div class="clearfix"></div>
                 <!-- BEGIN SIDEBAR MENU -->
                 @include('admin.layouts._left_menu')

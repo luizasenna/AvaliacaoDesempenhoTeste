@@ -367,10 +367,12 @@ class AvaliacaoController extends Controller
 									left join pessoas AS P on P.CODIGO = E.CODPESSOA
 									left join fotos AS I on P.IDIMAGEM = I.IDIMAGEM
 									where E.CHAPA = '.$id);
+				$c = $pessoa[0]->CODIGO;
 
-
-			$obs = Anotacao::where('codpessoa', '=', $pessoa[0]->CODIGO)->get();
-
+			$obs = Anotacao::where('codpessoa', '=', $c)->get();
+		//	$obs = DB::select('select *
+		//						from anotacoes
+			//						where codpessoa ='.$c);
 
 			return view('/avaliacao/observacoes',[
 				'chapa' => $id,
@@ -380,7 +382,43 @@ class AvaliacaoController extends Controller
 		}
 
 
+   public function insereObs(){
 
+
+		 $id = Request::input('chapa');
+		 $codigo = DB::select('select * from funcionarios where CHAPA = '.$id);
+		 $cod = $codigo[0]->CODPESSOA;
+		 $obs = Request::input('observacao');
+		 $u = Sentinel::getUser();
+		 $now = date('d/m/Y');
+
+		 try{
+					// DB::insert('insert into anotacoes (codpessoa, chapa, observacao) VALUES
+					// ('.$cod.',012345, 012345,"$obs")');
+
+					$nova = Anotacao::create(array(
+							'codpessoa' => $cod,
+							'chapa' => $id,
+							'observacao' => $obs,
+							'idusuario' => 2
+					));
+
+					$nova->save();
+
+		 		}
+		 		catch (QueryException $e){
+		 				$error_code = $e->errorInfo[1];
+		 				if($error_code == 1062){
+		 					 return redirect()->intended('avaliacao/observacoes?id='.$id)->withInput()->with('status' , 'Erro, não foi possivel inserir.');
+		 						//return 'houston, we have a duplicate entry problem';
+		 				}
+		 		}
+
+		 return redirect()->intended('avaliacao/observacoes?id='.$id)->withInput()->with('status' , 'Observação Inserida com sucesso.');
+
+
+
+	 }
 
 
     public function mostra()
@@ -590,7 +628,7 @@ class AvaliacaoController extends Controller
 		if(isset($compfuncao[0]->c1)) { $c1 = $compfuncao[0]->c1; }
 		if(isset($compfuncao[0]->c2)) { $c2 = $compfuncao[0]->c2; }
 
-
+		$anotacoes = Anotacao::where('codpessoa', '=', $ch[0]->CODPESSOA)->get();
 
       return view('avaliacao.insere', [
 			'comps' => $comps,
@@ -606,6 +644,7 @@ class AvaliacaoController extends Controller
 			'invalidos' => $invalidos,
 			'imagem' =>$imagem,
 			'compfuncao' => $compfuncao,
+			'anotacoes' => $anotacoes,
 			'pt' => $pt,
 			'd1' => $compfuncao[0]->c1,
 			'd2' => $compfuncao[0]->c2,

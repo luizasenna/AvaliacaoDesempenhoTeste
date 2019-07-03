@@ -201,6 +201,7 @@ Route::get('/avaliacao/insere', 'AvaliacaoController@insere');
 Route::get('/avaliacao/notas', 'AvaliacaoController@visao');
 Route::get('/avaliacao/inserenota', 'AvaliacaoController@inserenota');
 Route::get('/avaliacao/inserevalor', 'AvaliacaoController@inserenota');
+Route::get('/avaliacao/insereobs', 'AvaliacaoController@insereObs');
 Route::get('/avaliacao/valida', 'AvaliacaoController@valida');
 Route::get('/avaliacao/delegaUma', 'AvaliacaoController@delegaUma');
 Route::get('/avaliacao/delegaTodas', 'AvaliacaoController@delegaTodas');

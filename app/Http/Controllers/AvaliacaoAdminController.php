@@ -604,10 +604,11 @@ class AvaliacaoAdminController extends Controller
                                                   from
                                                   ObservacoesNota
                                                   where CODPESSOA = '.$codigo.' and ANO = '.$ano);
-                                    $meses = DB::select(' select DESCRICAO
+                                    $meses = DB::select(' select DESCRICAO, AVALIACAO
                                                   from
                                                   ObservacoesNota
-                                                  where CODPESSOA = '.$codigo.' and ANO = '.$ano.' GROUP BY DESCRICAO');
+                                                  where CODPESSOA = '.$codigo.' and ANO = '.$ano.'
+                                                  GROUP BY DESCRICAO, ANO');
 
 
     return view('admin.avaliacao.notasImpressao', [

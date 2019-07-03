@@ -12,9 +12,13 @@ class Anotacao extends Model
     protected $fillable = ['id','codpessoa','chapa','idusuario','observacao'];
 
 	   public function pessoas() {
-        return $this->hasMany('App\Pessoa', 'CODIGO', 'codpessoa');
+        return $this->hasOne('App\Pessoa', 'CODIGO', 'codpessoa');
 		}
 
+    public function usuario() {
+       return $this->hasOne('App\User', 'id', 'idusuario');
+
+    }
 
 
 }

@@ -48,7 +48,7 @@ Avaliação de Desempenho dos Funcionários
 @section('content')
     <!-- Aba de Título -->
     <div class="text-center">
-                <h3 class="border-primary"><span class="heading_border bg-primary"> 
+                <h3 class="border-primary"><span class="heading_border bg-primary">
 				<i class="livicon icon3" data-name="barchart" data-size="30" data-loop="true" data-c="#ffffff" data-hc="red"></i>
 				Avaliação de Desempenho</span></h3>
         </div>	<center>
@@ -59,8 +59,8 @@ Avaliação de Desempenho dos Funcionários
 		</div>
 		@endif
 	</div></center>
-    
-    
+
+
     <div class="container" >
         <!--Content Section Start -->
 		<div class="col-md-12">
@@ -71,9 +71,9 @@ Avaliação de Desempenho dos Funcionários
 						Avaliar Funcionario</h3>
                     </div>
                     <div class="panel-body">
-						 <!--  Consulta de Solicitações --> 
+						 <!--  Consulta de Solicitações -->
                  				<div class="alert alert-warning">
-                                    
+
                                     <H3 style="line-height:20px;">Antes de Prosseguir, confira atentamente os dados abaixo: </h3>
                                     <br/>
                                     @foreach ($imagem as $i)
@@ -81,9 +81,9 @@ Avaliação de Desempenho dos Funcionários
                                     @endforeach
                                     <div>
                                     <H4 style="line-height:25px;">
-										
-                                    <span class="text-info">Avaliação: </span> @foreach ($avaliacao as $a){{$a->NOME }} <span class="text-info">| Código: </span> {{$av = $a->CODAVALIACAO }} @endforeach  
-									<br/>  
+
+                                    <span class="text-info">Avaliação: </span> @foreach ($avaliacao as $a){{$a->NOME }} <span class="text-info">| Código: </span> {{$av = $a->CODAVALIACAO }} @endforeach
+									<br/>
 									<span class="text-info">Avaliado (a): </span> @foreach ($avaliado as $b){{$b->NOME}} <span class="text-info">| Chapa: </span>{{$b->CHAPA}} @endforeach
 									<br/>
 									<span class="text-info">Avaliador (a): </span>@foreach ($lider as $c){{$c->NOME}}  <span class="text-info">| Chapa: </span>{{$c->CHAPA}} @endforeach
@@ -97,18 +97,52 @@ Avaliação de Desempenho dos Funcionários
            							Legenda: <br/>
            							P - Péssimo | RU - Ruim | RE - Regular | B - Bom | MB - Muito Bom | E - Excelente
            							<br/>
-                                    </H4>
-                                </div>
-								
+                        </H4>
+              </div>
+							<!-- ver obs-->
+							<div>
+								<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+								  <div class="panel panel-default text-primary">
+								    <div class="panel-heading" role="tab" id="headingOne">
+								      <h3 class="panel-title">
+								        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								          Observações anotadas sobre o(a) funcionário(a) (clique para abrir)
+								        </a>
+								      </h3>
+								    </div>
+								    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+								      <div class="panel-body">
+												@if(count($anotacoes)>0)
+												<table class="table table-striped">
+														<th>Data</th>
+														<th>Usuário</th>
+														<th>Observação</th>
+														@foreach ($anotacoes as $o)
+															<tr>
+																	<td>{{$o->created_at}}</td>
+																	<td>{{$o->idusuario}} </td>
+																	<td>{{$o->observacao}}</td>
+															</tr>
+														@endforeach
+														@endif
+												</table>
+								      </div>
+								    </div>
+								  </div>
+
+								</div>
+						  </div>
+								<!-- ver obs-->
+
                                  <form action="inserevalor/" >
                                     <div class="col-md-12">
-										<input type="hidden" name="_token" value="{{ csrf_token() }}">
+																			<input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         <input type="hidden" name="avaliacao" value="{{$av}}">
                                         <input type="hidden" name="participante" value="{{$pt}}">
-                                        
-																						
-										
-											 @foreach ($comps as $c)	
+
+
+
+											 @foreach ($comps as $c)
 												<h3 class="text-info"><?=$contador++ ?> - {{$c->NOME }}</h3>
                                                 <h4> {{$c->CONCEITO}}</h4>
 											    <div id="notas{{$c->CODCOMPETENCIA}}">
@@ -147,67 +181,67 @@ Avaliação de Desempenho dos Funcionários
 													  <input type="radio" name="id{{$c->CODCOMPETENCIA}}"  value="10" required> 10 - E
 													</label>
 												</div>
-												
+
 												<textarea name="obs{{$c->CODCOMPETENCIA}}" class="form-control" rows="1" placeholder="Observações"></textarea>
 											</div>
-											
+
                                         @endforeach
                                        <button type="submit" class="btn btn-success" style="margin:25px;">
                                        <span class="glyphicon glyphicon-ok"></span> Inserir Avaliação de Desempenho para o funcionário
-                                       </button> 
+                                       </button>
                                     </div>
-                                   
+
 						 </form>
-                       
-						 
-						<!--  Consulta de Solicitações--> 
-						
+
+
+						<!--  Consulta de Solicitações-->
+
 					</div>
 				</div>
-				</div>		
-  
-   
-        
+				</div>
+
+
+
         <!-- //Content Section End -->
-	
-	
-	</div>	
+
+
+	</div>
     </div>
 @stop
 
 {{-- page level scripts --}}
 @section('footer_scripts')
 {{-- Scripts --}}
-    
-       
+
+
             <script>
-			if (<?php echo ($d1); ?> == 1) 
-            { 
+			if (<?php echo ($d1); ?> == 1)
+            {
 				$('#notas1 *').prop('disabled',true);
 				var div = document.getElementById('notas1');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id1";
                 inputnota.id = "id1";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs1";      
-                input2.id = "obs1";   
-                
-                document.getElementById("notas1").appendChild(inputnota);         
+                input2.name = "obs1";
+                input2.id = "obs1";
+
+                document.getElementById("notas1").appendChild(inputnota);
                 document.getElementById("notas1").appendChild(input2);
-				
-				
+
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d2); ?> == 1) 
-            { 
+			if (<?php echo ($d2); ?> == 1)
+            {
 				$('#notas2 *').prop('disabled',true);
 				var div = document.getElementById('notas2');
 				div.style.opacity = "0.5";
@@ -218,44 +252,44 @@ Avaliação de Desempenho dos Funcionários
                 inputnota.value = '0';
                 inputnota.name = "id2";
                 inputnota.id = "id2";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs2";      
-                input2.id = "obs2";   
-                
-                document.getElementById("notas2").appendChild(inputnota);         
+                input2.name = "obs2";
+                input2.id = "obs2";
+
+                document.getElementById("notas2").appendChild(inputnota);
                 document.getElementById("notas2").appendChild(input2);
-				
-				               
+
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d3); ?> == 1) 
-            { 
+			if (<?php echo ($d3); ?> == 1)
+            {
 				$('#notas3 *').prop('disabled',true);
 				var div = document.getElementById('notas3');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id3";
                 inputnota.id = "id3";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' teste ';
-                input2.name = "obs3";      
-                input2.id = "obs3";   
-                
-                document.getElementById("notas3").appendChild(inputnota);         
+                input2.name = "obs3";
+                input2.id = "obs3";
+
+                document.getElementById("notas3").appendChild(inputnota);
                 document.getElementById("notas3").appendChild(input2);
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d4); ?> == 1) 
-            { 
+			if (<?php echo ($d4); ?> == 1)
+            {
 				$('#notas4 *').prop('disabled',true);
 				var div = document.getElementById('notas4');
 				div.style.opacity = "0.5";
@@ -266,21 +300,21 @@ Avaliação de Desempenho dos Funcionários
                 inputnota.value = '0';
                 inputnota.name = "id4";
                 inputnota.id = "id4";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs4";      
-                input2.id = "obs4";   
-                
-                document.getElementById("notas4").appendChild(inputnota);         
+                input2.name = "obs4";
+                input2.id = "obs4";
+
+                document.getElementById("notas4").appendChild(inputnota);
                 document.getElementById("notas4").appendChild(input2);
-				
-				
+
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-            if (<?php echo ($d5); ?> == 1) 
-            { 
+            if (<?php echo ($d5); ?> == 1)
+            {
 				$('#notas5 *').prop('disabled',true);
 				var div = document.getElementById('notas5');
 				div.style.opacity = "0.5";
@@ -291,21 +325,21 @@ Avaliação de Desempenho dos Funcionários
                 inputnota.value = '0';
                 inputnota.name = "id5";
                 inputnota.id = "id5";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs5";      
-                input2.id = "obs5";   
-                
-                document.getElementById("notas5").appendChild(inputnota);         
+                input2.name = "obs5";
+                input2.id = "obs5";
+
+                document.getElementById("notas5").appendChild(inputnota);
                 document.getElementById("notas5").appendChild(input2);
-				
-								
+
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d6); ?> == 1) 
-            { 
+			if (<?php echo ($d6); ?> == 1)
+            {
 				$('#notas6 *').prop('disabled',true);
 				var div = document.getElementById('notas6');
 				div.style.opacity = "0.5";
@@ -316,21 +350,21 @@ Avaliação de Desempenho dos Funcionários
                 inputnota.value = '0';
                 inputnota.name = "id6";
                 inputnota.id = "id6";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs6";      
-                input2.id = "obs6";   
-                
-                document.getElementById("notas6").appendChild(inputnota);         
+                input2.name = "obs6";
+                input2.id = "obs6";
+
+                document.getElementById("notas6").appendChild(inputnota);
                 document.getElementById("notas6").appendChild(input2);
-				
-								
+
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d7); ?> == 1) 
-            { 
+			if (<?php echo ($d7); ?> == 1)
+            {
 				$('#notas7 *').prop('disabled',true);
 				var div = document.getElementById('notas7');
 				div.style.opacity = "0.5";
@@ -341,20 +375,20 @@ Avaliação de Desempenho dos Funcionários
                 inputnota.value = '0';
                 inputnota.name = "id7";
                 inputnota.id = "id7";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs7";      
-                input2.id = "obs7";   
-                
-                document.getElementById("notas7").appendChild(inputnota);         
+                input2.name = "obs7";
+                input2.id = "obs7";
+
+                document.getElementById("notas7").appendChild(inputnota);
                 document.getElementById("notas7").appendChild(input2);
-				
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d8); ?> == 1) 
-            { 
+			if (<?php echo ($d8); ?> == 1)
+            {
 				$('#notas8 *').prop('disabled',true);
 				var div = document.getElementById('notas8');
 				div.style.opacity = "0.5";
@@ -365,183 +399,183 @@ Avaliação de Desempenho dos Funcionários
                 inputnota.value = '0';
                 inputnota.name = "id8";
                 inputnota.id = "id8";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs8";      
-                input2.id = "obs8";   
-                
-                document.getElementById("notas8").appendChild(inputnota);         
+                input2.name = "obs8";
+                input2.id = "obs8";
+
+                document.getElementById("notas8").appendChild(inputnota);
                 document.getElementById("notas8").appendChild(input2);
-				
-								
-				
+
+
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-            if (<?php echo ($d9); ?> == 1) 
-            { 
+            if (<?php echo ($d9); ?> == 1)
+            {
 				$('#notas9 *').prop('disabled',true);
 				var div = document.getElementById('notas9');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id9";
                 inputnota.id = "id9";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs9";      
-                input2.id = "obs9";   
-                
-                document.getElementById("notas9").appendChild(inputnota);         
+                input2.name = "obs9";
+                input2.id = "obs9";
+
+                document.getElementById("notas9").appendChild(inputnota);
                 document.getElementById("notas9").appendChild(input2);
-				
-				
+
+
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d10); ?> == 1) 
-            { 
+			if (<?php echo ($d10); ?> == 1)
+            {
 				$('#notas10 *').prop('disabled',true);
 				var div = document.getElementById('notas10');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id10";
                 inputnota.id = "id10";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs10";      
-                input2.id = "obs10";   
-                
-                document.getElementById("notas10").appendChild(inputnota);         
+                input2.name = "obs10";
+                input2.id = "obs10";
+
+                document.getElementById("notas10").appendChild(inputnota);
                 document.getElementById("notas10").appendChild(input2);
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d11); ?> == 1) 
-            { 
+			if (<?php echo ($d11); ?> == 1)
+            {
 				$('#notas11 *').prop('disabled',true);
 				var div = document.getElementById('notas11');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id11";
                 inputnota.id = "id11";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs11";      
-                input2.id = "obs11";   
-                
-                document.getElementById("notas11").appendChild(inputnota);         
+                input2.name = "obs11";
+                input2.id = "obs11";
+
+                document.getElementById("notas11").appendChild(inputnota);
                 document.getElementById("notas11").appendChild(input2);
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d12); ?> == 1) 
-            { 
+			if (<?php echo ($d12); ?> == 1)
+            {
 				$('#notas12 *').prop('disabled',true);
 				var div = document.getElementById('notas12');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id12";
                 inputnota.id = "id12";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs12";      
-                input2.id = "obs12";   
-                
-                document.getElementById("notas12").appendChild(inputnota);         
+                input2.name = "obs12";
+                input2.id = "obs12";
+
+                document.getElementById("notas12").appendChild(inputnota);
                 document.getElementById("notas12").appendChild(input2);
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d13); ?> == 1) 
-            { 
+			if (<?php echo ($d13); ?> == 1)
+            {
 				$('#notas13 *').prop('disabled',true);
 				var div = document.getElementById('notas13');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id13";
                 inputnota.id = "id13";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs13";      
-                input2.id = "obs13";   
-                
-                document.getElementById("notas13").appendChild(inputnota);         
+                input2.name = "obs13";
+                input2.id = "obs13";
+
+                document.getElementById("notas13").appendChild(inputnota);
                 document.getElementById("notas13").appendChild(input2);
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-			if (<?php echo ($d14); ?> == 1) 
-            { 
+			if (<?php echo ($d14); ?> == 1)
+            {
 				$('#notas14 *').prop('disabled',true);
 				var div = document.getElementById('notas14');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id14";
                 inputnota.id = "id14";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs14";      
-                input2.id = "obs14";   
-                
-                document.getElementById("notas14").appendChild(inputnota);         
+                input2.name = "obs14";
+                input2.id = "obs14";
+
+                document.getElementById("notas14").appendChild(inputnota);
                 document.getElementById("notas14").appendChild(input2);
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
 			}
-            if (<?php echo ($d15); ?> == 1) 
-            { 
+            if (<?php echo ($d15); ?> == 1)
+            {
 				$('#notas15 *').prop('disabled',true);
 				var div = document.getElementById('notas15');
 				div.style.opacity = "0.5";
 				div.style.filter  = 'alpha(opacity=90)'; // IE fallback
-				
+
 				var inputnota = document.createElement("input");
                 inputnota.type = "hidden";
                 inputnota.value = '0';
                 inputnota.name = "id15";
                 inputnota.id = "id15";
-                
+
                 var input2 = document.createElement("input");
                 input2.type = "hidden";
                 input2.value = ' ';
-                input2.name = "obs15";      
-                input2.id = "obs15";   
-                
-                document.getElementById("notas15").appendChild(inputnota);         
+                input2.name = "obs15";
+                input2.id = "obs15";
+
+                document.getElementById("notas15").appendChild(inputnota);
                 document.getElementById("notas15").appendChild(input2);
 				div.innerHTML = div.innerHTML + '<span class="text-danger">esta competência não é avaliada para a função/cargo do funcionário(a)</span>';
-			}				
+			}
      </script>
 
 @stop

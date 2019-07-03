@@ -229,9 +229,10 @@
                         <tr style="font-size:9px;">
                             <td class="col-md-2"> <b><?php echo e(substr($m->DESCRICAO,11,16)); ?> </b></td>
                             <td>
+
                               <?php foreach($observacoes as $res): ?>
-                                 <?php if($m->DESCRICAO = $res->DESCRICAO): ?>
-                                        <b>ITEM <?php echo e($res->ITEM); ?>:</b>  <?php echo e($res->OBS); ?>  <br/>
+                                 <?php if($m->AVALIACAO == $res->AVALIACAO): ?>
+                                        <b>ITEM <?php echo e($res->ITEM); ?>:</b>  <?php echo e(iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $res->OBS)); ?> <?php echo e(utf8_encode($res->OBS)); ?>  <br/>
                                  <?php endif; ?>
                               <?php endforeach; ?>
                             </td>

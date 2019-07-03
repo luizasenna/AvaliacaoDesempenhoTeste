@@ -69,7 +69,7 @@ Avaliação de Desempenho dos Funcionários
               <!-- Dados do funcionario -->
               <div class="col-md-2"></div>
               <div class="col-md-6">
-                  <table class="table table-stripped ">
+                  <table class="table table-striped ">
                         @if (!$pessoa)
                         {{"Pessoa não encontrada"}}
                       @else
@@ -94,16 +94,76 @@ Avaliação de Desempenho dos Funcionários
             @foreach ($pessoa as $f)
             <!--<img src="/assets/images/avaliacao/avatar.png" width="180px" height="180px"/>-->
             {{  $f->IMAGEM }}
-            <img width="130px" height="150px" src="data:image/jpeg;base64,{{ base64_encode( $f->IMAGEM )}}"/>
+            <img width="90px" height="110px" src="data:image/jpeg;base64,{{ base64_encode( $f->IMAGEM )}}"/>
             @endforeach
           </div>
-        </div>
 
-        <div>
-          <table class="table table-stripped">
+				<div class="col-md-2" style="min-height:150px;"></div>
+				<hr/>
+        <div class="col-md-2"></div>
+        <div class="col-md-8 bordered">
+					<h4>Observações lançadas para o (a) funcionário(a)</h4>
 
+          <table class="table table-striped">
+							<th>Data</th>
+							<th>Usuário</th>
+							<th>Observação</th>
+              @foreach ($obs as $o)
+                <tr>
+                    <td>{{$o->created_at}}</td>
+										<td>{{$o->idusuario}} </td>
+										<td>{{$o->observacao}}</td>
+                </tr>
+              @endforeach
           </table>
+				<!-- <span class="alert-warning">Não existem observações lançadas ainda para esta pessoa.</span>-->
+
         </div>
+				<div class="col-md-2"></div>
+				<div class="col-md-12">
+					 <div class="col-md-4"></div>
+					 <div class="col-md-4">
+						 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+							 Nova Observação
+						 </button>
+
+					 </div>
+					 <div class="col-md-4"></div>
+
+				</div>
+
+				<!-- Button trigger modal -->
+
+				<!-- Modal -->
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+				  <div class="modal-dialog" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				        <h4 class="modal-title" id="myModalLabel">Nova Observação</h4>
+				      </div>
+				      <div class="modal-body">
+				        <div></div>
+								<div class="well">
+									  Data: {{date('d/m/Y')}} <hr/><br/>
+										<form action="insereobs/" >
+											<textarea name="observacao" class="form-control" rows="3" placeholder="Escreva aqui..."></textarea>
+											<input type="hidden" value="{{$chapa}}" name="chapa"/>
+											<input type="submit" class="btn btn-primary" value="Inserir"/>
+										</form>
+								</div>
+				      </div>
+				      <div class="modal-footer">
+
+				      </div>
+				    </div>
+				  </div>
+				</div>
+
+
+
+
+      </div> <!-- fim do painel-->
         <!- fim coluna12 -->
 
   </div>
