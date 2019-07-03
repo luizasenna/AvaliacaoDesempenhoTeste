@@ -19,10 +19,10 @@ Relatório de Notas Baixas
                 <li>
                     <a href="{{ route('dashboard') }}">
                         <i class="livicon" data-name="home" data-size="14" data-loop="true"></i>
-                        Dashboard
+                        Dashboard =)
                     </a>
                 </li>
-                <li class="active">Médias Anuais</li>
+                <li class="active">Funcionários com baixo desempenho</li>
             </ol>
 	</section>
 	 <section class="content">
